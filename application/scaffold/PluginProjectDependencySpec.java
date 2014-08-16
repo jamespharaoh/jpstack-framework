@@ -1,6 +1,5 @@
 package wbs.framework.application.scaffold;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Getter;
@@ -9,23 +8,24 @@ import lombok.experimental.Accessors;
 import wbs.framework.data.annotations.DataAttribute;
 import wbs.framework.data.annotations.DataChildren;
 import wbs.framework.data.annotations.DataClass;
-import wbs.framework.data.annotations.DataIgnore;
+import wbs.framework.data.annotations.DataParent;
 
 @Accessors (fluent = true)
-@DataClass ("wbs-build")
+@DataClass ("project")
 public
-class BuildSpec {
+class PluginProjectDependencySpec {
+
+	@DataParent
+	@Getter @Setter
+	PluginDependenciesSpec dependencies;
 
 	@DataAttribute
 	@Getter @Setter
 	String name;
 
-	@DataChildren
+	@DataChildren (
+		direct = true)
 	@Getter @Setter
-	List<BuildProjectSpec> projects =
-		new ArrayList<BuildProjectSpec> ();
-
-	@DataIgnore
-	Object gitLinks = null;
+	List<PluginPluginDependencySpec> plugins;
 
 }

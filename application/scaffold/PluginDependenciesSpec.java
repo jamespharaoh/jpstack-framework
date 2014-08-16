@@ -1,29 +1,29 @@
 package wbs.framework.application.scaffold;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import wbs.framework.data.annotations.DataAttribute;
 import wbs.framework.data.annotations.DataChildren;
 import wbs.framework.data.annotations.DataClass;
+import wbs.framework.data.annotations.DataParent;
+
+import com.google.common.collect.ImmutableList;
 
 @Accessors (fluent = true)
-@DataClass ("layer")
+@DataClass ("dependencies")
 public
-class PluginLayerSpec {
+class PluginDependenciesSpec {
 
-	@DataAttribute (
-		required = true)
+	@DataParent
 	@Getter @Setter
-	String name;
+	PluginSpec plugin;
 
 	@DataChildren (
 		direct = true)
 	@Getter @Setter
-	List<PluginBeanSpec> beans =
-		new ArrayList<PluginBeanSpec> ();
+	List<PluginProjectDependencySpec> projects =
+		ImmutableList.of ();
 
 }

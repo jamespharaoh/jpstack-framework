@@ -1,29 +1,24 @@
 package wbs.framework.application.scaffold;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import wbs.framework.data.annotations.DataAttribute;
-import wbs.framework.data.annotations.DataChildren;
 import wbs.framework.data.annotations.DataClass;
+import wbs.framework.data.annotations.DataParent;
 
 @Accessors (fluent = true)
-@DataClass ("layer")
+@DataClass ("fixture")
 public
-class PluginLayerSpec {
+class PluginFixtureSpec {
+
+	@DataParent
+	@Getter @Setter
+	PluginSpec plugin;
 
 	@DataAttribute (
 		required = true)
 	@Getter @Setter
 	String name;
-
-	@DataChildren (
-		direct = true)
-	@Getter @Setter
-	List<PluginBeanSpec> beans =
-		new ArrayList<PluginBeanSpec> ();
 
 }
