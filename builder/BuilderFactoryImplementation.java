@@ -17,7 +17,7 @@ import wbs.framework.builder.annotations.BuilderTarget;
 
 @PrototypeComponent ("builderFactory")
 public
-class BuilderFactoryImpl
+class BuilderFactoryImplementation
 	implements BuilderFactory {
 
 	List<BuilderInfo> builderInfos =

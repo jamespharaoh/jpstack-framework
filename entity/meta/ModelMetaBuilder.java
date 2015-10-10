@@ -1,4 +1,4 @@
-package wbs.framework.entity.model;
+package wbs.framework.entity.meta;
 
 import java.util.List;
 import java.util.Map;

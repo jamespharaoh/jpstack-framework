@@ -1,4 +1,4 @@
-package wbs.framework.entity.model;
+package wbs.framework.entity.meta;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -34,7 +34,7 @@ import com.google.common.collect.ImmutableMap;
 @Log4j
 @SingletonComponent ("entityHelper")
 public
-class EntityHelperImpl
+class EntityHelperImplementation
 	implements EntityHelper {
 
 	// dependencies
