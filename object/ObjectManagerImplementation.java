@@ -30,7 +30,7 @@ import wbs.framework.utils.etc.BeanLogic;
 @Accessors (fluent = true)
 @SingletonComponent ("objectManager")
 public
-class ObjectManagerImpl
+class ObjectManagerImplementation
 	implements ObjectManager {
 
 	// dependencies
@@ -103,7 +103,8 @@ class ObjectManagerImpl
 			@NonNull Record<?> object) {
 
 		ObjectHelper<?> objectHelper =
-			objectHelperForClass (object.getClass ());
+			objectHelperForClass (
+				object.getClass ());
 
 		return objectHelper.getParent (
 			object);
@@ -137,15 +138,15 @@ class ObjectManagerImpl
 	ObjectHelper<?> objectHelperForClass (
 			@NonNull Class<?> objectClass) {
 
-		return objectHelperManager
-			.forObjectClass (objectClass);
+		return objectHelperManager.forObjectClass (
+			objectClass);
 
 	}
 
 	@Override
 	public
 	String objectPath (
-			Record<?> dataObject) {
+			@NonNull Record<?> dataObject) {
 
 		return objectPath (
 			dataObject,
@@ -158,7 +159,7 @@ class ObjectManagerImpl
 	@Override
 	public
 	String objectPathMini (
-			Record<?> dataObject) {
+			@NonNull Record<?> dataObject) {
 
 		return objectPath (
 			dataObject,
@@ -171,8 +172,8 @@ class ObjectManagerImpl
 	@Override
 	public
 	String objectPathMini (
-			Record<?> object,
-			Record<?> root) {
+			@NonNull Record<?> object,
+			@NonNull Record<?> root) {
 
 		return objectPath (
 			object,

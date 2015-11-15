@@ -12,6 +12,7 @@ import javax.sql.DataSource;
 
 import lombok.Cleanup;
 import lombok.Getter;
+import lombok.NonNull;
 
 import com.google.common.collect.ImmutableSet;
 
@@ -19,7 +20,7 @@ import wbs.framework.application.annotations.SingletonComponent;
 
 @SingletonComponent ("sqlLogic")
 public
-class SqlLogicImpl
+class SqlLogicImplementation
 	implements SqlLogic {
 
 	@Inject
@@ -60,7 +61,7 @@ class SqlLogicImpl
 	@Override
 	public
 	String quoteIdentifier (
-			String identifier) {
+			@NonNull String identifier) {
 
 		// TODO handle special characters etc
 

@@ -44,7 +44,7 @@ import wbs.framework.application.annotations.ProxiedRequestComponent;
 	proxyInterface = RequestContext.class)
 // TODO move this somewhere else
 public
-class RequestContextImpl
+class RequestContextImplementation
 	implements RequestContext {
 
 	public static
