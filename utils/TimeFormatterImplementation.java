@@ -1,0 +1,315 @@
+package wbs.framework.utils;
+
+import static wbs.framework.utils.etc.Misc.pluralise;
+
+import java.util.Locale;
+
+import lombok.NonNull;
+
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.Duration;
+import org.joda.time.Instant;
+import org.joda.time.LocalDate;
+import org.joda.time.ReadableDuration;
+import org.joda.time.ReadableInstant;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
+import com.google.common.base.Optional;
+
+import wbs.framework.application.annotations.SingletonComponent;
+
+@SingletonComponent ("timeFormatter")
+public
+class TimeFormatterImplementation
+	implements TimeFormatter {
+
+	// implementation
+
+	@Override
+	public
+	String timestampString (
+			@NonNull DateTimeZone timeZone,
+			@NonNull ReadableInstant instant) {
+
+		return timestampFormat
+			.withZone (timeZone)
+			.print (instant);
+
+	}
+
+	@Override
+	public
+	String timestampTimezoneString (
+			@NonNull DateTimeZone timeZone,
+			@NonNull ReadableInstant instant) {
+
+		return timestampTimezoneFormat
+			.withZone (timeZone)
+			.print (instant);
+
+	}
+
+	@Override
+	public
+	String dateStringLong (
+			@NonNull DateTimeZone timeZone,
+			@NonNull ReadableInstant instant) {
+
+		return longDateFormat
+			.withZone (timeZone)
+			.print (instant);
+
+	}
+
+	@Override
+	public
+	String timeString (
+			@NonNull DateTimeZone timeZone,
+			@NonNull ReadableInstant instant) {
+
+		return timeFormat
+			.withZone (timeZone)
+			.print (instant);
+
+	}
+
+	@Override
+	public
+	String dateStringShort (
+			@NonNull DateTimeZone timeZone,
+			@NonNull ReadableInstant instant) {
+
+		return shortDateFormat
+			.withZone (timeZone)
+			.print (instant);
+
+	}
+
+	@Override
+	public
+	String httpTimestampString (
+			@NonNull ReadableInstant instant) {
+
+		return httpTimestampFormat
+			.print (instant);
+
+	}
+
+	@Override
+	public
+	Instant timestampStringToInstant (
+			@NonNull DateTimeZone timeZone,
+			@NonNull String string) {
+
+		return timestampFormat
+			.withZone (timeZone)
+			.parseDateTime (string)
+			.toInstant ();
+
+	}
+
+	@Override
+	public
+	String dateString (
+			@NonNull LocalDate localDate) {
+
+		return shortDateFormat.print (
+			localDate);
+
+	}
+
+	@Override
+	public
+	String timestampTimezoneString (
+			@NonNull DateTime dateTime) {
+
+		return timestampTimezoneFormat.print (
+			dateTime);
+
+	}
+
+	@Override
+	public
+	String timezoneString (
+			@NonNull DateTime dateTime) {
+
+		return timezoneFormat.print (
+			dateTime);
+
+	}
+
+	@Override
+	public
+	Optional<LocalDate> dateStringToLocalDate (
+			@NonNull String string) {
+
+		try {
+
+			return Optional.of (
+				shortDateFormat.parseLocalDate (
+					string));
+
+		} catch (IllegalArgumentException exception) {
+
+			return Optional.absent ();
+
+		}
+
+	}
+
+	@Override
+	public
+	LocalDate dateStringToLocalDateRequired (
+			@NonNull String string) {
+
+		return shortDateFormat.parseLocalDate (
+			string);
+
+	}
+
+	// duration
+
+	@Override
+	public 
+	String prettyDuration (
+			@NonNull ReadableInstant start,
+			@NonNull ReadableInstant end) {
+
+		return prettyDuration (
+			new Duration (
+				start,
+				end));
+
+	}
+
+	@Override
+	public 
+	String prettyDuration (
+			@NonNull ReadableDuration interval) {
+
+		long millis =
+			interval.getMillis ();
+
+		if (millis < 2 * 1000L) {
+
+			return pluralise (
+				millis,
+				"millisecond");
+
+		} else if (millis < 2 * 60000L) {
+
+			return pluralise (
+				millis / 1000L,
+				"second");
+
+		} else if (millis < 2 * 3600000L) {
+
+			return pluralise (
+				millis / 60000L,
+				"minute");
+
+		} else if (millis < 2 * 86400000L) {
+
+			return pluralise (
+				millis / 3600000L,
+				"hour");
+
+		} else if (millis < 2 * 2678400000L) {
+
+			return pluralise (
+				millis / 86400000L,
+				"day");
+
+		} else if (millis < 2 * 31557600000L) {
+
+			return pluralise (
+				millis / 2592000000L,
+				"month");
+
+		} else {
+
+			return pluralise (
+				millis / 31556736000L,
+				"year");
+
+		}
+
+	}
+
+	// time zone
+
+	@Override
+	public
+	DateTime timestampTimezoneToDateTime (
+			@NonNull String string) {
+
+		return timestampTimezoneFormat.parseDateTime (
+			string);
+
+	}
+
+	/*
+	@Override
+	public
+	DateTimeZone defaultTimezone () {
+
+		return timezone (
+			ifNull (
+				wbsConfig.defaultTimezone (),
+				DateTimeZone.getDefault ().getID ()));
+
+	}
+	*/
+
+	@Override
+	public
+	DateTimeZone timezone (
+			@NonNull String name) {
+
+		return DateTimeZone.forID (
+			name);
+
+	}
+
+	// data
+
+	public final static
+	DateTimeFormatter timestampFormat =
+		DateTimeFormat
+			.forPattern ("yyyy-MM-dd HH:mm:ss");
+
+	public final static
+	DateTimeFormatter timestampTimezoneFormat =
+		DateTimeFormat
+			.forPattern ("yyyy-MM-dd HH:mm:ss z");
+
+	public final static
+	DateTimeFormatter timeFormat =
+		DateTimeFormat
+			.forPattern ("HH:mm:ss");
+
+	public final static
+	DateTimeFormatter longDateFormat =
+		DateTimeFormat
+			.forPattern ("EEEE, d MMMM yyyy");
+
+	public final static
+	DateTimeFormatter shortDateFormat =
+		DateTimeFormat
+			.forPattern ("yyyy-MM-dd");
+
+	public final static
+	DateTimeFormatter timezoneFormat =
+		DateTimeFormat
+			.forPattern ("z");
+
+	public final static
+	DateTimeFormatter httpTimestampFormat =
+		DateTimeFormat
+			.forPattern ("EEE, dd MMM yyyyy HH:mm:ss z")
+			.withLocale (Locale.US)
+			.withZoneUTC ();
+
+}
