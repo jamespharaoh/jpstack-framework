@@ -1,5 +1,5 @@
 <plugin
-	name="entity"
+	name="framework-entity"
 	package="wbs.framework.entity">
 
 	<layer name="model-meta">
@@ -27,6 +27,7 @@
 
 		<component class="meta.identities.CodeFieldSpec"/>
 		<component class="meta.identities.IdentityDateFieldSpec"/>
+		<component class="meta.identities.IdentityEnumFieldSpec"/>
 		<component class="meta.identities.IdentityIntegerFieldSpec"/>
 		<component class="meta.identities.IdentityReferenceFieldSpec"/>
 		<component class="meta.identities.IdentityStringFieldSpec"/>
@@ -80,6 +81,7 @@
 		<component class="generate.fields.ForeignIdFieldWriter"/>
 		<component class="generate.fields.GeneratedIdFieldWriter"/>
 		<component class="generate.fields.IdentityDateFieldWriter"/>
+		<component class="generate.fields.IdentityEnumFieldWriter"/>
 		<component class="generate.fields.IdentityIntegerFieldWriter"/>
 		<component class="generate.fields.IdentityReferenceFieldWriter"/>
 		<component class="generate.fields.IdentityStringFieldWriter"/>
@@ -124,6 +126,7 @@
 		<component class="build.ForeignIdModelFieldBuilder"/>
 		<component class="build.GeneratedIdModelFieldBuilder"/>
 		<component class="build.IdentityDateModelFieldBuilder"/>
+		<component class="build.IdentityEnumModelFieldBuilder"/>
 		<component class="build.IdentityIntegerModelFieldBuilder"/>
 		<component class="build.IdentityReferenceModelFieldBuilder"/>
 		<component class="build.IdentityStringModelFieldBuilder"/>

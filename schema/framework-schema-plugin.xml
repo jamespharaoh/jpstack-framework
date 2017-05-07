@@ -1,5 +1,5 @@
 <plugin
-	name="schema"
+	name="framework-schema"
 	package="wbs.framework.schema">
 
 	<layer name="schema">

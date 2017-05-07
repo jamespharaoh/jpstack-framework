@@ -1,5 +1,5 @@
 <plugin
-	name="codegen"
+	name="framework-codegen"
 	package="wbs.framework.codegen">
 
 	<layer name="utils">

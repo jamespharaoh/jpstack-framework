@@ -1,5 +1,5 @@
 <plugin
-	name="sql"
+	name="framework-sql"
 	package="wbs.framework.sql">
 
 	<layer name="sql">

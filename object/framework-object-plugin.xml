@@ -1,5 +1,5 @@
 <plugin
-	name="object"
+	name="framework-object"
 	package="wbs.framework.object">
 
 	<layer name="object">

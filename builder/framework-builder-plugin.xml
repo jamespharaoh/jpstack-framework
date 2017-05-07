@@ -1,5 +1,5 @@
 <plugin
-	name="builder"
+	name="framework-builder"
 	package="wbs.framework.builder">
 
 	<layer name="utils">

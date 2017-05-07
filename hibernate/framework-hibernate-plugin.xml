@@ -1,5 +1,5 @@
 <plugin
-	name="hibernate"
+	name="framework-hibernate"
 	package="wbs.framework.hibernate">
 
 	<layer name="hibernate">

@@ -13,19 +13,21 @@ import javax.servlet.ServletResponse;
 
 import lombok.NonNull;
 
+import wbs.framework.component.annotations.ClassSingletonDependency;
+import wbs.framework.component.annotations.PrototypeComponent;
 import wbs.framework.component.manager.ComponentManager;
-import wbs.framework.logging.DefaultLogContext;
 import wbs.framework.logging.LogContext;
 import wbs.framework.logging.OwnedTaskLogger;
 
+@PrototypeComponent ("componentServletProxy")
 public
-class BeanServletProxy
+class ComponentServletProxy
 	implements Servlet {
 
-	private final static
-	LogContext logContext =
-		DefaultLogContext.forClass (
-			BeanServletProxy.class);
+	// singleton dependencies
+
+	@ClassSingletonDependency
+	LogContext logContext;
 
 	// state
 
@@ -55,6 +57,18 @@ class BeanServletProxy
 			@NonNull ServletConfig servletConfig)
 		throws ServletException {
 
+		ServletContext servletContext =
+			servletConfig.getServletContext ();
+
+		@SuppressWarnings ("resource")
+		ComponentManager componentManager =
+			genericCastUnchecked (
+				servletContext.getAttribute (
+					"wbs-application-context"));
+
+		componentManager.bootstrapComponent (
+			this);
+
 		try (
 
 			OwnedTaskLogger taskLogger =
@@ -62,15 +76,6 @@ class BeanServletProxy
 					"init");
 
 		) {
-
-			ServletContext servletContext =
-				servletConfig.getServletContext ();
-
-			@SuppressWarnings ("resource")
-			ComponentManager componentManager =
-				genericCastUnchecked (
-					servletContext.getAttribute (
-						"wbs-application-context"));
 
 			target =
 				componentManager.getComponentRequired (

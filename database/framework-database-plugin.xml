@@ -1,5 +1,5 @@
 <plugin
-	name="database"
+	name="framework-database"
 	package="wbs.framework.database">
 
 	<layer name="data">
