@@ -11,21 +11,16 @@ import wbs.framework.data.annotations.DataParent;
 @Accessors (fluent = true)
 @DataClass ("plugin")
 public
-class BuildPluginSpec {
+class BuildLayerPluginSpec {
 
 	@DataParent
 	@Getter @Setter
-	BuildSpec build;
+	BuildLayerSpec layer;
 
 	@DataAttribute (
+		name = "class",
 		required = true)
 	@Getter @Setter
-	String name;
-
-	@DataAttribute (
-		name = "package",
-		required = true)
-	@Getter @Setter
-	String packageName;
+	String className;
 
 }

@@ -14,17 +14,19 @@ import lombok.NonNull;
 import org.hibernate.SessionFactory;
 
 import wbs.framework.component.annotations.ClassSingletonDependency;
-import wbs.framework.component.annotations.PrototypeDependency;
 import wbs.framework.component.annotations.SingletonComponent;
 import wbs.framework.component.annotations.SingletonDependency;
+import wbs.framework.component.annotations.StrongPrototypeDependency;
 import wbs.framework.component.config.WbsConfig;
+import wbs.framework.component.tools.ComponentFactory;
 import wbs.framework.logging.LogContext;
 import wbs.framework.logging.OwnedTaskLogger;
 import wbs.framework.logging.TaskLogger;
 
-@SingletonComponent ("hibernateComponents")
+@SingletonComponent ("hibernateSessionFactory")
 public
-class HibernateComponents {
+class HibernateSessionFactory
+	implements ComponentFactory <SessionFactory> {
 
 	// singleton dependencies
 
@@ -36,15 +38,15 @@ class HibernateComponents {
 
 	// prototype dependencies
 
-	@PrototypeDependency
+	@StrongPrototypeDependency
 	Provider <HibernateSessionFactoryBuilder>
 		hibernateSessionFactoryBuilderProvider;
 
-	// components
+	// implementation
 
-	@SingletonComponent ("hibernateSessionFactory")
+	@Override
 	public
-	SessionFactory hibernateSessionFactory (
+	SessionFactory makeComponent (
 			@NonNull TaskLogger parentTaskLogger) {
 
 		try (
@@ -52,7 +54,7 @@ class HibernateComponents {
 			OwnedTaskLogger taskLogger =
 				logContext.nestTaskLogger (
 					parentTaskLogger,
-					"hibernateSessionFactory");
+					"makeComponent");
 
 		) {
 

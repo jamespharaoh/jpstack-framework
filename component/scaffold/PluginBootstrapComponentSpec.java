@@ -4,28 +4,28 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
+import wbs.framework.data.annotations.DataAncestor;
 import wbs.framework.data.annotations.DataAttribute;
 import wbs.framework.data.annotations.DataClass;
 import wbs.framework.data.annotations.DataParent;
 
 @Accessors (fluent = true)
-@DataClass ("plugin")
+@DataClass ("bootstrap-component")
 public
-class BuildPluginSpec {
+class PluginBootstrapComponentSpec {
+
+	@DataAncestor
+	@Getter @Setter
+	PluginSpec plugin;
 
 	@DataParent
 	@Getter @Setter
-	BuildSpec build;
+	PluginLayerSpec layer;
 
 	@DataAttribute (
+		name = "class",
 		required = true)
 	@Getter @Setter
-	String name;
-
-	@DataAttribute (
-		name = "package",
-		required = true)
-	@Getter @Setter
-	String packageName;
+	String className;
 
 }

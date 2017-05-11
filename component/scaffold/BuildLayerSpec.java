@@ -9,26 +9,20 @@ import lombok.experimental.Accessors;
 import wbs.framework.data.annotations.DataAttribute;
 import wbs.framework.data.annotations.DataChildren;
 import wbs.framework.data.annotations.DataClass;
-import wbs.framework.data.annotations.DataIgnore;
 
 @Accessors (fluent = true)
-@DataClass ("wbs-build")
+@DataClass ("layer")
 public
-class BuildSpec {
+class BuildLayerSpec {
 
-	@DataAttribute
+	@DataAttribute (
+		required = true)
 	@Getter @Setter
 	String name;
 
-	@DataChildren
+	@DataChildren (
+		direct = true)
 	@Getter @Setter
-	List <BuildPluginSpec> plugins;
-
-	@DataChildren
-	@Getter @Setter
-	List <BuildLayerSpec> layers;
-
-	@DataIgnore
-	Object gitLinks = null;
+	List <BuildLayerPluginSpec> plugins;
 
 }

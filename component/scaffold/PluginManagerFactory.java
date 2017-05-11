@@ -3,10 +3,12 @@ package wbs.framework.component.scaffold;
 import static wbs.utils.collection.CollectionUtils.collectionIsNotEmpty;
 import static wbs.utils.collection.IterableUtils.iterableFilterToList;
 import static wbs.utils.collection.IterableUtils.iterableMap;
+import static wbs.utils.etc.Misc.contains;
 import static wbs.utils.etc.Misc.doesNotContain;
 import static wbs.utils.etc.NumberUtils.integerToDecimalString;
 import static wbs.utils.string.StringUtils.joinWithCommaAndSpace;
 import static wbs.utils.string.StringUtils.stringFormat;
+import static wbs.utils.string.StringUtils.stringNotEqualSafe;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -22,45 +24,175 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
 import lombok.NonNull;
-import lombok.Setter;
-import lombok.experimental.Accessors;
 
 import wbs.framework.component.annotations.ClassSingletonDependency;
-import wbs.framework.component.annotations.PrototypeComponent;
 import wbs.framework.component.annotations.PrototypeDependency;
+import wbs.framework.component.annotations.SingletonComponent;
+import wbs.framework.component.annotations.SingletonDependency;
+import wbs.framework.component.tools.ComponentFactory;
+import wbs.framework.data.tools.DataFromXml;
+import wbs.framework.data.tools.DataFromXmlBuilder;
 import wbs.framework.logging.LogContext;
 import wbs.framework.logging.OwnedTaskLogger;
 import wbs.framework.logging.TaskLogger;
 
-@PrototypeComponent ("pluginManagerBuilder")
-@Accessors (fluent = true)
+@SingletonComponent ("pluginManager")
 public
-class PluginManagerBuilder {
+class PluginManagerFactory
+	implements ComponentFactory <PluginManager> {
 
-	// singleton depndencies
+	// singleton components
+
+	@SingletonDependency
+	BuildSpec buildSpec;
 
 	@ClassSingletonDependency
 	LogContext logContext;
 
-	// prototype dependencies
+	// prototype components
 
 	@PrototypeDependency
-	Provider <PluginManager> pluginManagerProvider;
+	Provider <DataFromXmlBuilder> dataFromXmlBuilderProvider;
 
-	// properties
+	// public implementation
 
-	@Setter
-	List <PluginSpec> plugins;
-
-	// state
-
-	Set <String> donePluginNames;
-
-	// implementation
-
+	@Override
 	public
-	PluginManager build (
+	PluginManager makeComponent (
 			@NonNull TaskLogger parentTaskLogger) {
+
+		try (
+
+			OwnedTaskLogger taskLogger =
+				logContext.nestTaskLogger (
+					parentTaskLogger,
+					"makeComponent");
+
+		) {
+
+			List <PluginSpec> plugins =
+				loadPlugins (
+					taskLogger);
+
+			return buildReal (
+				taskLogger,
+				plugins);
+
+		}
+
+	}
+
+	// private implementation
+
+	private
+	List <PluginSpec> loadPlugins (
+			@NonNull TaskLogger parentTaskLogger) {
+
+		try (
+
+			OwnedTaskLogger taskLogger =
+				logContext.nestTaskLogger (
+					parentTaskLogger,
+					"loadPlugins");
+
+		) {
+
+			ImmutableList.Builder <PluginSpec> pluginsBuilder =
+				ImmutableList.builder ();
+
+			DataFromXml pluginDataFromXml =
+				dataFromXmlBuilderProvider.get ()
+
+				.registerBuilderClasses (
+					PluginApiModuleSpec.class,
+					PluginBootstrapComponentSpec.class,
+					PluginComponentSpec.class,
+					PluginComponentTypeSpec.class,
+					PluginConsoleModuleSpec.class,
+					PluginCustomTypeSpec.class,
+					PluginEnumTypeSpec.class,
+					PluginFixtureSpec.class,
+					PluginLayerSpec.class,
+					PluginModelSpec.class,
+					PluginModelsSpec.class,
+					PluginDependencySpec.class,
+					PluginSpec.class)
+
+				.build ();
+
+			Set <String> pluginNames =
+				new HashSet<> ();
+
+			for (
+				BuildPluginSpec buildPlugin
+					: buildSpec.plugins ()
+			) {
+
+				String pluginPath =
+					stringFormat (
+						"/%s",
+						buildPlugin.packageName ().replace (".", "/"),
+						"/%s-plugin.xml",
+						buildPlugin.name ());
+
+				PluginSpec plugin =
+					(PluginSpec)
+					pluginDataFromXml.readClasspath (
+						taskLogger,
+						pluginPath,
+						ImmutableList.of (
+							buildSpec));
+
+				if (
+					stringNotEqualSafe (
+						buildPlugin.name (),
+						plugin.name ())
+				) {
+
+					taskLogger.errorFormat (
+						"Plugin name mismatch for %s ",
+						pluginPath,
+						"(should be %s ",
+						buildPlugin.name (),
+						"but was %s)",
+						plugin.name ());
+
+					continue;
+
+				}
+
+				if (
+					contains (
+						pluginNames,
+						plugin.name ())
+				) {
+
+					taskLogger.errorFormat (
+						"Duplicated plugin name: %s",
+						plugin.name ());
+
+					continue;
+
+				}
+
+				pluginsBuilder.add (
+					plugin);
+
+				pluginNames.add (
+					plugin.name ());
+
+			}
+
+			return pluginsBuilder.build ();
+
+		}
+
+	}
+
+	private
+	PluginManager buildReal (
+			@NonNull TaskLogger parentTaskLogger,
+			@NonNull List <PluginSpec> plugins) {
 
 		try (
 
@@ -72,7 +204,8 @@ class PluginManagerBuilder {
 		) {
 
 			verifyPluginDependencies (
-				taskLogger);
+				taskLogger,
+				plugins);
 
 			ImmutableList.Builder <PluginSpec> pluginsBuilder =
 				ImmutableList.builder ();
@@ -89,7 +222,7 @@ class PluginManagerBuilder {
 			pluginCustomTypesByNameBuilder =
 				ImmutableMap.builder ();
 
-			donePluginNames =
+			Set <String> donePluginNames =
 				new HashSet<> ();
 
 			List <PluginSpec> remainingPlugins =
@@ -112,6 +245,7 @@ class PluginManagerBuilder {
 
 					if (
 						! pluginDependenciesSatisfied (
+							donePluginNames,
 							plugin)
 					) {
 						continue;
@@ -192,7 +326,7 @@ class PluginManagerBuilder {
 
 			}
 
-			return pluginManagerProvider.get ()
+			return new PluginManager ()
 
 				.plugins (
 					pluginsBuilder.build ())
@@ -214,7 +348,8 @@ class PluginManagerBuilder {
 
 	private
 	void verifyPluginDependencies (
-			@NonNull TaskLogger parentTaskLogger) {
+			@NonNull TaskLogger parentTaskLogger,
+			@NonNull List <PluginSpec> plugins) {
 
 		try (
 
@@ -268,16 +403,21 @@ class PluginManagerBuilder {
 	}
 
 	boolean pluginDependenciesSatisfied (
-			PluginSpec plugin) {
+			@NonNull Set <String> donePluginNames,
+			@NonNull PluginSpec plugin) {
 
 		for (
 			PluginDependencySpec pluginDependency
 				: plugin.pluginDependencies ()
 		) {
 
-			if (! donePluginNames.contains (
-					pluginDependency.name ()))
+			if (
+				doesNotContain (
+					donePluginNames,
+					pluginDependency.name ())
+			) {
 				return false;
+			}
 
 		}
 
