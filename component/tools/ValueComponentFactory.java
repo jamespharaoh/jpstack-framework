@@ -9,7 +9,7 @@ import wbs.framework.logging.TaskLogger;
 
 @Accessors (fluent = true)
 public
-class SingletonComponentFactory <ComponentType>
+class ValueComponentFactory <ComponentType>
 	implements ComponentFactory <ComponentType> {
 
 	// properties
