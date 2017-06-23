@@ -1,7 +1,6 @@
 package wbs.framework.data.tools;
 
 import static wbs.utils.etc.EnumUtils.enumNameHyphens;
-import static wbs.utils.etc.Misc.shouldNeverHappen;
 import static wbs.utils.etc.NullUtils.ifNull;
 import static wbs.utils.etc.ReflectionUtils.fieldGet;
 import static wbs.utils.string.StringUtils.nullIfEmptyString;
@@ -12,11 +11,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 
 import lombok.NonNull;
 
@@ -25,93 +22,67 @@ import wbs.framework.data.annotations.DataChild;
 import wbs.framework.data.annotations.DataClass;
 
 public
-class DataToJson {
+class DataToSimple {
 
 	public
-	JsonElement toJson (
+	Object toJson (
 			@NonNull Object dataValue) {
 
-		Class <?> dataClass =
+		Class<?> dataClass =
 			dataValue.getClass ();
 
 		if (simpleClasses.contains (dataValue.getClass ())) {
 
-			if (dataValue instanceof Number) {
-
-				return new JsonPrimitive (
-					(Number) dataValue);
-
-			} else if (dataValue instanceof String) {
-
-				return new JsonPrimitive (
-					(String) dataValue);
-
-			} else if (dataValue instanceof Boolean) {
-
-				return new JsonPrimitive (
-					(Boolean) dataValue);
-
-			} else if (dataValue instanceof Character) {
-
-				return new JsonPrimitive (
-					(Character) dataValue);
-			} else {
-
-				throw shouldNeverHappen ();
-
-			}
+			return dataValue;
 
 		} else if (dataValue instanceof Enum) {
 
 			Enum <?> dataEnum =
 				(Enum <?>) dataValue;
 
-			return new JsonPrimitive (
-				enumNameHyphens (
-					dataEnum));
+			return enumNameHyphens (
+				dataEnum);
 
 		} else if (dataValue instanceof List) {
 
-			List <?> dataList =
-				(List <?>) dataValue;
+			List<?> dataList =
+				(List<?>) dataValue;
 
-			JsonArray jsonArray =
-				new JsonArray ();
+			ImmutableList.Builder<Object> jsonListBuilder =
+				ImmutableList.<Object>builder ();
 
 			for (
 				Object dataListElement
 					: dataList
 			) {
 
-				jsonArray.add (
-					toJson (
-						dataListElement));
+				jsonListBuilder.add (
+					toJson (dataListElement));
 
 			}
 
-			return jsonArray;
+			return jsonListBuilder.build ();
 
 		} else if (dataValue instanceof Map) {
 
-			Map <?, ?> dataMap =
-				(Map <?, ?>) dataValue;
+			Map<?,?> dataMap =
+				(Map<?,?>) dataValue;
 
-			JsonObject jsonObject =
-				new JsonObject ();
+			ImmutableMap.Builder<String,Object> jsonMapBuilder =
+				ImmutableMap.<String,Object>builder ();
 
 			for (
-				Map.Entry <?, ?> dataMapEntry
+				Map.Entry<?,?> dataMapEntry
 					: dataMap.entrySet ()
 			) {
 
-				jsonObject.add (
+				jsonMapBuilder.put (
 					(String) dataMapEntry.getKey (),
-					toJson (
-						dataMapEntry.getValue ()));
+					toJson (dataMapEntry.getValue ()));
 
 			}
 
-			return jsonObject;
+			return jsonMapBuilder.build ();
 
 		} else {
 
@@ -129,8 +100,8 @@ class DataToJson {
 
 			}
 
-			JsonObject jsonObject =
-				new JsonObject ();
+			ImmutableMap.Builder <String, Object> jsonValueBuilder =
+				ImmutableMap.builder ();
 
 			for (
 				Field field
@@ -154,7 +125,7 @@ class DataToJson {
 
 				if (dataAttribute != null) {
 
-					jsonObject.add (
+					jsonValueBuilder.put (
 						ifNull (
 							nullIfEmptyString (
 								dataAttribute.name ()),
@@ -170,7 +141,7 @@ class DataToJson {
 
 				if (dataChild != null) {
 
-					jsonObject.add (
+					jsonValueBuilder.put (
 						ifNull (
 							nullIfEmptyString (
 								dataChild.name ()),
@@ -182,7 +153,7 @@ class DataToJson {
 
 			}
 
-			return jsonObject;
+			return jsonValueBuilder.build ();
 
 		}
 
@@ -193,7 +164,6 @@ class DataToJson {
 	Set <Class <?>> simpleClasses =
 		ImmutableSet.<Class <?>> of (
 			Boolean.class,
-			Character.class,
 			Double.class,
 			Float.class,
 			Integer.class,

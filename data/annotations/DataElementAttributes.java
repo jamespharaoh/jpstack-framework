@@ -6,14 +6,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Retention (RetentionPolicy.RUNTIME)
-@Target (ElementType.TYPE)
+@Target (ElementType.FIELD)
 public
-@interface DataClass {
-
-	String value ()
-	default "";
-
-	boolean element ()
-	default false;
+@interface DataElementAttributes {
 
 }
