@@ -1,18 +1,13 @@
-package wbs.framework.entity.fixtures;
+package wbs.framework.component.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import javax.inject.Qualifier;
-
-@Qualifier
 @Retention (RetentionPolicy.RUNTIME)
-@Target ({
-	ElementType.FIELD,
-	ElementType.TYPE })
+@Target (ElementType.METHOD)
 public
-@interface ModelMetaBuilderHandler {
+@interface LifecycleStart {
 
 }

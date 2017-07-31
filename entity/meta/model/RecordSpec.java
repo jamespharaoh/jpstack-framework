@@ -19,11 +19,11 @@ import wbs.framework.data.annotations.DataParent;
 @Data
 @EqualsAndHashCode (of = "name")
 @ToString (of = "name")
-@DataClass ("model-meta")
-@PrototypeComponent ("modelMetaSpec")
+@DataClass ("record")
+@PrototypeComponent ("recordSpec")
 @ModelMetaData
 public
-class ModelMetaSpec {
+class RecordSpec {
 
 	@DataParent
 	PluginSpec plugin;
@@ -54,11 +54,6 @@ class ModelMetaSpec {
 	// children
 
 	@DataChildren (
-		childrenElement = "implements-interfaces")
-	List <ModelImplementsInterfaceSpec> implementsInterfaces =
-		new ArrayList<> ();
-
-	@DataChildren (
 		childrenElement = "fields")
 	List <ModelFieldSpec> fields =
 		new ArrayList<> ();
@@ -66,6 +61,21 @@ class ModelMetaSpec {
 	@DataChildren (
 		childrenElement = "collections")
 	List <ModelCollectionSpec> collections =
+		new ArrayList<> ();
+
+	@DataChildren (
+		childrenElement = "dao-interfaces")
+	List <ModelInterfaceSpec> daoInterfaces =
+		new ArrayList<> ();
+
+	@DataChildren (
+		childrenElement = "record-interfaces")
+	List <ModelInterfaceSpec> recordInterfaces =
+		new ArrayList<> ();
+
+	@DataChildren (
+		childrenElement = "object-helper-interfaces")
+	List <ModelInterfaceSpec> objectHelperInterfaces =
 		new ArrayList<> ();
 
 	@DataChildren (

@@ -13,14 +13,14 @@ import wbs.framework.data.annotations.DataClass;
 
 @Accessors (fluent = true)
 @Data
-@DataClass ("implements-interface")
-@PrototypeComponent ("modelImplementsInterfaceSpec")
+@DataClass ("interface")
+@PrototypeComponent ("modelInterfaceSpec")
 @ModelMetaData
 public
-class ModelImplementsInterfaceSpec {
+class ModelInterfaceSpec {
 
 	@DataAncestor
-	ModelMetaSpec modelMeta;
+	RecordSpec modelMeta;
 
 	@DataAttribute (
 		name = "package")
