@@ -23,6 +23,7 @@ import wbs.framework.component.scaffold.PluginManager;
 import wbs.framework.entity.meta.fields.DateFieldSpec;
 import wbs.framework.entity.model.ModelField;
 import wbs.framework.entity.model.ModelFieldType;
+import wbs.framework.hibernate.DateUserType;
 import wbs.framework.logging.LogContext;
 import wbs.framework.logging.OwnedTaskLogger;
 import wbs.framework.logging.TaskLogger;
@@ -118,6 +119,9 @@ class DateModelFieldBuilder
 				.columnSqlTypes (
 					ImmutableList.of (
 						"date"))
+
+				.hibernateTypeHelper (
+					DateUserType.class)
 
 			;
 

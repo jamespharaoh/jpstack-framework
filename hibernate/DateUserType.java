@@ -7,7 +7,6 @@ import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Types;
 
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.type.CustomType;
@@ -83,7 +82,7 @@ class DateUserType
 
 			statement.setNull (
 				index,
-				Types.VARCHAR);
+				1111);
 
 			return;
 
@@ -111,7 +110,7 @@ class DateUserType
 	int[] sqlTypes () {
 
 		return new int [] {
-			Types.VARCHAR,
+			1111,
 		};
 
 	}

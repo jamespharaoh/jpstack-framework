@@ -1,7 +1,5 @@
 package wbs.framework.database;
 
-import static wbs.utils.etc.Misc.todo;
-
 import java.util.List;
 
 import com.google.common.base.Optional;
@@ -105,7 +103,7 @@ class BorrowedTransaction
 	public
 	RealTaskLogger realTaskLogger () {
 
-		throw new UnsupportedOperationException ();
+		return ownedTransaction.realTaskLogger ();
 
 	}
 
@@ -133,7 +131,11 @@ class BorrowedTransaction
 			@NonNull List <CharSequence> dynamicContextParameters,
 			@NonNull Optional <Boolean> debugEnabled) {
 
-		throw todo ();
+		return ownedTransaction.nestTransaction (
+			logContext,
+			dynamicContextName,
+			dynamicContextParameters,
+			debugEnabled);
 
 	}
 
