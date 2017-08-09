@@ -91,9 +91,10 @@ class DateUserType
 		LocalDate localDateValue =
 			(LocalDate) value;
 
-		statement.setString (
+		statement.setObject (
 			index,
-			localDateValue.toString ());
+			localDateValue.toString (),
+			1111);
 
 	}
 
