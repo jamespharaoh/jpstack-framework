@@ -30,8 +30,6 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import com.google.common.base.Optional;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
@@ -755,19 +753,10 @@ class GenericHttpSender <Request, Response> {
 
 					} else {
 
-						Gson gson =
-							new GsonBuilder ().create ();
-
 						taskLogger.errorFormat (
 							"Decode error: %s\n",
 							optionalGetRequired (
-								errorMessage),
-							"Trace: %s\n",
-							gson.toJson (
-								requestTrace),
-							"Response: %s",
-							gson.toJson (
-								responseTrace));
+								errorMessage));
 
 						throw new RuntimeException (
 							optionalGetRequired (
