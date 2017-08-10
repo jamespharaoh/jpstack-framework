@@ -2,6 +2,7 @@ package wbs.framework.apiclient;
 
 import static wbs.utils.collection.ArrayUtils.arrayStream;
 import static wbs.utils.collection.MapUtils.mapContainsKey;
+import static wbs.utils.collection.MapUtils.mapWithDerivedKeyAndValueGroup;
 import static wbs.utils.etc.EnumUtils.enumEqualSafe;
 import static wbs.utils.etc.EnumUtils.enumNotEqualSafe;
 import static wbs.utils.etc.Misc.doNothing;
@@ -23,13 +24,17 @@ import static wbs.utils.string.StringUtils.utf8ToString;
 import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -50,7 +55,6 @@ import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.json.simple.JSONObject;
 
 import wbs.framework.component.annotations.ClassSingletonDependency;
 import wbs.framework.component.annotations.NormalLifecycleSetup;
@@ -89,6 +93,7 @@ class GenericHttpSender <Request, Response> {
 
 	// state
 
+	@Getter
 	GenericHttpSenderHelper <Request, Response> helper;
 
 	State state =
@@ -102,14 +107,17 @@ class GenericHttpSender <Request, Response> {
 	String responseBody;
 
 	@Getter
-	JSONObject requestTrace;
+	JsonObject requestTrace;
 
 	@Getter
-	JSONObject responseTrace;
+	JsonObject responseTrace;
 
 	@Getter
 	Optional <String> errorMessage =
 		optionalAbsent ();
+
+	@Getter
+	Boolean success;
 
 	// life cycle
 
@@ -335,34 +343,57 @@ class GenericHttpSender <Request, Response> {
 			// create debug trace
 
 			requestTrace =
-				new JSONObject (
-					ImmutableMap.<String, Object> builder ()
+				new JsonObject ();
 
-				.put (
-					"url",
-					httpRequest.getURI ().toString ())
+			requestTrace.addProperty (
+				"url",
+				httpRequest.getURI ().toString ());
 
-				.put (
-					"method",
-					httpRequest.getMethod ())
+			requestTrace.addProperty (
+				"method",
+				httpRequest.getMethod ());
 
-				.put (
-					"headers",
-					Arrays.asList (
-						httpRequest.getAllHeaders ()
-					).stream ().collect (
-						Collectors.toMap (
-							Header::getName,
-							Header::getValue)))
+			JsonObject requestHeadersTrace =
+				new JsonObject ();
 
-				.put (
-					"body",
-					emptyStringIfNull (
-						helper.requestBody ()))
+			for (
+				Map.Entry <String, List <String>> requestHeaderEntry
+					: mapWithDerivedKeyAndValueGroup (
+						Arrays.asList (
+							httpRequest.getAllHeaders ()),
+						Header::getName,
+						Header::getValue
+					).entrySet ()
+			) {
 
-				.build ()
+				JsonArray requestHeaderTrace =
+					new JsonArray ();
 
-			);
+				for (
+					String requestHeaderValue
+						: requestHeaderEntry.getValue ()
+				) {
+
+					requestHeaderTrace.add (
+						new JsonPrimitive (
+							requestHeaderValue));
+
+				}
+
+				requestHeadersTrace.add (
+					requestHeaderEntry.getKey (),
+					requestHeaderTrace);
+
+			}
+
+			requestTrace.add (
+				"headers",
+				requestHeadersTrace);
+
+			requestTrace.addProperty (
+				"body",
+				emptyStringIfNull (
+					helper.requestBody ()));
 
 			// update state and return
 
@@ -479,38 +510,53 @@ class GenericHttpSender <Request, Response> {
 			// store raw response
 
 			responseTrace =
-				new JSONObject (
-					ImmutableMap.<String, Object> builder ()
+				new JsonObject ();
 
-				.put (
-					"statusCode",
-					httpResponse.getStatusLine ().getStatusCode ())
+			responseTrace.addProperty (
+				"statusCode",
+				httpResponse.getStatusLine ().getStatusCode ());
 
-				.put (
-					"statusMessage",
-					httpResponse.getStatusLine ().getReasonPhrase ())
+			responseTrace.addProperty (
+				"statusMessage",
+				httpResponse.getStatusLine ().getReasonPhrase ());
 
-				.put (
-					"headers",
-					arrayStream (
-						httpResponse.getAllHeaders ())
+			JsonObject responseHeadersTrace =
+				new JsonObject ();
 
-					.collect (
-						Collectors.groupingBy (
-							Header::getName,
-							Collectors.mapping (
-								Header::getValue,
-								Collectors.toList ())))
+			for (
+				Map.Entry <String, List <String>> responseHeaderEntry
+					: mapWithDerivedKeyAndValueGroup (
+						Arrays.asList (
+							httpResponse.getAllHeaders ()),
+						Header::getName,
+						Header::getValue
+					).entrySet ()
+			) {
 
-				)
+				JsonArray responseHeaderTrace =
+					new JsonArray ();
 
-				.put (
-					"body",
-					responseBody)
+				for (
+					String responseHeaderValue
+						: responseHeaderEntry.getValue ()
+				) {
 
-				.build ()
+					responseHeaderTrace.add (
+						new JsonPrimitive (
+							responseHeaderValue));
 
-			);
+				}
+
+				responseHeadersTrace.add (
+					responseHeaderEntry.getKey (),
+					responseHeaderTrace);
+
+			}
+
+			responseTrace.addProperty (
+				"body",
+				emptyStringIfNull (
+					responseBody));
 
 			// update state and return
 
@@ -639,7 +685,9 @@ class GenericHttpSender <Request, Response> {
 	public
 	Response allInOne (
 			@NonNull TaskLogger parentTaskLogger,
-			@NonNull Request request) {
+			@NonNull Request request,
+			@NonNull Consumer <GenericHttpSender <Request, Response>>
+				postProcessor) {
 
 		try (
 
@@ -650,72 +698,26 @@ class GenericHttpSender <Request, Response> {
 
 		) {
 
-			request (
-				request);
+			success = false;
 
-			encode (
-				taskLogger);
+			try {
 
-			send (
-				taskLogger);
+				request (
+					request);
 
-			receive (
-				taskLogger);
+				encode (
+					taskLogger);
 
-			if (
-				optionalIsPresent (
-					errorMessage)
-			) {
+				send (
+					taskLogger);
 
-				throw new RuntimeException (
-					optionalGetRequired (
-						errorMessage));
-
-			}
-
-			decode (
-				taskLogger);
-
-			if (
-				optionalIsPresent (
-					errorMessage)
-			) {
+				receive (
+					taskLogger);
 
 				if (
-
-					doesNotContain (
-						helper.validStatusCodes (),
-						fromJavaInteger (
-							httpResponse.getStatusLine ().getStatusCode ()))
-
-					&& mapContainsKey (
-						HttpClientException.exceptionClassesByStatus,
-						fromJavaInteger (
-							httpResponse.getStatusLine ().getStatusCode ()))
-
+					optionalIsPresent (
+						errorMessage)
 				) {
-
-					throw HttpClientException.forStatus (
-						fromJavaInteger (
-							httpResponse.getStatusLine ().getStatusCode ()),
-						optionalGetRequired (
-							errorMessage));
-
-				} else {
-
-					Gson gson =
-						new GsonBuilder ().create ();
-
-					taskLogger.errorFormat (
-						"Decode error: %s\n",
-						optionalGetRequired (
-							errorMessage),
-						"Trace: %s\n",
-						gson.toJson (
-							requestTrace),
-						"Response: %s",
-						gson.toJson (
-							responseTrace));
 
 					throw new RuntimeException (
 						optionalGetRequired (
@@ -723,11 +725,83 @@ class GenericHttpSender <Request, Response> {
 
 				}
 
+				decode (
+					taskLogger);
+
+				if (
+					optionalIsPresent (
+						errorMessage)
+				) {
+
+					if (
+
+						doesNotContain (
+							helper.validStatusCodes (),
+							fromJavaInteger (
+								httpResponse.getStatusLine ().getStatusCode ()))
+
+						&& mapContainsKey (
+							HttpClientException.exceptionClassesByStatus,
+							fromJavaInteger (
+								httpResponse.getStatusLine ().getStatusCode ()))
+
+					) {
+
+						throw HttpClientException.forStatus (
+							fromJavaInteger (
+								httpResponse.getStatusLine ().getStatusCode ()),
+							optionalGetRequired (
+								errorMessage));
+
+					} else {
+
+						Gson gson =
+							new GsonBuilder ().create ();
+
+						taskLogger.errorFormat (
+							"Decode error: %s\n",
+							optionalGetRequired (
+								errorMessage),
+							"Trace: %s\n",
+							gson.toJson (
+								requestTrace),
+							"Response: %s",
+							gson.toJson (
+								responseTrace));
+
+						throw new RuntimeException (
+							optionalGetRequired (
+								errorMessage));
+
+					}
+
+				}
+
+				success = true;
+
+				return response ();
+
+			} finally {
+
+				postProcessor.accept (
+					this);
+
 			}
 
-			return response ();
-
 		}
+
+	}
+
+	public
+	Response allInOne (
+			@NonNull TaskLogger parentTaskLogger,
+			@NonNull Request request) {
+
+		return allInOne (
+			parentTaskLogger,
+			request,
+			httpSender ->
+				doNothing ());
 
 	}
 
