@@ -67,6 +67,16 @@ interface ObjectHooks <RecordType extends Record <RecordType>> {
 	}
 
 	default
+	void cleanData (
+			@NonNull Transaction parentTransaction,
+			@NonNull RecordType object,
+			@NonNull Boolean recurse) {
+
+		doNothing ();
+
+	}
+
+	default
 	Object getDynamic (
 			@NonNull Transaction parentTransaction,
 			@NonNull RecordType object,
