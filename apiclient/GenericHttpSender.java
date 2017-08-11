@@ -5,6 +5,7 @@ import static wbs.utils.collection.MapUtils.mapContainsKey;
 import static wbs.utils.collection.MapUtils.mapWithDerivedKeyAndValueGroup;
 import static wbs.utils.etc.EnumUtils.enumEqualSafe;
 import static wbs.utils.etc.EnumUtils.enumNotEqualSafe;
+import static wbs.utils.etc.LogicUtils.attemptWithRetriesVoid;
 import static wbs.utils.etc.Misc.doNothing;
 import static wbs.utils.etc.Misc.doesNotContain;
 import static wbs.utils.etc.Misc.shouldNeverHappen;
@@ -685,7 +686,8 @@ class GenericHttpSender <Request, Response> {
 			@NonNull TaskLogger parentTaskLogger,
 			@NonNull Request request,
 			@NonNull Consumer <GenericHttpSender <Request, Response>>
-				postProcessor) {
+				postProcessor)
+		throws InterruptedException {
 
 		try (
 
@@ -706,22 +708,29 @@ class GenericHttpSender <Request, Response> {
 				encode (
 					taskLogger);
 
-				send (
-					taskLogger);
+				attemptWithRetriesVoid (
+					helper.tooManyRequestsMaxTries (),
+					helper.tooManyRequestsWait (),
+					() -> {
 
-				receive (
-					taskLogger);
+					send (
+						taskLogger);
 
-				if (
-					optionalIsPresent (
-						errorMessage)
-				) {
+					receive (
+						taskLogger);
 
-					throw new RuntimeException (
-						optionalGetRequired (
-							errorMessage));
+					if (
+						optionalIsPresent (
+							errorMessage)
+					) {
 
-				}
+						throw new RuntimeException (
+							optionalGetRequired (
+								errorMessage));
+
+					}
+
+				});
 
 				decode (
 					taskLogger);
@@ -784,7 +793,8 @@ class GenericHttpSender <Request, Response> {
 	public
 	Response allInOne (
 			@NonNull TaskLogger parentTaskLogger,
-			@NonNull Request request) {
+			@NonNull Request request)
+		throws InterruptedException {
 
 		return allInOne (
 			parentTaskLogger,

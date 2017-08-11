@@ -68,6 +68,16 @@ interface GenericHttpSenderHelper <
 		return defaultTimeout ();
 	}
 
+	default
+	Duration tooManyRequestsWait () {
+		return Duration.standardSeconds (2l);
+	}
+
+	default
+	Long tooManyRequestsMaxTries () {
+		return 1l;
+	}
+
 	// response information setters
 
 	GenericHttpSenderHelper <RequestType, ResponseType> responseStatusCode (
