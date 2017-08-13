@@ -220,6 +220,16 @@ class ModelField {
 	}
 
 	public
+	ModelField columnSqlType (
+			@NonNull CharSequence columnSqlType) {
+
+		return columnNames (
+			singletonList (
+				columnSqlType.toString ()));
+
+	}
+
+	public
 	boolean id () {
 
 		return enumInSafe (

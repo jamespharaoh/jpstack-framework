@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.SortedMap;
+import java.util.function.Function;
 
 import com.google.common.base.Optional;
 
@@ -235,6 +236,19 @@ interface ObjectManagerMethods {
 			Transaction parentTransaction,
 			Record <?> object,
 			Boolean recurse);
+
+	default
+	Function <Record <?>, List <Pair <Record <?>, String>>> verifyData (
+			@NonNull Transaction parentTransaction,
+			@NonNull Boolean recurse) {
+
+		return object ->
+			verifyData (
+				parentTransaction,
+				object,
+				recurse);
+
+	}
 
 	// object paths
 

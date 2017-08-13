@@ -133,14 +133,13 @@ class ReferenceModelFieldBuilder
 						spec.nullable (),
 						false))
 
-				.columnNames (
-					ImmutableList.<String>of (
-						ifNull (
-							spec.columnName (),
-							stringFormat (
-								"%s_id",
-								hyphenToUnderscore (
-									fieldName)))))
+				.columnName (
+					ifNull (
+						spec.columnName (),
+						stringFormat (
+							"%s_id",
+							hyphenToUnderscore (
+								fieldName))))
 
 				.columnSqlTypes (
 					ImmutableList.of (

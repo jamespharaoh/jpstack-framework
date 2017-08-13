@@ -5,6 +5,8 @@ import static wbs.utils.etc.Misc.doNothing;
 import static wbs.utils.string.StringUtils.stringFormat;
 
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 import com.google.common.base.Optional;
 
@@ -67,12 +69,38 @@ interface ObjectHooks <RecordType extends Record <RecordType>> {
 	}
 
 	default
+	Function <RecordType, List <Pair <Record <?>, String>>> verifyData (
+			@NonNull Transaction parentTransaction,
+			@NonNull Boolean recurse) {
+
+		return object ->
+			verifyData (
+				parentTransaction,
+				object,
+				recurse);
+
+	}
+
+	default
 	void cleanData (
 			@NonNull Transaction parentTransaction,
 			@NonNull RecordType object,
 			@NonNull Boolean recurse) {
 
 		doNothing ();
+
+	}
+
+	default
+	Consumer <RecordType> cleanData (
+			@NonNull Transaction parentTransaction,
+			@NonNull Boolean recurse) {
+
+		return object ->
+			cleanData (
+				parentTransaction,
+				object,
+				recurse);
 
 	}
 
