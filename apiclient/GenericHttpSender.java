@@ -70,6 +70,7 @@ import wbs.utils.io.RuntimeInterruptedIoException;
 import wbs.utils.io.RuntimeIoException;
 
 import wbs.web.exceptions.HttpClientException;
+import wbs.web.exceptions.HttpStatusException;
 import wbs.web.exceptions.HttpTooManyRequestsException;
 import wbs.web.misc.UrlParams;
 
@@ -112,6 +113,10 @@ class GenericHttpSender <Request, Response> {
 
 	@Getter
 	JsonObject responseTrace;
+
+	@Getter
+	Optional <RuntimeException> errorException =
+		optionalAbsent ();
 
 	@Getter
 	Optional <String> errorMessage =
@@ -606,6 +611,12 @@ class GenericHttpSender <Request, Response> {
 							httpResponse.getStatusLine ().getStatusCode ()),
 						httpResponse.getStatusLine ().getReasonPhrase ()));
 
+			errorException =
+				optionalOf (
+					HttpStatusException.forStatus (
+						httpResponse.getStatusLine ().getStatusCode (),
+						httpResponse.getStatusLine ().getReasonPhrase ()));
+
 		} else {
 
 			// decode response
@@ -724,12 +735,11 @@ class GenericHttpSender <Request, Response> {
 
 						if (
 							optionalIsPresent (
-								errorMessage)
+								errorException)
 						) {
 
-							throw new RuntimeException (
-								optionalGetRequired (
-									errorMessage));
+							throw optionalGetRequired (
+								errorException);
 
 						}
 
