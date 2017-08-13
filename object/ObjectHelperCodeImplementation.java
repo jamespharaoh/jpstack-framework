@@ -25,6 +25,7 @@ import static wbs.utils.string.StringUtils.stringFormat;
 
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import com.google.common.base.Optional;
 
@@ -359,7 +360,19 @@ class ObjectHelperCodeImplementation <RecordType extends Record <RecordType>>
 				optionalIsNotPresent (
 					recordOptional)
 			) {
-				throw new RuntimeException ();
+
+				throw new NoSuchElementException (
+					stringFormat (
+						"No such '%s' ",
+						objectModel.objectTypeHyphen (),
+						"with parent '%s' ",
+						objectManager.objectPath (
+							transaction,
+							parent),
+						"and code '%s'",
+						joinWithFullStop (
+							codes)));
+
 			}
 
 			return optionalGetRequired (
