@@ -9,7 +9,7 @@ public
 interface JavaImportRegistry {
 
 	String register (
-			String className);
+			CharSequence className);
 
 	default
 	String register (
@@ -23,7 +23,7 @@ interface JavaImportRegistry {
 
 	default
 	String registerFormat (
-			@NonNull String ... arguments) {
+			@NonNull CharSequence ... arguments) {
 
 		return register (
 			stringFormatArray (

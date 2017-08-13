@@ -1,5 +1,7 @@
 package wbs.framework.entity.generate.fields;
 
+import static wbs.utils.string.StringUtils.hyphenToCamel;
+
 import lombok.NonNull;
 
 import org.joda.time.LocalDate;
@@ -73,7 +75,8 @@ class DateFieldWriter
 					LocalDate.class)
 
 				.propertyName (
-					spec.name ())
+					hyphenToCamel (
+						spec.name ()))
 
 				.setUpdatedFieldName (
 					ModelRecordGenerator.recordUpdatedFieldName)

@@ -1,7 +1,10 @@
 package wbs.framework.object;
 
+import static wbs.utils.etc.TypeUtils.classDoesNotExist;
 import static wbs.utils.etc.TypeUtils.classForNameRequired;
-import static wbs.utils.string.StringUtils.capitalise;
+import static wbs.utils.etc.TypeUtils.classNameFormat;
+import static wbs.utils.string.StringUtils.hyphenToCamel;
+import static wbs.utils.string.StringUtils.hyphenToCamelCapitalise;
 import static wbs.utils.string.StringUtils.stringFormat;
 
 import lombok.NonNull;
@@ -16,6 +19,9 @@ import wbs.framework.component.tools.ComponentPlugin;
 import wbs.framework.logging.LogContext;
 import wbs.framework.logging.OwnedTaskLogger;
 import wbs.framework.logging.TaskLogger;
+
+import wbs.utils.etc.ClassName;
+import wbs.utils.exception.RuntimeClassNotFoundException;
 
 @SingletonComponent ("objectComponentPlugin")
 public
@@ -87,20 +93,22 @@ class ObjectComponentPlugin
 			String objectHooksComponentName =
 				stringFormat (
 					"%sHooks",
-					model.name ());
+					hyphenToCamel (
+						model.name ()));
 
-			String objectHooksClassName =
-				stringFormat (
+			ClassName objectHooksClassName =
+				classNameFormat (
 					"%s.logic.%sHooks",
 					model.plugin ().packageName (),
-					capitalise (model.name ()));
+					hyphenToCamelCapitalise (
+						model.name ()));
 
 			Class <?> objectHooksClass;
 
 			try {
 
 				objectHooksClass =
-					Class.forName (
+					classForNameRequired (
 						objectHooksClassName);
 
 				componentRegistry.registerDefinition (
@@ -118,7 +126,7 @@ class ObjectComponentPlugin
 
 				);
 
-			} catch (ClassNotFoundException exception) {
+			} catch (RuntimeClassNotFoundException exception) {
 
 				componentRegistry.registerDefinition (
 					taskLogger,
@@ -159,13 +167,14 @@ class ObjectComponentPlugin
 			String objectHelperComponentName =
 				stringFormat (
 					"%sObjectHelper",
-					model.name ());
+					hyphenToCamel (
+						model.name ()));
 
-			String objectHelperImplementationClassName =
-				stringFormat (
+			ClassName objectHelperImplementationClassName =
+				classNameFormat (
 					"%s.logic.%sObjectHelperImplementation",
 					model.plugin ().packageName (),
-					capitalise (
+					hyphenToCamelCapitalise (
 						model.name ()));
 
 			Class <?> objectHelperImplementationClass =
@@ -209,36 +218,26 @@ class ObjectComponentPlugin
 			String objectHelperMethodsImplementationComponentName =
 				stringFormat (
 					"%sObjectHelperMethodsImplementation",
-					model.name ());
-
-			String objectHelperMethodsImplementationClassName =
-				stringFormat (
-					"%s.logic.%sObjectHelperMethodsImplementation",
-					model.plugin ().packageName (),
-					capitalise (
+					hyphenToCamel (
 						model.name ()));
 
-			Class <?> objectHelperMethodsImplementationClass;
-
-			try {
-
-				objectHelperMethodsImplementationClass =
-					Class.forName (
-						objectHelperMethodsImplementationClassName);
-
-			} catch (ClassNotFoundException exception) {
-
-				/*
-				log.warn (sf (
-					"No object helper implementation for %s.%s.%s",
-					model.project ().packageName (),
+			ClassName objectHelperMethodsImplementationClassName =
+				classNameFormat (
+					"%s.logic.%sObjectHelperMethodsImplementation",
 					model.plugin ().packageName (),
-					model.name ()));
-				*/
+					hyphenToCamelCapitalise (
+						model.name ()));
 
+			if (
+				classDoesNotExist (
+					objectHelperMethodsImplementationClassName)
+			) {
 				return;
-
 			}
+
+			Class <?> objectHelperMethodsImplementationClass =
+				classForNameRequired (
+					objectHelperMethodsImplementationClassName);
 
 			componentRegistry.registerDefinition (
 				taskLogger,

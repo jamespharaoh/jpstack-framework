@@ -2,9 +2,12 @@ package wbs.framework.schema.helper;
 
 import static wbs.utils.string.StringUtils.camelToUnderscore;
 import static wbs.utils.string.StringUtils.stringFormat;
+import static wbs.utils.string.StringUtils.uncapitalise;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import lombok.NonNull;
 
 import wbs.framework.component.annotations.SingletonComponent;
 
@@ -16,18 +19,17 @@ class SchemaNamesHelperImplementation
 	@Override
 	public
 	String tableName (
-			Class<?> entityClass) {
+			@NonNull Class <?> entityClass) {
 
-		return camelToUnderscore (
-			objectName (
-				entityClass));
+		return objectTypeCode (
+			entityClass);
 
 	}
 
 	@Override
 	public
 	String columnName (
-			String fieldName) {
+			@NonNull String fieldName) {
 
 		return camelToUnderscore (
 			fieldName);
@@ -53,8 +55,8 @@ class SchemaNamesHelperImplementation
 
 		return stringFormat (
 			"%s_id",
-			camelToUnderscore (
-				objectName (objectClass)));
+			objectTypeCode (
+				objectClass));
 
 	}
 
@@ -65,26 +67,32 @@ class SchemaNamesHelperImplementation
 
 		return stringFormat (
 			"%s_id_seq",
-			camelToUnderscore (
-				objectName (objectClass)));
+			objectTypeCode (
+				objectClass));
 
 	}
 
 	@Override
 	public
-	String objectName (
-			Class<?> objectClass) {
+	String objectNameCamel (
+			@NonNull Class <?> objectClass) {
 
 		String className =
 			objectClass.getSimpleName ();
 
 		Matcher matcher =
-			entityNamePattern.matcher (className);
+			entityNamePattern.matcher (
+				className);
 
-		if (! matcher.matches ())
-			throw new IllegalArgumentException (className);
+		if (! matcher.matches ()) {
 
-		return matcher.group (1);
+			throw new IllegalArgumentException (
+				className);
+
+		}
+
+		return uncapitalise (
+			matcher.group (1));
 
 	}
 

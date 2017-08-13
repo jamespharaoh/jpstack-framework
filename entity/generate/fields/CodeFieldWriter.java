@@ -1,6 +1,7 @@
 package wbs.framework.entity.generate.fields;
 
 import static wbs.utils.etc.NullUtils.ifNull;
+import static wbs.utils.string.StringUtils.hyphenToCamel;
 
 import lombok.NonNull;
 
@@ -73,9 +74,10 @@ class CodeFieldWriter
 					String.class)
 
 				.propertyName (
-					ifNull (
-						spec.name (),
-						"code"))
+					hyphenToCamel (
+						ifNull (
+							spec.name (),
+							"code")))
 
 				.setUpdatedFieldName (
 					ModelRecordGenerator.recordUpdatedFieldName)

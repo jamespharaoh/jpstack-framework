@@ -1,8 +1,10 @@
 package wbs.framework.entity.generate.collections;
 
+import static wbs.utils.collection.MapUtils.mapItemForKeyRequired;
 import static wbs.utils.etc.NullUtils.ifNull;
 import static wbs.utils.etc.NullUtils.isNull;
-import static wbs.utils.string.StringUtils.capitalise;
+import static wbs.utils.string.StringUtils.hyphenToCamel;
+import static wbs.utils.string.StringUtils.hyphenToCamelCapitalise;
 import static wbs.utils.string.StringUtils.naivePluralise;
 import static wbs.utils.string.StringUtils.stringFormat;
 
@@ -82,7 +84,8 @@ class ChildrenCollectionWriter
 						spec.typeName ()));
 
 			PluginRecordModelSpec fieldTypePluginModel =
-				pluginManager.pluginRecordModelsByName ().get (
+				mapItemForKeyRequired (
+					pluginManager.pluginRecordModelsByName (),
 					spec.typeName ());
 
 			if (
@@ -109,7 +112,7 @@ class ChildrenCollectionWriter
 				stringFormat (
 					"%s.model.%sRec",
 					fieldTypePlugin.packageName (),
-					capitalise (
+					hyphenToCamelCapitalise (
 						spec.typeName ()));
 
 			// write field
@@ -131,7 +134,8 @@ class ChildrenCollectionWriter
 								fullFieldTypeName)))
 
 				.propertyName (
-					fieldName)
+					hyphenToCamel (
+						fieldName))
 
 				.defaultValue (
 					imports ->

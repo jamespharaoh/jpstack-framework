@@ -4,7 +4,7 @@ import static wbs.framework.logging.TaskLogUtils.writeTaskLogToStandardError;
 import static wbs.utils.etc.OptionalUtils.optionalGetRequired;
 import static wbs.utils.etc.OptionalUtils.optionalIsNotPresent;
 import static wbs.utils.etc.TypeUtils.classForName;
-import static wbs.utils.string.StringUtils.capitalise;
+import static wbs.utils.string.StringUtils.hyphenToCamelCapitalise;
 import static wbs.utils.string.StringUtils.keyEqualsString;
 import static wbs.utils.string.StringUtils.stringFormat;
 
@@ -44,7 +44,7 @@ class FixturesTool {
 	// prototype dependencies
 
 	@PrototypeDependency
-	Map <Class <?>, ComponentProvider <FixtureProvider>>
+	Map <Class <?>, ComponentProvider <Fixture>>
 		fixtureProviderProviders;
 
 	// implementation
@@ -129,7 +129,7 @@ class FixturesTool {
 				stringFormat (
 					"%s.fixture.%sFixtureProvider",
 					plugin.packageName (),
-					capitalise (
+					hyphenToCamelCapitalise (
 						fixture.name ()));
 
 			Optional <Class <?>> fixtureProviderClassOptional =
@@ -157,11 +157,11 @@ class FixturesTool {
 				optionalGetRequired (
 					fixtureProviderClassOptional);
 
-			ComponentProvider <FixtureProvider> fixtureProviderProvider =
+			ComponentProvider <Fixture> fixtureProviderProvider =
 				fixtureProviderProviders.get (
 					fixtureProviderClass);
 
-			FixtureProvider fixtureProvider =
+			Fixture fixtureProvider =
 				fixtureProviderProvider.provide (
 					taskLogger);
 
@@ -180,7 +180,7 @@ class FixturesTool {
 			@NonNull TaskLogger parentTaskLogger,
 			@NonNull PluginSpec plugin,
 			@NonNull PluginFixtureSpec fixture,
-			@NonNull FixtureProvider fixtureProvider) {
+			@NonNull Fixture fixtureProvider) {
 
 		try (
 

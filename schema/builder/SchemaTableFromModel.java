@@ -156,7 +156,7 @@ class SchemaTableFromModel {
 
 				taskLogger.errorFormat (
 					"No primary key for %s",
-					model.objectName ());
+					model.objectTypeHyphen ());
 
 				return null;
 
@@ -589,7 +589,7 @@ class SchemaTableFromModel {
 
 				taskLogger.errorFormat (
 					"More than one primary key for %s",
-					model.objectName ());
+					model.objectTypeHyphen ());
 
 				return;
 

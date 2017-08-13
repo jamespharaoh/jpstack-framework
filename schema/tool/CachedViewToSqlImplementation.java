@@ -78,8 +78,8 @@ class CachedViewToSqlImplementation
 					parentTaskLogger,
 					"forModel",
 					keyEqualsString (
-						"objectName",
-						model.objectName ()));
+						"objectType",
+						model.objectTypeHyphen ()));
 
 		) {
 

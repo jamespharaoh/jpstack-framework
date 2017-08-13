@@ -1,11 +1,17 @@
 package wbs.framework.entity.model;
 
 import static wbs.utils.etc.NullUtils.ifNull;
+import static wbs.utils.etc.OptionalUtils.optionalFromNullable;
+import static wbs.utils.etc.OptionalUtils.optionalMapRequiredOrNull;
 import static wbs.utils.etc.TypeUtils.classForNameRequired;
+import static wbs.utils.etc.TypeUtils.classNameFormat;
+import static wbs.utils.etc.TypeUtils.classNameSimple;
 import static wbs.utils.etc.TypeUtils.genericCastUnchecked;
-import static wbs.utils.string.StringUtils.camelToUnderscore;
-import static wbs.utils.string.StringUtils.capitalise;
+import static wbs.utils.string.StringUtils.hyphenToCamel;
+import static wbs.utils.string.StringUtils.hyphenToCamelCapitalise;
+import static wbs.utils.string.StringUtils.hyphenToUnderscore;
 import static wbs.utils.string.StringUtils.stringFormat;
+import static wbs.utils.string.StringUtils.stringIntern;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -32,6 +38,8 @@ import wbs.framework.object.ObjectHelper;
 import wbs.framework.schema.helper.SchemaNamesHelper;
 import wbs.framework.schema.helper.SchemaTypesHelper;
 
+import wbs.utils.etc.ClassName;
+
 @Accessors (fluent = true)
 @PrototypeComponent ("recordModelBuilder")
 public
@@ -54,7 +62,7 @@ class RecordModelBuilder <RecordType extends Record <RecordType>> {
 	// properties
 
 	@Getter @Setter
-	RecordSpec modelMeta;
+	RecordSpec recordSpec;
 
 	// state
 
@@ -63,12 +71,12 @@ class RecordModelBuilder <RecordType extends Record <RecordType>> {
 
 	RecordModelImplementation <?> model;
 
-	String modelClassName;
-	String recordClassNameFull;
+	ClassName modelClassName;
+	ClassName recordClassNameFull;
 	Class <RecordType> modelClass;
 
-	String objectHelperClassName;
-	String objectHelperClassNameFull;
+	ClassName objectHelperClassName;
+	ClassName objectHelperClassNameFull;
 	Class <ObjectHelper <RecordType>> objectHelperClass;
 
 	// implementation
@@ -87,18 +95,18 @@ class RecordModelBuilder <RecordType extends Record <RecordType>> {
 		) {
 
 			plugin =
-				modelMeta.plugin ();
+				recordSpec.plugin ();
 
 			// record class
 
 			modelClassName =
-				stringFormat (
+				classNameFormat (
 					"%sRec",
-					capitalise (
-						modelMeta.name ()));
+					hyphenToCamelCapitalise (
+						recordSpec.name ()));
 
 			recordClassNameFull =
-				stringFormat (
+				classNameFormat (
 					"%s.model.%s",
 					plugin.packageName (),
 					modelClassName);
@@ -111,13 +119,13 @@ class RecordModelBuilder <RecordType extends Record <RecordType>> {
 			// object helper class
 
 			objectHelperClassName =
-				stringFormat (
+				classNameFormat (
 					"%sObjectHelper",
-					capitalise (
-						modelMeta.name ()));
+					hyphenToCamelCapitalise (
+						recordSpec.name ()));
 
 			objectHelperClassNameFull =
-				stringFormat (
+				classNameFormat (
 					"%s.model.%s",
 					plugin.packageName (),
 					objectHelperClassName);
@@ -138,39 +146,71 @@ class RecordModelBuilder <RecordType extends Record <RecordType>> {
 				.objectClass (
 					modelClass)
 
-				.objectName (
-					modelMeta.name ())
+				.objectClassName (
+					stringFormat (
+						classNameSimple (
+							modelClass)))
 
 				.oldObjectName (
-					modelMeta.oldName ())
+					optionalMapRequiredOrNull (
+						optionalFromNullable (
+							recordSpec.oldName ()),
+						stringIntern ()))
 
 				.objectTypeCode (
-					camelToUnderscore (
-						ifNull (
-							modelMeta.oldName (),
-							modelMeta.name ())))
+					stringIntern (
+						hyphenToUnderscore (
+							ifNull (
+								recordSpec.oldName (),
+								recordSpec.name ()))))
+
+				.objectTypeCamel (
+					stringIntern (
+						hyphenToCamel (
+							recordSpec.name ())))
+
+				.objectTypeHyphen (
+					stringIntern (
+						recordSpec.name ()))
+
+				.friendlyNameSingular (
+					stringIntern (
+						recordSpec.friendlyNameSingular ()))
+
+				.friendlyNamePlural (
+					stringIntern (
+						recordSpec.friendlyNamePlural ()))
+
+				.shortNameSingular (
+					stringIntern (
+						recordSpec.shortNameSingular ()))
+
+				.shortNamePlural (
+					stringIntern (
+						recordSpec.shortNamePlural ()))
 
 				.tableName (
-					ifNull (
-						modelMeta.tableName (),
-						schemaNamesHelper.tableName (
-							modelClass)))
+					stringIntern (
+						ifNull (
+							recordSpec.tableName (),
+							schemaNamesHelper.tableName (
+								modelClass))))
 
 				.create (
 					ifNull (
-						modelMeta.create (),
+						recordSpec.create (),
 						true))
 
 				.mutable (
 					ifNull (
-						modelMeta.mutable (),
+						recordSpec.mutable (),
 						true))
 
 				.helperClass (
 					objectHelperClass)
 
 				.cachedView (
-					modelMeta.cachedView ())
+					recordSpec.cachedView ())
 
 			;
 
@@ -180,7 +220,7 @@ class RecordModelBuilder <RecordType extends Record <RecordType>> {
 				new ModelFieldBuilderContext ()
 
 				.modelMeta (
-					modelMeta)
+					recordSpec)
 
 				.modelClass (
 					modelClass);
@@ -200,13 +240,13 @@ class RecordModelBuilder <RecordType extends Record <RecordType>> {
 			modelBuilderManager.build (
 				taskLogger,
 				context,
-				modelMeta.fields (),
+				recordSpec.fields (),
 				target);
 
 			modelBuilderManager.build (
 				taskLogger,
 				context,
-				modelMeta.collections (),
+				recordSpec.collections (),
 				target);
 
 			// and return

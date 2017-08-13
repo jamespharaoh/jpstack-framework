@@ -37,11 +37,29 @@ class CompositeModelImplementation <DataType>
 	@DataAttribute
 	Class <DataType> objectClass;
 
+	@DataAttribute
+	String objectClassName;
+
 	@DataName
-	String objectName;
+	String objectTypeHyphen;
 
 	@DataAttribute
 	String objectTypeCode;
+
+	@DataAttribute
+	String objectTypeCamel;
+
+	@DataAttribute
+	String friendlyNameSingular;
+
+	@DataAttribute
+	String friendlyNamePlural;
+
+	@DataAttribute
+	String shortNameSingular;
+
+	@DataAttribute
+	String shortNamePlural;
 
 	// fields
 

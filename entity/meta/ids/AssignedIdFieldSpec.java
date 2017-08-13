@@ -8,6 +8,8 @@ import wbs.framework.data.annotations.DataAttribute;
 import wbs.framework.data.annotations.DataClass;
 import wbs.framework.entity.meta.model.ModelFieldSpec;
 
+import wbs.utils.string.StringFormat;
+
 @Accessors (fluent = true)
 @Data
 @DataClass ("assigned-id-field")
@@ -17,7 +19,8 @@ class AssignedIdFieldSpec
 	implements ModelFieldSpec {
 
 	@DataAttribute (
-		name = "column")
+		name = "column",
+		format = StringFormat.hyphenated)
 	String columnName;
 
 }

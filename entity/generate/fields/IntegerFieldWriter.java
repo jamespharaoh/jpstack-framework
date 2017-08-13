@@ -1,5 +1,7 @@
 package wbs.framework.entity.generate.fields;
 
+import static wbs.utils.string.StringUtils.hyphenToCamel;
+
 import lombok.NonNull;
 
 import wbs.framework.builder.Builder;
@@ -72,7 +74,8 @@ class IntegerFieldWriter
 					Long.class)
 
 				.propertyName (
-					spec.name ())
+					hyphenToCamel (
+						spec.name ()))
 
 				.setUpdatedFieldName (
 					ModelRecordGenerator.recordUpdatedFieldName)

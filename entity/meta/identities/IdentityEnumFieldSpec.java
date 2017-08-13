@@ -8,6 +8,8 @@ import wbs.framework.data.annotations.DataAttribute;
 import wbs.framework.data.annotations.DataClass;
 import wbs.framework.entity.meta.model.ModelFieldSpec;
 
+import wbs.utils.string.StringFormat;
+
 @Accessors (fluent = true)
 @Data
 @DataClass ("identity-enum-field")
@@ -16,16 +18,19 @@ public
 class IdentityEnumFieldSpec
 	implements ModelFieldSpec {
 
-	@DataAttribute
+	@DataAttribute (
+		format = StringFormat.hyphenated)
 	String name;
 
 	@DataAttribute (
 		name = "type",
-		required = true)
+		required = true,
+		format = StringFormat.hyphenated)
 	String typeName;
 
 	@DataAttribute (
-		name = "column")
+		name = "column",
+		format = StringFormat.snakeCase)
 	String columnName;
 
 }

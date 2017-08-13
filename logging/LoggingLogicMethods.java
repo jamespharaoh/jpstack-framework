@@ -8,11 +8,11 @@ interface LoggingLogicMethods {
 	Long nextEventId ();
 
 	LogContext findOrCreateLogContext (
-			String staticContextName);
+			CharSequence staticContextName);
 
 	default
 	LogContext findOrCreateLogContextFormat (
-			String ... staticContextNameArguments) {
+			CharSequence ... staticContextNameArguments) {
 
 		return findOrCreateLogContext (
 			stringFormatArray (

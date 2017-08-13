@@ -10,6 +10,7 @@ import static wbs.utils.etc.OptionalUtils.optionalOf;
 import static wbs.utils.etc.OptionalUtils.optionalOrNull;
 import static wbs.utils.etc.OptionalUtils.optionalOrThrow;
 import static wbs.utils.etc.ResultUtils.mapSuccess;
+import static wbs.utils.etc.TypeUtils.genericCastUnchecked;
 import static wbs.utils.string.StringUtils.stringFormat;
 
 import java.util.Collection;
@@ -168,6 +169,20 @@ interface ObjectManagerMethods {
 						objectGlobalId.typeId ()),
 					integerToDecimalString (
 						objectGlobalId.objectId ()))));
+
+	}
+
+	default
+	Record <?> findObjectRequired (
+			@NonNull Transaction parentTransaction,
+			@NonNull Long objectTypeId,
+			@NonNull Long objectId) {
+
+		return findObjectRequired (
+			parentTransaction,
+			new GlobalId (
+				objectTypeId,
+				objectId));
 
 	}
 
@@ -500,8 +515,19 @@ interface ObjectManagerMethods {
 	ObjectHelper <?> objectHelperForObjectNameRequired (
 			String objectName);
 
-	ObjectHelper <?> objectHelperForObjectRequired (
-			Record <?> object);
+	<Type extends Record <Type>>
+	ObjectHelper <Type> objectHelperForObjectRequired (
+			Type object);
+
+	default
+	ObjectHelper <?> objectHelperForObjectGenericRequired (
+			@NonNull Record <?> object) {
+
+		return objectHelperForObjectRequired (
+			genericCastUnchecked (
+				object));
+
+	}
 
 	ObjectHelper <?> objectHelperForClassRequired (
 			Class <?> objectClass);

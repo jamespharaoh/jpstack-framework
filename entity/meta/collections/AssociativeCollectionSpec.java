@@ -10,6 +10,8 @@ import wbs.framework.data.annotations.DataClass;
 import wbs.framework.entity.meta.model.ModelCollectionSpec;
 import wbs.framework.entity.meta.model.RecordSpec;
 
+import wbs.utils.string.StringFormat;
+
 @Accessors (fluent = true)
 @Data
 @DataClass ("associative-collection")
@@ -21,29 +23,35 @@ class AssociativeCollectionSpec
 	@DataAncestor
 	RecordSpec model;
 
-	@DataAttribute
+	@DataAttribute (
+		format = StringFormat.hyphenated)
 	String name;
 
 	@DataAttribute (
 		name = "type",
-		required = true)
+		required = true,
+		format = StringFormat.hyphenated)
 	String typeName;
 
 	@DataAttribute (
 		name = "table",
-		required = true)
+		required = true,
+		format = StringFormat.snakeCase)
 	String tableName;
 
 	@DataAttribute (
-		name = "join-column")
+		name = "join-column",
+		format = StringFormat.snakeCase)
 	String joinColumnName;
 
 	@DataAttribute (
-		name = "foreign-column")
+		name = "foreign-column",
+		format = StringFormat.snakeCase)
 	String foreignColumnName;
 
 	@DataAttribute (
-		name = "value-column")
+		name = "value-column",
+		format = StringFormat.snakeCase)
 	String valueColumnName;
 
 	@DataAttribute

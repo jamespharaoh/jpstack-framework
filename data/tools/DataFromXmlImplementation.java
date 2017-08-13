@@ -4,6 +4,7 @@ import static wbs.utils.collection.CollectionUtils.collectionIsNotEmpty;
 import static wbs.utils.collection.CollectionUtils.emptyList;
 import static wbs.utils.collection.IterableUtils.iterableOnlyItemRequired;
 import static wbs.utils.collection.MapUtils.mapItemForKeyOrElse;
+import static wbs.utils.etc.EnumUtils.enumNameHyphens;
 import static wbs.utils.etc.LogicUtils.parseBooleanYesNoEmpty;
 import static wbs.utils.etc.Misc.contains;
 import static wbs.utils.etc.Misc.toEnumGeneric;
@@ -771,6 +772,27 @@ class DataFromXmlImplementation
 					}
 
 					return;
+
+				}
+
+				if (
+					! dataAttributeAnnotation.format ().matches (
+						attributeValue)
+				) {
+
+					taskLogger.errorFormat (
+						"%s: ",
+						joinWithFullStop (
+							context),
+						"Attribute '%s' ",
+						attributeName,
+						"of <%s> ",
+						element.getName (),
+						"doesn't match %s: ",
+						enumNameHyphens (
+							dataAttributeAnnotation.format ()),
+						"%s",
+						attributeValue);
 
 				}
 
@@ -1649,7 +1671,8 @@ class DataFromXmlImplementation
 
 	static
 	Pattern childrenIndexPattern =
-		Pattern.compile ("(.+)By(.+)");
+		Pattern.compile (
+			"(.+)By(.+)");
 
 	@Accessors (fluent = true)
 	@Data

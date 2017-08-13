@@ -63,8 +63,14 @@ class ObjectModelImplementation <RecordType extends Record <RecordType>>
 
 	@Override
 	public
-	String objectName () {
-		return model.objectName ();
+	String objectTypeCamel () {
+		return model.objectTypeCamel ();
+	}
+
+	@Override
+	public
+	String objectTypeHyphen () {
+		return model.objectTypeHyphen ();
 	}
 
 	@Override
@@ -77,6 +83,36 @@ class ObjectModelImplementation <RecordType extends Record <RecordType>>
 	public
 	Class <RecordType> objectClass () {
 		return model.objectClass ();
+	}
+
+	@Override
+	public
+	String objectClassName () {
+		return model.objectClassName ();
+	}
+
+	@Override
+	public
+	String friendlyNameSingular () {
+		return model.friendlyNameSingular ();
+	}
+
+	@Override
+	public
+	String friendlyNamePlural () {
+		return model.friendlyNamePlural ();
+	}
+
+	@Override
+	public
+	String shortNameSingular () {
+		return model.shortNameSingular ();
+	}
+
+	@Override
+	public
+	String shortNamePlural () {
+		return model.shortNamePlural ();
 	}
 
 	@Override

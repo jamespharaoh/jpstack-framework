@@ -2,11 +2,12 @@ package wbs.framework.entity.build;
 
 import static wbs.utils.etc.NullUtils.ifNull;
 import static wbs.utils.etc.TypeUtils.classForNameRequired;
-import static wbs.utils.string.StringUtils.camelToSpaces;
-import static wbs.utils.string.StringUtils.capitalise;
+import static wbs.utils.etc.TypeUtils.classNameFormat;
+import static wbs.utils.string.StringUtils.hyphenToCamel;
+import static wbs.utils.string.StringUtils.hyphenToCamelCapitalise;
+import static wbs.utils.string.StringUtils.hyphenToSpaces;
 import static wbs.utils.string.StringUtils.naivePluralise;
 import static wbs.utils.string.StringUtils.stringEqualSafe;
-import static wbs.utils.string.StringUtils.stringFormat;
 
 import java.util.Set;
 
@@ -32,6 +33,8 @@ import wbs.framework.entity.model.ModelFieldType;
 import wbs.framework.logging.LogContext;
 import wbs.framework.logging.OwnedTaskLogger;
 import wbs.framework.logging.TaskLogger;
+
+import wbs.utils.etc.ClassName;
 
 @PrototypeComponent ("associativeCollectionModelFieldBuilder")
 @ModelBuilder
@@ -82,7 +85,7 @@ class AssociativeCollectionModelFieldBuilder
 					naivePluralise (
 						spec.typeName ()));
 
-			Class<?> fieldTypeClass;
+			Class <?> fieldTypeClass;
 
 			if (
 				stringEqualSafe (
@@ -102,11 +105,11 @@ class AssociativeCollectionModelFieldBuilder
 				PluginSpec fieldTypePlugin =
 					fieldTypePluginModel.plugin ();
 
-				String fullFieldTypeName =
-					stringFormat (
+				ClassName fullFieldTypeName =
+					classNameFormat (
 						"%s.model.%sRec",
 						fieldTypePlugin.packageName (),
-						capitalise (
+						hyphenToCamelCapitalise (
 							spec.typeName ()));
 
 				fieldTypeClass =
@@ -127,10 +130,11 @@ class AssociativeCollectionModelFieldBuilder
 					context.parentModelField ())
 
 				.name (
-					fieldName)
+					hyphenToCamel (
+						fieldName))
 
 				.label (
-					camelToSpaces (
+					hyphenToSpaces (
 						fieldName))
 
 				.type (

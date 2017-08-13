@@ -15,12 +15,21 @@ interface ModelMethods <DataType> {
 
 	// identity
 
-	String objectName ();
 	Class <DataType> objectClass ();
+	String objectClassName ();
+
 	String objectTypeCode ();
+	String objectTypeCamel ();
+	String objectTypeHyphen ();
 
 	String oldObjectName ();
 	String tableName ();
+
+	String friendlyNameSingular ();
+	String friendlyNamePlural ();
+
+	String shortNameSingular ();
+	String shortNamePlural ();
 
 	// fields
 

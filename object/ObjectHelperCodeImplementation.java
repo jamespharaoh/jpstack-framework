@@ -16,9 +16,11 @@ import static wbs.utils.etc.NumberUtils.integerToDecimalStringLazy;
 import static wbs.utils.etc.OptionalUtils.optionalFromNullable;
 import static wbs.utils.etc.OptionalUtils.optionalGetRequired;
 import static wbs.utils.etc.OptionalUtils.optionalIsNotPresent;
+import static wbs.utils.etc.TypeUtils.genericCastUnchecked;
 import static wbs.utils.string.StringUtils.joinWithCommaAndSpaceLazy;
 import static wbs.utils.string.StringUtils.joinWithFullStop;
 import static wbs.utils.string.StringUtils.keyEqualsString;
+import static wbs.utils.string.StringUtils.objectToString;
 import static wbs.utils.string.StringUtils.stringFormat;
 
 import java.util.List;
@@ -173,7 +175,7 @@ class ObjectHelperCodeImplementation <RecordType extends Record <RecordType>>
 	Optional <RecordType> findByCode (
 			@NonNull Transaction parentTransaction,
 			@NonNull GlobalId ancestorGlobalId,
-			@NonNull List <String> codes) {
+			@NonNull List <? extends CharSequence> codes) {
 
 		try (
 
@@ -212,8 +214,9 @@ class ObjectHelperCodeImplementation <RecordType extends Record <RecordType>>
 					objectDatabaseHelper.findByParentAndCode (
 						transaction,
 						ancestorGlobalId,
-						listFirstElementRequired (
-							codes)));
+						objectToString (
+							listFirstElementRequired (
+								codes))));
 
 			} else {
 
@@ -250,7 +253,7 @@ class ObjectHelperCodeImplementation <RecordType extends Record <RecordType>>
 	RecordType findByCodeRequired (
 			@NonNull Transaction parentTransaction,
 			@NonNull GlobalId ancestorGlobalId,
-			@NonNull List <String> codes) {
+			@NonNull List <? extends CharSequence> codes) {
 
 		try (
 
@@ -282,7 +285,7 @@ class ObjectHelperCodeImplementation <RecordType extends Record <RecordType>>
 					throw new RuntimeException (
 						stringFormat (
 							"No such %s with parent root and code %s",
-							objectModel.objectName (),
+							objectModel.objectTypeHyphen (),
 							joinWithFullStop (
 								codes)));
 
@@ -314,7 +317,7 @@ class ObjectHelperCodeImplementation <RecordType extends Record <RecordType>>
 				throw new RuntimeException (
 					stringFormat (
 						"No such %s with parent %s and code %s",
-						objectModel.objectName (),
+						objectModel.objectTypeHyphen (),
 						objectManager.objectPath (
 							transaction,
 							ancestor),
@@ -335,7 +338,7 @@ class ObjectHelperCodeImplementation <RecordType extends Record <RecordType>>
 	RecordType findByCodeRequired (
 			@NonNull Transaction parentTransaction,
 			@NonNull Record <?> parent,
-			@NonNull List <String> codes) {
+			@NonNull List <? extends CharSequence> codes) {
 
 		try (
 
@@ -407,7 +410,7 @@ class ObjectHelperCodeImplementation <RecordType extends Record <RecordType>>
 	Optional <RecordType> findByCode (
 			@NonNull Transaction parentTransaction,
 			@NonNull Record <?> parent,
-			@NonNull List <String> codes) {
+			@NonNull List <? extends CharSequence> codes) {
 
 		try (
 
@@ -457,7 +460,8 @@ class ObjectHelperCodeImplementation <RecordType extends Record <RecordType>>
 
 			ObjectHelper <?> parentHelper =
 				objectManager.objectHelperForObjectRequired (
-					parent);
+					genericCastUnchecked (
+						parent));
 
 			GlobalId parentGlobalId =
 				new GlobalId (

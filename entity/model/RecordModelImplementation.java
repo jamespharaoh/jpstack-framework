@@ -20,7 +20,6 @@ import wbs.framework.data.annotations.DataChild;
 import wbs.framework.data.annotations.DataChildren;
 import wbs.framework.data.annotations.DataChildrenIndex;
 import wbs.framework.data.annotations.DataClass;
-import wbs.framework.data.annotations.DataName;
 import wbs.framework.data.annotations.DataReference;
 import wbs.framework.entity.meta.cachedview.CachedViewSpec;
 import wbs.framework.entity.record.Record;
@@ -46,11 +45,29 @@ class RecordModelImplementation <RecordType extends Record <RecordType>>
 	@DataAttribute
 	Class <RecordType> objectClass;
 
-	@DataName
-	String objectName;
+	@DataAttribute
+	String objectClassName;
 
 	@DataAttribute
 	String objectTypeCode;
+
+	@DataAttribute
+	String objectTypeHyphen;
+
+	@DataAttribute
+	String objectTypeCamel;
+
+	@DataAttribute
+	String friendlyNameSingular;
+
+	@DataAttribute
+	String friendlyNamePlural;
+
+	@DataAttribute
+	String shortNameSingular;
+
+	@DataAttribute
+	String shortNamePlural;
 
 	// database stuff
 
@@ -237,7 +254,7 @@ class RecordModelImplementation <RecordType extends Record <RecordType>>
 			throw new UnsupportedOperationException (
 				stringFormat (
 					"Can't get parent for %s",
-					objectName ()));
+					objectTypeHyphen ()));
 
 		}
 
@@ -258,7 +275,7 @@ class RecordModelImplementation <RecordType extends Record <RecordType>>
 			throw new UnsupportedOperationException (
 				stringFormat (
 					"Can't get parent id for %s",
-					objectName ()));
+					objectTypeHyphen ()));
 
 		}
 
@@ -279,7 +296,7 @@ class RecordModelImplementation <RecordType extends Record <RecordType>>
 			throw new UnsupportedOperationException (
 				stringFormat (
 					"Can't get parent type for %s",
-					objectName ()));
+					objectTypeHyphen ()));
 
 		}
 
@@ -299,7 +316,7 @@ class RecordModelImplementation <RecordType extends Record <RecordType>>
 			throw new UnsupportedOperationException (
 				stringFormat (
 					"Can't get parent class for %s",
-					objectName ()));
+					objectTypeHyphen ()));
 
 		} else if (parentField != null) {
 
@@ -315,7 +332,7 @@ class RecordModelImplementation <RecordType extends Record <RecordType>>
 			throw new UnsupportedOperationException (
 				stringFormat (
 					"Can't get parent class for %s",
-					objectName ()));
+					objectTypeHyphen ()));
 
 		} else if (isRooted ()) {
 

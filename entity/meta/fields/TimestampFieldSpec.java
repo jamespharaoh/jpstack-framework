@@ -8,6 +8,8 @@ import wbs.framework.data.annotations.DataAttribute;
 import wbs.framework.data.annotations.DataClass;
 import wbs.framework.entity.meta.model.ModelFieldSpec;
 
+import wbs.utils.string.StringFormat;
+
 @Accessors (fluent = true)
 @Data
 @DataClass ("timestamp-field")
@@ -17,7 +19,8 @@ class TimestampFieldSpec
 	implements ModelFieldSpec {
 
 	@DataAttribute (
-		required = true)
+		required = true,
+		format = StringFormat.hyphenated)
 	String name;
 
 	@DataAttribute (
@@ -28,7 +31,8 @@ class TimestampFieldSpec
 	Boolean nullable;
 
 	@DataAttribute (
-		name = "column")
+		name = "column",
+		format = StringFormat.snakeCase)
 	String columnName;
 
 	public static

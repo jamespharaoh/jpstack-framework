@@ -2,7 +2,8 @@ package wbs.framework.data.tools;
 
 import static wbs.utils.collection.MapUtils.mapContainsKey;
 import static wbs.utils.etc.NullUtils.ifNull;
-import static wbs.utils.string.StringUtils.camelToHyphen;
+import static wbs.utils.etc.TypeUtils.classNameSimple;
+import static wbs.utils.string.StringUtils.camelToHyphenUncapitalise;
 import static wbs.utils.string.StringUtils.nullIfEmptyString;
 import static wbs.utils.string.StringUtils.stringFormat;
 
@@ -119,7 +120,7 @@ class DataFromXmlBuilder {
 	public
 	DataFromXmlBuilder registerBuilderClasses (
 			@NonNull TaskLogger parentTaskLogger,
-			@NonNull Class <?>... builderClasses) {
+			@NonNull Class <?> ... builderClasses) {
 
 		return registerBuilderClasses (
 			parentTaskLogger,
@@ -245,8 +246,9 @@ class DataFromXmlBuilder {
 				ifNull (
 					nullIfEmptyString (
 						dataClassAnnotation.value ()),
-					camelToHyphen (
-						dataClass.getSimpleName ()));
+					camelToHyphenUncapitalise (
+						classNameSimple (
+							dataClass)));
 
 			Field parentField =
 				findParentField (

@@ -8,6 +8,8 @@ import wbs.framework.data.annotations.DataAttribute;
 import wbs.framework.data.annotations.DataClass;
 import wbs.framework.entity.meta.model.ModelFieldSpec;
 
+import wbs.utils.string.StringFormat;
+
 @Accessors (fluent = true)
 @Data
 @DataClass ("floating-point-field")
@@ -17,7 +19,8 @@ class FloatingPointFieldSpec
 	implements ModelFieldSpec {
 
 	@DataAttribute (
-		required = true)
+		required = true,
+		format = StringFormat.hyphenated)
 	String name;
 
 	@DataAttribute
@@ -28,7 +31,8 @@ class FloatingPointFieldSpec
 	Boolean defaultValue;
 
 	@DataAttribute (
-		name = "column")
+		name = "column",
+		format = StringFormat.snakeCase)
 	String columnName;
 
 }

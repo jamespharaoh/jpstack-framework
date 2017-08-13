@@ -59,11 +59,14 @@ class LoggingLogicImplementation
 	@Override
 	public synchronized
 	LogContext findOrCreateLogContext (
-			@NonNull String staticContextName) {
+			@NonNull CharSequence staticContextNameCharSequence) {
+
+		String staticContextName =
+			staticContextNameCharSequence.toString ();
 
 		return mapItemForKeyOrElseSet (
 			logContexts,
-			staticContextName.toString (),
+			staticContextName,
 			() -> createLogContext (
 				staticContextName));
 

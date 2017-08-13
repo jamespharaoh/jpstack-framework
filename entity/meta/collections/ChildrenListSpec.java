@@ -10,6 +10,8 @@ import wbs.framework.data.annotations.DataClass;
 import wbs.framework.entity.meta.model.ModelCollectionSpec;
 import wbs.framework.entity.meta.model.RecordSpec;
 
+import wbs.utils.string.StringFormat;
+
 @Accessors (fluent = true)
 @Data
 @DataClass ("children-list")
@@ -21,20 +23,24 @@ class ChildrenListSpec
 	@DataAncestor
 	RecordSpec model;
 
-	@DataAttribute
+	@DataAttribute (
+		format = StringFormat.hyphenated)
 	String name;
 
 	@DataAttribute (
 		name = "type",
-		required = true)
+		required = true,
+		format = StringFormat.hyphenated)
 	String typeName;
 
 	@DataAttribute (
-		name = "join-column")
+		name = "join-column",
+		format = StringFormat.snakeCase)
 	String joinColumnName;
 
 	@DataAttribute (
-		name = "list-index-column")
+		name = "list-index-column",
+		format = StringFormat.snakeCase)
 	String listIndexColumnName;
 
 	@DataAttribute

@@ -8,7 +8,6 @@ import static wbs.utils.etc.OptionalUtils.optionalAbsent;
 import static wbs.utils.etc.OptionalUtils.optionalGetRequired;
 import static wbs.utils.etc.OptionalUtils.optionalIsNotPresent;
 import static wbs.utils.etc.OptionalUtils.optionalOf;
-import static wbs.utils.string.StringUtils.camelToHyphen;
 import static wbs.utils.string.StringUtils.stringFormat;
 import static wbs.utils.string.StringUtils.stringNotEqualSafe;
 
@@ -259,8 +258,7 @@ class ModelMetaLoader {
 				stringFormat (
 					"/%s/model/%s-record.xml",
 					plugin.packageName ().replace ('.', '/'),
-					camelToHyphen (
-						modelName));
+					modelName);
 
 			try (
 

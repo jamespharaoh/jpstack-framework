@@ -8,6 +8,8 @@ import wbs.framework.data.annotations.DataAttribute;
 import wbs.framework.data.annotations.DataClass;
 import wbs.framework.entity.meta.model.ModelFieldSpec;
 
+import wbs.utils.string.StringFormat;
+
 @Accessors (fluent = true)
 @Data
 @DataClass ("foreign-id-field")
@@ -17,11 +19,13 @@ class ForeignIdFieldSpec
 	implements ModelFieldSpec {
 
 	@DataAttribute (
-		name = "field")
+		name = "field",
+		format = StringFormat.hyphenated)
 	String fieldName;
 
 	@DataAttribute (
-		name = "column")
+		name = "column",
+		format = StringFormat.snakeCase)
 	String columnName;
 
 }

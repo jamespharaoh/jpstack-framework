@@ -1,10 +1,9 @@
 package wbs.framework.entity.build;
 
+import static wbs.utils.collection.CollectionUtils.singletonList;
 import static wbs.utils.etc.NullUtils.ifNull;
-import static wbs.utils.string.StringUtils.camelToUnderscore;
+import static wbs.utils.string.StringUtils.hyphenToUnderscore;
 import static wbs.utils.string.StringUtils.stringFormat;
-
-import com.google.common.collect.ImmutableList;
 
 import lombok.NonNull;
 
@@ -104,12 +103,12 @@ class ForeignIdModelFieldBuilder
 					spec.fieldName ())
 
 				.columnNames (
-					ImmutableList.of (
+					singletonList (
 						ifNull (
 							spec.columnName (),
 							stringFormat (
 								"%s_id",
-								camelToUnderscore (
+								hyphenToUnderscore (
 									spec.fieldName ())))));
 
 			// store field

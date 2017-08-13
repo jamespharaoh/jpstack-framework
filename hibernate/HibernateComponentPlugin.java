@@ -1,7 +1,11 @@
 package wbs.framework.hibernate;
 
 import static wbs.utils.collection.IterableUtils.iterableChainArguments;
-import static wbs.utils.string.StringUtils.capitalise;
+import static wbs.utils.etc.TypeUtils.classExists;
+import static wbs.utils.etc.TypeUtils.classForNameRequired;
+import static wbs.utils.etc.TypeUtils.classNameFormat;
+import static wbs.utils.string.StringUtils.hyphenToCamel;
+import static wbs.utils.string.StringUtils.hyphenToCamelCapitalise;
 import static wbs.utils.string.StringUtils.stringFormat;
 
 import lombok.NonNull;
@@ -16,6 +20,8 @@ import wbs.framework.component.tools.ComponentPlugin;
 import wbs.framework.logging.LogContext;
 import wbs.framework.logging.OwnedTaskLogger;
 import wbs.framework.logging.TaskLogger;
+
+import wbs.utils.etc.ClassName;
 
 @SingletonComponent ("hibernateComponentPlugin")
 public
@@ -79,64 +85,51 @@ class HibernateComponentPlugin
 			String daoComponentName =
 				stringFormat (
 					"%sDao",
-					pluginModelSpec.name ());
+					hyphenToCamel (
+						pluginModelSpec.name ()));
 
-			String daoClassName =
-				stringFormat (
+			ClassName daoInterfaceClassName =
+				classNameFormat (
 					"%s.model.%sDao",
 					pluginModelSpec.plugin ().packageName (),
-					capitalise (
+					hyphenToCamelCapitalise (
 						pluginModelSpec.name ()));
 
-			boolean gotDaoClass;
+			boolean daoInterfaceClass =
+				classExists (
+					daoInterfaceClassName);
 
-			try {
-
-				Class.forName (
-					daoClassName);
-
-				gotDaoClass = true;
-
-			} catch (ClassNotFoundException exception) {
-
-				gotDaoClass = false;
-
-			}
-
-			String daoHibernateClassName =
-				stringFormat (
+			ClassName daoHibernateClassName =
+				classNameFormat (
 					"%s.hibernate.%sDaoHibernate",
 					pluginModelSpec.plugin ().packageName (),
-					capitalise (
+					hyphenToCamelCapitalise (
 						pluginModelSpec.name ()));
 
-			Class<?> daoHibernateClass = null;
-			boolean gotDaoHibernateClass;
+			Class <?> daoHibernateClass = null;
 
-			try {
+			boolean daoHibernateClassExists =
+				classExists (
+					daoHibernateClassName);
+
+			if (daoHibernateClassExists) {
 
 				daoHibernateClass =
-					Class.forName (
+					classForNameRequired (
 						daoHibernateClassName);
-
-				gotDaoHibernateClass = true;
-
-			} catch (ClassNotFoundException exception) {
-
-				gotDaoHibernateClass = false;
 
 			}
 
 			if (
-				! gotDaoClass
-				&& ! gotDaoHibernateClass
+				! daoInterfaceClass
+				&& ! daoHibernateClassExists
 			) {
 				return;
 			}
 
 			if (
-				! gotDaoClass
-				|| ! gotDaoHibernateClass
+				! daoInterfaceClass
+				|| ! daoHibernateClassExists
 			) {
 
 				taskLogger.errorFormat (

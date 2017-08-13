@@ -8,7 +8,10 @@ interface ObjectModelMethods <
 > {
 
 	Long objectTypeId ();
+
 	String objectTypeCode ();
+	String objectTypeHyphen ();
+	String objectTypeCamel ();
 
 	Long parentTypeId ();
 	Class <? extends Record <?>> parentClassRequired ();

@@ -84,7 +84,7 @@ class ObjectHelperGeneratorTool {
 					taskLogger.errorFormatException (
 						exception,
 						"Error writing object helper for %s",
-						model.objectName ());
+						model.objectTypeHyphen ());
 
 					numFailures ++;
 

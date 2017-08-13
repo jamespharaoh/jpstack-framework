@@ -9,6 +9,8 @@ import wbs.framework.data.annotations.DataAttribute;
 import wbs.framework.data.annotations.DataClass;
 import wbs.framework.data.annotations.DataParent;
 
+import wbs.utils.string.StringFormat;
+
 @Accessors (fluent = true)
 @DataClass ("custom-type")
 public
@@ -28,7 +30,8 @@ class PluginCustomTypeSpec {
 	@Getter @Setter
 	PluginModelsSpec models;
 
-	@DataAttribute
+	@DataAttribute (
+		format = StringFormat.hyphenated)
 	@Getter @Setter
 	String name;
 

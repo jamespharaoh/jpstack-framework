@@ -1,6 +1,7 @@
 package wbs.framework.entity.generate.fields;
 
 import static wbs.utils.etc.ReflectionUtils.methodGetStaticRequired;
+import static wbs.utils.string.StringUtils.hyphenToCamel;
 
 import com.google.common.collect.ImmutableList;
 
@@ -76,9 +77,9 @@ class DurationFieldWriter
 					context.modelMeta ().plugin ().packageName (),
 					context.recordClassName ())
 
-				.propertyNameFormat (
-					"%s",
-					spec.name ())
+				.propertyName (
+					hyphenToCamel (
+						spec.name ()))
 
 				.typeClass (
 					Duration.class)

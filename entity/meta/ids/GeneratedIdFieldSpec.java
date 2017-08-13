@@ -8,6 +8,8 @@ import wbs.framework.data.annotations.DataAttribute;
 import wbs.framework.data.annotations.DataClass;
 import wbs.framework.entity.meta.model.ModelFieldSpec;
 
+import wbs.utils.string.StringFormat;
+
 @Accessors (fluent = true)
 @Data
 @DataClass ("generated-id-field")
@@ -17,7 +19,8 @@ class GeneratedIdFieldSpec
 	implements ModelFieldSpec {
 
 	@DataAttribute (
-		name = "sequence")
+		name = "sequence",
+		format = StringFormat.snakeCase)
 	String sequenceName;
 
 }

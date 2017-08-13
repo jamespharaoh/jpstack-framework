@@ -1,8 +1,9 @@
 package wbs.framework.entity.build;
 
 import static wbs.utils.etc.NullUtils.ifNull;
-import static wbs.utils.string.StringUtils.camelToSpaces;
-import static wbs.utils.string.StringUtils.camelToUnderscore;
+import static wbs.utils.string.StringUtils.hyphenToCamel;
+import static wbs.utils.string.StringUtils.hyphenToSpaces;
+import static wbs.utils.string.StringUtils.hyphenToUnderscore;
 
 import com.google.common.collect.ImmutableList;
 
@@ -63,9 +64,6 @@ class FloatingPointModelFieldBuilder
 
 		) {
 
-			String fieldName =
-				spec.name ();
-
 			// create model field
 
 			ModelField modelField =
@@ -78,11 +76,12 @@ class FloatingPointModelFieldBuilder
 					context.parentModelField ())
 
 				.name (
-					fieldName)
+					hyphenToCamel (
+						spec.name ()))
 
 				.label (
-					camelToSpaces (
-						fieldName))
+					hyphenToSpaces (
+						spec.name ()))
 
 				.type (
 					ModelFieldType.simple)
@@ -105,8 +104,8 @@ class FloatingPointModelFieldBuilder
 					ImmutableList.of (
 						ifNull (
 							spec.columnName (),
-							camelToUnderscore (
-								fieldName))))
+							hyphenToUnderscore (
+								spec.name ()))))
 
 				.columnSqlTypes (
 					ImmutableList.of (
