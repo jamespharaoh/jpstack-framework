@@ -1,7 +1,6 @@
 package wbs.framework.apiclient;
 
 import static wbs.utils.collection.ArrayUtils.arrayStream;
-import static wbs.utils.collection.MapUtils.mapContainsKey;
 import static wbs.utils.collection.MapUtils.mapWithDerivedKeyAndValueGroup;
 import static wbs.utils.etc.EnumUtils.enumEqualSafe;
 import static wbs.utils.etc.EnumUtils.enumNotEqualSafe;
@@ -69,7 +68,6 @@ import wbs.framework.logging.TaskLogger;
 import wbs.utils.io.RuntimeInterruptedIoException;
 import wbs.utils.io.RuntimeIoException;
 
-import wbs.web.exceptions.HttpClientException;
 import wbs.web.exceptions.HttpStatusException;
 import wbs.web.exceptions.HttpTooManyRequestsException;
 import wbs.web.misc.UrlParams;
@@ -748,41 +746,11 @@ class GenericHttpSender <Request, Response> {
 
 						if (
 							optionalIsPresent (
-								errorMessage)
+								errorException)
 						) {
 
-							if (
-
-								doesNotContain (
-									helper.validStatusCodes (),
-									fromJavaInteger (
-										httpResponse.getStatusLine ().getStatusCode ()))
-
-								&& mapContainsKey (
-									HttpClientException.exceptionClassesByStatus,
-									fromJavaInteger (
-										httpResponse.getStatusLine ().getStatusCode ()))
-
-							) {
-
-								throw HttpClientException.forStatus (
-									fromJavaInteger (
-										httpResponse.getStatusLine ().getStatusCode ()),
-									optionalGetRequired (
-										errorMessage));
-
-							} else {
-
-								taskLogger.errorFormat (
-									"Decode error: %s\n",
-									optionalGetRequired (
-										errorMessage));
-
-								throw new RuntimeException (
-									optionalGetRequired (
-										errorMessage));
-
-							}
+							throw optionalGetRequired (
+								errorException);
 
 						}
 
@@ -798,6 +766,12 @@ class GenericHttpSender <Request, Response> {
 
 							state =
 								State.encoded;
+
+							errorMessage =
+								optionalAbsent ();
+
+							errorException =
+								optionalAbsent ();
 
 							taskLogger.warningFormat (
 								"Too many requests, will retry");
