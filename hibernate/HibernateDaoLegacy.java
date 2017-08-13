@@ -7,6 +7,7 @@ import static wbs.utils.etc.NullUtils.isNull;
 import static wbs.utils.etc.NumberUtils.integerToDecimalString;
 import static wbs.utils.etc.OptionalUtils.optionalAbsent;
 import static wbs.utils.etc.OptionalUtils.optionalFromNullable;
+import static wbs.utils.etc.OptionalUtils.optionalGetRequired;
 import static wbs.utils.etc.OptionalUtils.optionalOf;
 import static wbs.utils.etc.OptionalUtils.optionalOrNull;
 import static wbs.utils.etc.TypeUtils.genericCastUnchecked;
@@ -293,6 +294,20 @@ class HibernateDaoLegacy {
 					objectList.get (0)));
 
 		}
+
+	}
+
+	protected <Record>
+	Record findOneRequired (
+			@NonNull Transaction parentTransaction,
+			@NonNull Class <Record> theClass,
+			@NonNull Criteria criteria) {
+
+		return optionalGetRequired (
+			findOne (
+				parentTransaction,
+				theClass,
+				criteria));
 
 	}
 
