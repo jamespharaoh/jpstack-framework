@@ -69,8 +69,8 @@ interface GenericHttpSenderHelper <
 	}
 
 	default
-	Duration tooManyRequestsWait () {
-		return Duration.standardSeconds (2l);
+	Duration tooManyRequestsBackoff () {
+		return Duration.standardSeconds (1l);
 	}
 
 	default

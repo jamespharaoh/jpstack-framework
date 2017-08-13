@@ -17,6 +17,7 @@ import static wbs.utils.etc.OptionalUtils.optionalAbsent;
 import static wbs.utils.etc.OptionalUtils.optionalGetRequired;
 import static wbs.utils.etc.OptionalUtils.optionalIsPresent;
 import static wbs.utils.etc.OptionalUtils.optionalOf;
+import static wbs.utils.etc.TypeUtils.isInstanceOf;
 import static wbs.utils.string.StringUtils.emptyStringIfNull;
 import static wbs.utils.string.StringUtils.stringFormat;
 import static wbs.utils.string.StringUtils.stringToUtf8;
@@ -69,6 +70,7 @@ import wbs.utils.io.RuntimeInterruptedIoException;
 import wbs.utils.io.RuntimeIoException;
 
 import wbs.web.exceptions.HttpClientException;
+import wbs.web.exceptions.HttpTooManyRequestsException;
 import wbs.web.misc.UrlParams;
 
 @Accessors (fluent = true)
@@ -710,70 +712,98 @@ class GenericHttpSender <Request, Response> {
 
 				attemptWithRetriesVoid (
 					helper.tooManyRequestsMaxTries (),
-					helper.tooManyRequestsWait (),
+					helper.tooManyRequestsBackoff (),
+
 					() -> {
 
-					send (
-						taskLogger);
+						send (
+							taskLogger);
 
-					receive (
-						taskLogger);
+						receive (
+							taskLogger);
 
-					if (
-						optionalIsPresent (
-							errorMessage)
-					) {
+						if (
+							optionalIsPresent (
+								errorMessage)
+						) {
 
-						throw new RuntimeException (
-							optionalGetRequired (
-								errorMessage));
+							throw new RuntimeException (
+								optionalGetRequired (
+									errorMessage));
 
-					}
+						}
 
-				});
+						decode (
+							taskLogger);
 
-				decode (
-					taskLogger);
+						if (
+							optionalIsPresent (
+								errorMessage)
+						) {
 
-				if (
-					optionalIsPresent (
-						errorMessage)
-				) {
+							if (
 
-					if (
+								doesNotContain (
+									helper.validStatusCodes (),
+									fromJavaInteger (
+										httpResponse.getStatusLine ().getStatusCode ()))
 
-						doesNotContain (
-							helper.validStatusCodes (),
-							fromJavaInteger (
-								httpResponse.getStatusLine ().getStatusCode ()))
+								&& mapContainsKey (
+									HttpClientException.exceptionClassesByStatus,
+									fromJavaInteger (
+										httpResponse.getStatusLine ().getStatusCode ()))
 
-						&& mapContainsKey (
-							HttpClientException.exceptionClassesByStatus,
-							fromJavaInteger (
-								httpResponse.getStatusLine ().getStatusCode ()))
+							) {
 
-					) {
+								throw HttpClientException.forStatus (
+									fromJavaInteger (
+										httpResponse.getStatusLine ().getStatusCode ()),
+									optionalGetRequired (
+										errorMessage));
 
-						throw HttpClientException.forStatus (
-							fromJavaInteger (
-								httpResponse.getStatusLine ().getStatusCode ()),
-							optionalGetRequired (
-								errorMessage));
+							} else {
 
-					} else {
+								taskLogger.errorFormat (
+									"Decode error: %s\n",
+									optionalGetRequired (
+										errorMessage));
 
-						taskLogger.errorFormat (
-							"Decode error: %s\n",
-							optionalGetRequired (
-								errorMessage));
+								throw new RuntimeException (
+									optionalGetRequired (
+										errorMessage));
 
-						throw new RuntimeException (
-							optionalGetRequired (
-								errorMessage));
+							}
 
-					}
+						}
 
-				}
+					},
+
+					(attempt, exception) -> {
+
+						if (
+							isInstanceOf (
+								HttpTooManyRequestsException.class,
+								exception)
+						) {
+
+							state =
+								State.encoded;
+
+							taskLogger.warningFormat (
+								"Too many requests, will retry");
+
+						} else {
+
+							throw exception;
+
+						}
+
+					},
+
+					(attempt, exception) ->
+						doNothing ()
+
+				);
 
 				success = true;
 
