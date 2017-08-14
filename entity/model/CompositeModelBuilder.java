@@ -6,9 +6,7 @@ import static wbs.utils.etc.TypeUtils.classNameSimple;
 import static wbs.utils.etc.TypeUtils.genericCastUnchecked;
 import static wbs.utils.string.StringUtils.hyphenToCamel;
 import static wbs.utils.string.StringUtils.hyphenToCamelCapitalise;
-import static wbs.utils.string.StringUtils.hyphenToSpaces;
 import static wbs.utils.string.StringUtils.hyphenToUnderscore;
-import static wbs.utils.string.StringUtils.naivePluralise;
 import static wbs.utils.string.StringUtils.stringFormat;
 import static wbs.utils.string.StringUtils.stringIntern;
 
@@ -138,25 +136,19 @@ class CompositeModelBuilder <DataType> {
 
 				.friendlyNameSingular (
 					stringIntern (
-						hyphenToSpaces (
-							modelMeta.name ())))
+						modelMeta.friendlyNameSingular ()))
 
 				.friendlyNamePlural (
 					stringIntern (
-						naivePluralise (
-							hyphenToSpaces (
-								modelMeta.name ()))))
+						modelMeta.friendlyNamePlural ()))
 
 				.shortNameSingular (
 					stringIntern (
-						hyphenToSpaces (
-							modelMeta.name ())))
+						modelMeta.shortNameSingular ()))
 
 				.shortNamePlural (
 					stringIntern (
-						naivePluralise (
-							hyphenToSpaces (
-								modelMeta.name ()))))
+						modelMeta.shortNamePlural ()))
 
 			;
 

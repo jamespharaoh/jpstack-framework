@@ -235,18 +235,21 @@ interface ObjectManagerMethods {
 	List <Pair <Record <?>, String>> verifyData (
 			Transaction parentTransaction,
 			Record <?> object,
-			Boolean recurse);
+			Boolean recurse,
+			Boolean forUpdate);
 
 	default
 	Function <Record <?>, List <Pair <Record <?>, String>>> verifyData (
 			@NonNull Transaction parentTransaction,
-			@NonNull Boolean recurse) {
+			@NonNull Boolean recurse,
+			@NonNull Boolean forUpdate) {
 
 		return object ->
 			verifyData (
 				parentTransaction,
 				object,
-				recurse);
+				recurse,
+				forUpdate);
 
 	}
 

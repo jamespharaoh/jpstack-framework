@@ -1390,7 +1390,8 @@ class ObjectManagerImplementation
 	List <Pair <Record <?>, String>> verifyData (
 			@NonNull Transaction parentTransaction,
 			@NonNull Record <?> object,
-			@NonNull Boolean recurse) {
+			@NonNull Boolean recurse,
+			@NonNull Boolean forUpdate) {
 
 		try (
 
@@ -1410,7 +1411,8 @@ class ObjectManagerImplementation
 				transaction,
 				genericCastUnchecked (
 					object),
-				recurse);
+				recurse,
+				forUpdate);
 
 		}
 

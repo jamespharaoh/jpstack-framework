@@ -62,7 +62,8 @@ interface ObjectHooks <RecordType extends Record <RecordType>> {
 	List <Pair <Record <?>, String>> verifyData (
 			@NonNull Transaction parentTransaction,
 			@NonNull RecordType object,
-			@NonNull Boolean recurse) {
+			@NonNull Boolean recurse,
+			@NonNull Boolean forUpdate) {
 
 		return emptyList ();
 
@@ -71,13 +72,15 @@ interface ObjectHooks <RecordType extends Record <RecordType>> {
 	default
 	Function <RecordType, List <Pair <Record <?>, String>>> verifyData (
 			@NonNull Transaction parentTransaction,
-			@NonNull Boolean recurse) {
+			@NonNull Boolean recurse,
+			@NonNull Boolean forUpdate) {
 
 		return object ->
 			verifyData (
 				parentTransaction,
 				object,
-				recurse);
+				recurse,
+				forUpdate);
 
 	}
 

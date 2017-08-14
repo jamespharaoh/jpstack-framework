@@ -164,7 +164,8 @@ class RecordSpec
 			shortNamePlural =
 				ifNull (
 					shortNamePlural,
-					friendlyNamePlural);
+					naivePluralise (
+						shortNameSingular));
 
 		}
 
