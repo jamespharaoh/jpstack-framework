@@ -1,6 +1,7 @@
 package wbs.framework.object;
 
 import static wbs.utils.string.StringUtils.underscoreToCamel;
+import static wbs.utils.string.StringUtils.underscoreToHyphen;
 
 import java.util.List;
 
@@ -44,10 +45,20 @@ interface ObjectTypeRegistry {
 			Long typeId);
 
 	default
-	String nameForTypeIdRequired (
+	String camelForTypeIdRequired (
 			@NonNull Long typeId) {
 
 		return underscoreToCamel (
+			codeForTypeIdRequired (
+				typeId));
+
+	}
+
+	default
+	String hyphenForTypeIdRequired (
+			@NonNull Long typeId) {
+
+		return underscoreToHyphen (
 			codeForTypeIdRequired (
 				typeId));
 
