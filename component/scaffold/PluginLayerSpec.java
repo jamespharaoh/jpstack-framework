@@ -28,7 +28,7 @@ public
 class PluginLayerSpec {
 
 	// ancestry
-	
+
 	@DataParent
 	@Getter @Setter
 	PluginSpec plugin;
@@ -89,7 +89,7 @@ class PluginLayerSpec {
 						JpStringComparator.instance)));
 
 		}
-				
+
 		List <String> componentClassNames =
 			iterableMapToList (
 				components,
@@ -116,7 +116,7 @@ class PluginLayerSpec {
 						JpStringComparator.instance)));
 
 		}
-				
+
 	}
 
 }
