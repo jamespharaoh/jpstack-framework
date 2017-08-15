@@ -12,7 +12,6 @@ import wbs.framework.data.annotations.DataParent;
 @DataClass ("api-module")
 public
 class PluginApiModuleSpec {
-public
 
 	@DataParent
 	@Getter @Setter
