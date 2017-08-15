@@ -155,50 +155,6 @@ class RecordModelImplementation <RecordType extends Record <RecordType>>
 
 	@Override
 	public
-	String getTypeCode (
-			@NonNull RecordType object) {
-
-		return (String)
-			PropertyUtils.propertyGetAuto (
-				object,
-				typeCodeField.name ());
-
-	}
-
-	@Override
-	public
-	String getCode (
-			@NonNull RecordType object) {
-
-		if (codeField != null) {
-
-			return (String)
-				PropertyUtils.propertyGetAuto (
-					object,
-					codeField.name ());
-
-		}
-
-		return Long.toString (
-			getId (
-				object));
-
-	}
-
-	@Override
-	public
-	String getName (
-			@NonNull RecordType object) {
-
-		return (String)
-			PropertyUtils.propertyGetAuto (
-				object,
-				nameField.name ());
-
-	}
-
-	@Override
-	public
 	String getDescription (
 			@NonNull RecordType object) {
 
@@ -241,69 +197,6 @@ class RecordModelImplementation <RecordType extends Record <RecordType>>
 	Boolean parentTypeIsFixed () {
 
 		return parentTypeField == null;
-
-	}
-
-	@Override
-	public
-	Record <?> getParentOrNull (
-			@NonNull RecordType object) {
-
-		if (! canGetParent ()) {
-
-			throw new UnsupportedOperationException (
-				stringFormat (
-					"Can't get parent for %s",
-					objectTypeHyphen ()));
-
-		}
-
-		return (Record<?>)
-			PropertyUtils.propertyGetAuto (
-				object,
-				parentField.name ());
-
-	}
-
-	@Override
-	public
-	Long getParentId (
-			@NonNull RecordType object) {
-
-		if (parentTypeIsFixed ()) {
-
-			throw new UnsupportedOperationException (
-				stringFormat (
-					"Can't get parent id for %s",
-					objectTypeHyphen ()));
-
-		}
-
-		return (Long)
-			PropertyUtils.propertyGetAuto (
-				object,
-				parentIdField.name ());
-
-	}
-
-	@Override
-	public
-	Record <?> getParentType (
-			@NonNull RecordType object) {
-
-		if (parentTypeIsFixed ()) {
-
-			throw new UnsupportedOperationException (
-				stringFormat (
-					"Can't get parent type for %s",
-					objectTypeHyphen ()));
-
-		}
-
-		return (Record <?>)
-			PropertyUtils.propertyGetAuto (
-				object,
-				parentTypeField.name ());
 
 	}
 

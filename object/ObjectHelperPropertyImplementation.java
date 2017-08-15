@@ -105,16 +105,6 @@ class ObjectHelperPropertyImplementation <
 
 	@Override
 	public
-	String getDescription (
-			@NonNull RecordType object) {
-
-		return objectModel.getDescription (
-			object);
-
-	}
-
-	@Override
-	public
 	Record <?> getParentType (
 			@NonNull RecordType object) {
 

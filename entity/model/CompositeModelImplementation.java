@@ -220,69 +220,6 @@ class CompositeModelImplementation <DataType>
 
 	@Override
 	public
-	Record <?> getParentOrNull (
-			@NonNull DataType object) {
-
-		throw new UnsupportedOperationException ();
-
-	}
-
-	@Override
-	public
-	Record <?> getParentType (
-			@NonNull DataType object) {
-
-		throw new UnsupportedOperationException ();
-
-	}
-
-	@Override
-	public
-	Long getParentId (
-			@NonNull DataType object) {
-
-		throw new UnsupportedOperationException ();
-
-	}
-
-	@Override
-	public
-	String getTypeCode (
-			@NonNull DataType object) {
-
-		throw new UnsupportedOperationException ();
-
-	}
-
-	@Override
-	public
-	String getCode (
-			@NonNull DataType record) {
-
-		throw new UnsupportedOperationException ();
-
-	}
-
-	@Override
-	public
-	String getName (
-			@NonNull DataType record) {
-
-		throw new UnsupportedOperationException ();
-
-	}
-
-	@Override
-	public
-	String getDescription (
-			@NonNull DataType record) {
-
-		throw new UnsupportedOperationException ();
-
-	}
-
-	@Override
-	public
 	ModelField masterField () {
 		throw new UnsupportedOperationException ();
 	}

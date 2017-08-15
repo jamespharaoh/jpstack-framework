@@ -263,66 +263,6 @@ class ObjectModelImplementation <RecordType extends Record <RecordType>>
 
 	@Override
 	public
-	Record<?> getParentType (
-			@NonNull RecordType object) {
-
-		return model.getParentType (
-			object);
-
-	}
-
-	@Override
-	public
-	Long getParentId (
-			@NonNull RecordType object) {
-
-		return model.getParentId (
-			object);
-
-	}
-
-	@Override
-	public
-	String getTypeCode (
-			@NonNull RecordType record) {
-
-		return model.getTypeCode (
-			record);
-
-	}
-
-	@Override
-	public
-	String getCode (
-			@NonNull RecordType record) {
-
-		return model.getCode (
-			record);
-
-	}
-
-	@Override
-	public
-	String getName (
-			@NonNull RecordType record) {
-
-		return model.getName (
-			record);
-
-	}
-
-	@Override
-	public
-	String getDescription (
-			@NonNull RecordType record) {
-
-		return model.getDescription (
-			record);
-
-	}
-
-	@Override
-	public
 	String tableName () {
 		return model.tableName ();
 	}
