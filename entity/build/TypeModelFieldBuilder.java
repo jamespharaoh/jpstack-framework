@@ -4,7 +4,8 @@ import static wbs.utils.etc.NullUtils.ifNull;
 import static wbs.utils.etc.TypeUtils.classForNameRequired;
 import static wbs.utils.string.StringUtils.camelToSpaces;
 import static wbs.utils.string.StringUtils.camelToUnderscore;
-import static wbs.utils.string.StringUtils.capitalise;
+import static wbs.utils.string.StringUtils.hyphenToCamel;
+import static wbs.utils.string.StringUtils.hyphenToCamelCapitalise;
 import static wbs.utils.string.StringUtils.stringFormat;
 
 import com.google.common.collect.ImmutableList;
@@ -77,13 +78,14 @@ class TypeModelFieldBuilder
 				ifNull (
 					spec.typeName (),
 					stringFormat (
-						"%sType",
+						"%s-type",
 						context.modelMeta ().name ()));
 
 			String fieldName =
-				ifNull (
-					spec.name (),
-					fieldTypeName);
+				hyphenToCamel (
+					ifNull (
+						spec.name (),
+						fieldTypeName));
 
 			PluginRecordModelSpec fieldTypePluginModel =
 				pluginManager.pluginRecordModelsByName ().get (
@@ -96,7 +98,7 @@ class TypeModelFieldBuilder
 				stringFormat (
 					"%s.model.%sRec",
 					fieldTypePlugin.packageName (),
-					capitalise (
+					hyphenToCamelCapitalise (
 						fieldTypeName));
 
 			// create model field

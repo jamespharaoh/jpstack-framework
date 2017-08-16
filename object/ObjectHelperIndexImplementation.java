@@ -4,6 +4,7 @@ import static wbs.utils.etc.NullUtils.isNotNull;
 import static wbs.utils.etc.NumberUtils.integerToDecimalString;
 import static wbs.utils.etc.OptionalUtils.optionalIsNotPresent;
 import static wbs.utils.etc.OptionalUtils.optionalOrNull;
+import static wbs.utils.etc.TypeUtils.genericCastUnchecked;
 import static wbs.utils.string.StringUtils.stringFormat;
 
 import java.util.List;
@@ -358,7 +359,8 @@ class ObjectHelperIndexImplementation <
 
 			ObjectHelper <?> parentHelper =
 				objectManager.objectHelperForObjectRequired (
-					parent);
+					genericCastUnchecked (
+						parent));
 
 			GlobalId parentGlobalId =
 				new GlobalId (

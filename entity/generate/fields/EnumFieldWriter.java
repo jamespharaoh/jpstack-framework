@@ -1,7 +1,8 @@
 package wbs.framework.entity.generate.fields;
 
 import static wbs.utils.etc.NullUtils.ifNull;
-import static wbs.utils.string.StringUtils.capitalise;
+import static wbs.utils.string.StringUtils.hyphenToCamel;
+import static wbs.utils.string.StringUtils.hyphenToCamelCapitalise;
 import static wbs.utils.string.StringUtils.stringFormat;
 
 import lombok.NonNull;
@@ -106,15 +107,16 @@ class EnumFieldWriter
 			}
 
 			String fieldName =
-				ifNull (
-					spec.name (),
-					spec.typeName ());
+				hyphenToCamel (
+					ifNull (
+						spec.name (),
+						spec.typeName ()));
 
 			String fullFieldTypeName =
 				stringFormat (
 					"%s.model.%s",
 					fieldTypePackageName,
-					capitalise (
+					hyphenToCamelCapitalise (
 						spec.typeName ()));
 
 			// write field
@@ -143,7 +145,8 @@ class EnumFieldWriter
 				propertyWriter.defaultValueFormat (
 					"%s.%s",
 					fullFieldTypeName,
-					spec.defaultValue ());
+					hyphenToCamel (
+						spec.defaultValue ()));
 
 			}
 

@@ -15,14 +15,16 @@ interface ObjectHelperModelMethods <
 	ObjectModel <RecordType> objectModel ();
 
 	Class <RecordType> objectClass ();
-	String objectName ();
 	String objectTypeCode ();
 	Long objectTypeId ();
 
-	String friendlyName ();
+	String objectTypeCamel ();
+	String objectTypeHyphen ();
+
+	String friendlyNameSingular ();
 	String friendlyNamePlural ();
 
-	String shortName ();
+	String shortNameSingular ();
 	String shortNamePlural ();
 
 	ModelField field (

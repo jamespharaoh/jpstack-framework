@@ -3,8 +3,7 @@ package wbs.framework.component.scaffold;
 import static wbs.utils.collection.MapUtils.mapItemForKeyRequired;
 import static wbs.utils.etc.TypeUtils.classForNameRequired;
 import static wbs.utils.etc.TypeUtils.genericCastUnchecked;
-import static wbs.utils.string.StringUtils.capitalise;
-import static wbs.utils.string.StringUtils.hyphenToCamel;
+import static wbs.utils.string.StringUtils.hyphenToCamelCapitalise;
 import static wbs.utils.string.StringUtils.stringFormat;
 
 import java.util.List;
@@ -47,14 +46,13 @@ class PluginManager {
 		PluginRecordModelSpec modelSpec =
 			mapItemForKeyRequired (
 				pluginRecordModelsByName,
-				hyphenToCamel (
-					modelName));
+				modelName);
 
 		String modelClassName =
 			stringFormat (
 				"%s.model.%sRec",
 				modelSpec.plugin ().packageName (),
-				capitalise (
+				hyphenToCamelCapitalise (
 					modelSpec.name ()));
 
 		return genericCastUnchecked (
@@ -70,14 +68,13 @@ class PluginManager {
 		PluginCompositeModelSpec modelSpec =
 			mapItemForKeyRequired (
 				pluginCompositeModelsByName,
-				hyphenToCamel (
-					modelName));
+				modelName);
 
 		String modelClassName =
 			stringFormat (
 				"%s.model.%sRec",
 				modelSpec.plugin ().packageName (),
-				capitalise (
+				hyphenToCamelCapitalise (
 					modelSpec.name ()));
 
 		return genericCastUnchecked (

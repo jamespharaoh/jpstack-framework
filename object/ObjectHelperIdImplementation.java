@@ -95,7 +95,7 @@ class ObjectHelperIdImplementation <
 					"%s with id %s not found",
 					capitalise (
 						camelToSpaces (
-							objectModel.objectName ())),
+							objectModel.objectTypeHyphen ())),
 					integerToDecimalString (
 						id)));
 
@@ -209,7 +209,7 @@ class ObjectHelperIdImplementation <
 				stringFormat (
 					"No such %s with id %s",
 					camelToSpaces (
-						objectModel.objectName ()),
+						objectModel.objectTypeHyphen ()),
 					integerToDecimalString (
 						missingIds.get (0))));
 
@@ -224,7 +224,7 @@ class ObjectHelperIdImplementation <
 				stringFormat (
 					"No such %s with ids %s",
 					camelToSpaces (
-						objectModel.objectName ()),
+						objectModel.objectTypeHyphen ()),
 					joinWithCommaAndSpace (
 						missingIds.stream ()
 							.map (longValue -> longValue.toString ())
@@ -236,7 +236,7 @@ class ObjectHelperIdImplementation <
 				stringFormat (
 					"No such %s with ids %s (and %s others)",
 					camelToSpaces (
-						objectModel.objectName ()),
+						objectModel.objectTypeHyphen ()),
 					joinWithCommaAndSpace (
 						missingIds.subList (0, 5).stream ()
 							.map (longValue -> longValue.toString ())

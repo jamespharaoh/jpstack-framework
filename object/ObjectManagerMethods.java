@@ -10,6 +10,7 @@ import static wbs.utils.etc.OptionalUtils.optionalOf;
 import static wbs.utils.etc.OptionalUtils.optionalOrNull;
 import static wbs.utils.etc.OptionalUtils.optionalOrThrow;
 import static wbs.utils.etc.ResultUtils.mapSuccess;
+import static wbs.utils.etc.TypeUtils.genericCastUnchecked;
 import static wbs.utils.string.StringUtils.stringFormat;
 
 import java.util.Collection;
@@ -18,6 +19,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.SortedMap;
+import java.util.function.Function;
 
 import com.google.common.base.Optional;
 
@@ -171,6 +173,20 @@ interface ObjectManagerMethods {
 
 	}
 
+	default
+	Record <?> findObjectRequired (
+			@NonNull Transaction parentTransaction,
+			@NonNull Long objectTypeId,
+			@NonNull Long objectId) {
+
+		return findObjectRequired (
+			parentTransaction,
+			new GlobalId (
+				objectTypeId,
+				objectId));
+
+	}
+
 	<ObjectType extends Record <?>>
 	ObjectType update (
 			Transaction parentTransaction,
@@ -219,7 +235,23 @@ interface ObjectManagerMethods {
 	List <Pair <Record <?>, String>> verifyData (
 			Transaction parentTransaction,
 			Record <?> object,
-			Boolean recurse);
+			Boolean recurse,
+			Boolean forUpdate);
+
+	default
+	Function <Record <?>, List <Pair <Record <?>, String>>> verifyData (
+			@NonNull Transaction parentTransaction,
+			@NonNull Boolean recurse,
+			@NonNull Boolean forUpdate) {
+
+		return object ->
+			verifyData (
+				parentTransaction,
+				object,
+				recurse,
+				forUpdate);
+
+	}
 
 	// object paths
 
@@ -500,8 +532,19 @@ interface ObjectManagerMethods {
 	ObjectHelper <?> objectHelperForObjectNameRequired (
 			String objectName);
 
-	ObjectHelper <?> objectHelperForObjectRequired (
-			Record <?> object);
+	<Type extends Record <Type>>
+	ObjectHelper <Type> objectHelperForObjectRequired (
+			Type object);
+
+	default
+	ObjectHelper <?> objectHelperForObjectGenericRequired (
+			@NonNull Record <?> object) {
+
+		return objectHelperForObjectRequired (
+			genericCastUnchecked (
+				object));
+
+	}
 
 	ObjectHelper <?> objectHelperForClassRequired (
 			Class <?> objectClass);

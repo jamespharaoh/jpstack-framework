@@ -105,16 +105,6 @@ class ObjectHelperPropertyImplementation <
 
 	@Override
 	public
-	String getDescription (
-			@NonNull RecordType object) {
-
-		return objectModel.getDescription (
-			object);
-
-	}
-
-	@Override
-	public
 	Record <?> getParentType (
 			@NonNull RecordType object) {
 
@@ -314,7 +304,7 @@ class ObjectHelperPropertyImplementation <
 
 					return errorResultFormat (
 						"Failed to get parent id of %s with id %s",
-						objectModel.objectName (),
+						objectModel.objectTypeHyphen (),
 						integerToDecimalString (
 							object.getId ()));
 
@@ -335,7 +325,7 @@ class ObjectHelperPropertyImplementation <
 							integerToDecimalString (
 								parentObjectType.getId ()),
 							"parent of %s (%s)",
-							objectModel.objectName (),
+							objectModel.objectTypeHyphen (),
 							integerToDecimalString (
 								object.getId ())));
 
@@ -358,7 +348,7 @@ class ObjectHelperPropertyImplementation <
 
 					return errorResultFormat (
 						"Can't find %s with id %s",
-						parentHelper.objectName (),
+						parentHelper.objectTypeHyphen (),
 						integerToDecimalString (
 						parentObjectId));
 
@@ -477,7 +467,7 @@ class ObjectHelperPropertyImplementation <
 
 					return errorResultFormat (
 						"Unable to find parent for %s with id %s",
-						currentHelper.objectName (),
+						currentHelper.objectTypeHyphen (),
 						integerToDecimalString (
 							object.getId ()));
 
@@ -489,7 +479,8 @@ class ObjectHelperPropertyImplementation <
 
 				currentHelper =
 					objectManager.objectHelperForObjectRequired (
-						currentObject);
+						genericCastUnchecked (
+							currentObject));
 
 			}
 

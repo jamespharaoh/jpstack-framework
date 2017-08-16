@@ -1,8 +1,10 @@
 package wbs.framework.entity.generate.collections;
 
+import static wbs.utils.collection.MapUtils.mapItemForKeyOrThrow;
 import static wbs.utils.etc.NullUtils.ifNull;
-import static wbs.utils.etc.NullUtils.isNull;
-import static wbs.utils.string.StringUtils.capitalise;
+import static wbs.utils.etc.TypeUtils.classNameFormat;
+import static wbs.utils.string.StringUtils.hyphenToCamel;
+import static wbs.utils.string.StringUtils.hyphenToCamelCapitalise;
 import static wbs.utils.string.StringUtils.naivePluralise;
 import static wbs.utils.string.StringUtils.stringFormat;
 
@@ -32,6 +34,8 @@ import wbs.framework.entity.meta.model.ModelMetaLoader;
 import wbs.framework.logging.LogContext;
 import wbs.framework.logging.OwnedTaskLogger;
 import wbs.framework.logging.TaskLogger;
+
+import wbs.utils.etc.ClassName;
 
 @PrototypeComponent ("childrenListWriter")
 @ModelWriter
@@ -86,31 +90,24 @@ class ChildrenListWriter
 						spec.typeName ()));
 
 			PluginRecordModelSpec fieldTypePluginModel =
-				pluginManager.pluginRecordModelsByName ().get (
-					spec.typeName ());
-
-			if (
-				isNull (
-					fieldTypePluginModel)
-			) {
-
-				throw new RuntimeException (
-					stringFormat (
-						"Field %s.%s has invalid type %s",
-						context.recordClassName (),
-						fieldName,
-						spec.typeName ()));
-
-			}
+				mapItemForKeyOrThrow (
+					pluginManager.pluginRecordModelsByName (),
+					spec.typeName (),
+					() -> new RuntimeException (
+						stringFormat (
+							"Field %s.%s has invalid type %s",
+							context.recordClassName (),
+							fieldName,
+							spec.typeName ())));
 
 			PluginSpec fieldTypePlugin =
 				fieldTypePluginModel.plugin ();
 
-			String fullFieldTypeName =
-				stringFormat (
+			ClassName fullFieldTypeName =
+				classNameFormat (
 					"%s.model.%sRec",
 					fieldTypePlugin.packageName (),
-					capitalise (
+					hyphenToCamelCapitalise (
 						spec.typeName ()));
 
 			// write field
@@ -132,7 +129,8 @@ class ChildrenListWriter
 								fullFieldTypeName)))
 
 				.propertyName (
-					fieldName)
+					hyphenToCamel (
+						fieldName))
 
 				.defaultValue (
 					imports ->

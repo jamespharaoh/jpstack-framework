@@ -115,6 +115,7 @@ class PluginManagerFactory
 					PluginFixtureSpec.class,
 					PluginLayerSpec.class,
 					PluginRecordModelSpec.class,
+					PluginMetaFixtureSpec.class,
 					PluginModelsSpec.class,
 					PluginDependencySpec.class,
 					PluginSpec.class)

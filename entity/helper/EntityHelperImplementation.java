@@ -4,8 +4,7 @@ import static wbs.utils.collection.MapUtils.mapWithDerivedKey;
 import static wbs.utils.etc.Misc.shouldNeverHappen;
 import static wbs.utils.io.FileUtils.deleteDirectory;
 import static wbs.utils.io.FileUtils.forceMkdir;
-import static wbs.utils.string.StringUtils.camelToHyphen;
-import static wbs.utils.string.StringUtils.capitalise;
+import static wbs.utils.string.StringUtils.hyphenToCamelCapitalise;
 import static wbs.utils.string.StringUtils.stringFormat;
 
 import java.util.List;
@@ -176,7 +175,7 @@ class EntityHelperImplementation
 						stringFormat (
 							"%s.model.%sRec",
 							plugin.packageName (),
-							capitalise (
+							hyphenToCamelCapitalise (
 								modelMeta.name ()));
 
 					recordClassNamesBuilder.add (
@@ -188,7 +187,7 @@ class EntityHelperImplementation
 						stringFormat (
 							"%s.model.%s",
 							plugin.packageName (),
-							capitalise (
+							hyphenToCamelCapitalise (
 								modelMeta.name ()));
 
 					compositeClassNamesBuilder.add (
@@ -348,32 +347,32 @@ class EntityHelperImplementation
 			int errors = 0;
 
 			for (
-				RecordSpec modelMeta
+				RecordSpec recordSpec
 					: modelMetaLoader.allSpecs ().values ()
 			) {
 
 				Model <?> model;
 
-				if (modelMeta.type ().record ()) {
+				if (recordSpec.type ().record ()) {
 
 					model =
 						recordModelBuilderProvider.provide (
 							taskLogger)
 
-						.modelMeta (
-							modelMeta)
+						.recordSpec (
+							recordSpec)
 
 						.build (
 							taskLogger);
 
-				} else if (modelMeta.type ().composite ()) {
+				} else if (recordSpec.type ().composite ()) {
 
 					model =
 						compositeModelBuilderProvider.provide (
 							taskLogger)
 
 						.modelMeta (
-							modelMeta)
+							recordSpec)
 
 						.build (
 							taskLogger);
@@ -395,12 +394,12 @@ class EntityHelperImplementation
 				allModelsBuilder.add (
 					model);
 
-				if (modelMeta.type ().record ()) {
+				if (recordSpec.type ().record ()) {
 
 					recordModelsBuilder.add (
 						model);
 
-				} else if (modelMeta.type ().composite ()) {
+				} else if (recordSpec.type ().composite ()) {
 
 					compositeModelsBuilder.add (
 						model);
@@ -414,8 +413,7 @@ class EntityHelperImplementation
 				String outputFilename =
 					stringFormat (
 						"work/model/%s.xml",
-						camelToHyphen (
-							model.objectName ()));
+						model.objectTypeHyphen ());
 
 				try {
 
@@ -470,7 +468,7 @@ class EntityHelperImplementation
 			recordModelsByName =
 				mapWithDerivedKey (
 					recordModels,
-					Model::objectName);
+					Model::objectTypeHyphen);
 
 			compositeModelsByClass =
 				mapWithDerivedKey (
@@ -480,7 +478,7 @@ class EntityHelperImplementation
 			compositeModelsByName =
 				mapWithDerivedKey (
 					compositeModels,
-					Model::objectName);
+					Model::objectTypeHyphen);
 
 			allModelsByClass =
 				mapWithDerivedKey (
@@ -490,7 +488,7 @@ class EntityHelperImplementation
 			allModelsByName =
 				mapWithDerivedKey (
 					allModels,
-					Model::objectName);
+					Model::objectTypeHyphen);
 
 		}
 

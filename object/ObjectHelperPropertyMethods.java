@@ -43,14 +43,52 @@ interface ObjectHelperPropertyMethods <
 
 	}
 
+	default
 	String getTypeCode (
-			RecordType object);
+			@NonNull RecordType object) {
 
+		return objectHelper ().objectModel ().getTypeCode (
+			object);
+
+	}
+
+	default
 	String getCode (
-			RecordType object);
+			@NonNull RecordType object) {
 
+		return objectHelper ().objectModel ().getCode (
+			object);
+
+	}
+
+	default
+	Long getIndex (
+			@NonNull RecordType object) {
+
+		return objectHelper ().objectModel ().getIndex (
+			object);
+
+	}
+
+	default
+	void setIndex (
+			@NonNull RecordType object,
+			@NonNull Long index) {
+
+		objectHelper ().objectModel ().setIndex (
+			object,
+			index);
+
+	}
+
+	default
 	String getDescription (
-			RecordType object);
+			@NonNull RecordType object) {
+
+		return objectHelper ().objectModel ().getDescription (
+			object);
+
+	}
 
 	Record <?> getParentType (
 			RecordType object);
@@ -125,6 +163,17 @@ interface ObjectHelperPropertyMethods <
 				parentTransaction,
 				object,
 				checkParents));
+
+	}
+
+	default
+	void setDeleted (
+			@NonNull RecordType object,
+			@NonNull Boolean deleted) {
+
+		objectHelper ().objectModel ().setDeleted (
+			object,
+			deleted);
 
 	}
 

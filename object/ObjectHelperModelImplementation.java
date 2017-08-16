@@ -2,8 +2,6 @@ package wbs.framework.object;
 
 import static wbs.utils.etc.OptionalUtils.optionalAbsent;
 import static wbs.utils.etc.OptionalUtils.optionalOf;
-import static wbs.utils.string.StringUtils.camelToSpaces;
-import static wbs.utils.string.StringUtils.naivePluralise;
 import static wbs.utils.string.StringUtils.stringFormat;
 
 import com.google.common.base.Optional;
@@ -58,12 +56,6 @@ class ObjectHelperModelImplementation <
 
 	@Override
 	public
-	String objectName () {
-		return objectModel.objectName ();
-	}
-
-	@Override
-	public
 	Long objectTypeId () {
 		return objectModel.objectTypeId ();
 	}
@@ -82,9 +74,19 @@ class ObjectHelperModelImplementation <
 	@Override
 	public
 	String objectTypeCode () {
-
 		return objectModel.objectTypeCode ();
+	}
 
+	@Override
+	public
+	String objectTypeCamel () {
+		return objectModel.objectTypeCamel ();
+	}
+
+	@Override
+	public
+	String objectTypeHyphen () {
+		return objectModel.objectTypeHyphen ();
 	}
 
 	@Override
@@ -168,7 +170,7 @@ class ObjectHelperModelImplementation <
 			throw new UnsupportedOperationException (
 				stringFormat (
 					"Object type %s has no code field",
-					objectModel.objectName ()));
+					objectModel.objectTypeHyphen ()));
 
 		}
 
@@ -191,7 +193,7 @@ class ObjectHelperModelImplementation <
 			throw new UnsupportedOperationException (
 				stringFormat (
 					"Object type %s has no type code field",
-					objectModel.objectName ()));
+					objectModel.objectTypeHyphen ()));
 
 		}
 
@@ -214,7 +216,7 @@ class ObjectHelperModelImplementation <
 			throw new UnsupportedOperationException (
 				stringFormat (
 					"Object type %s has no type code field",
-					objectModel.objectName ()));
+					objectModel.objectTypeHyphen ()));
 
 		}
 
@@ -231,7 +233,7 @@ class ObjectHelperModelImplementation <
 			throw new UnsupportedOperationException (
 				stringFormat (
 					"Object type %s has no code field",
-					objectModel.objectName ()));
+					objectModel.objectTypeHyphen ()));
 
 		}
 
@@ -260,7 +262,7 @@ class ObjectHelperModelImplementation <
 			throw new UnsupportedOperationException (
 				stringFormat (
 					"Object type %s has no index field",
-					objectModel.objectName ()));
+					objectModel.objectTypeHyphen ()));
 
 		}
 
@@ -277,7 +279,7 @@ class ObjectHelperModelImplementation <
 			throw new UnsupportedOperationException (
 				stringFormat (
 					"Object type %s has no index field",
-					objectModel.objectName ()));
+					objectModel.objectTypeHyphen ()));
 
 		}
 
@@ -312,7 +314,7 @@ class ObjectHelperModelImplementation <
 			throw new UnsupportedOperationException (
 				stringFormat (
 					"Object type %s has no name field",
-					objectModel.objectName ()));
+					objectModel.objectTypeHyphen ()));
 
 		}
 
@@ -329,7 +331,7 @@ class ObjectHelperModelImplementation <
 			throw new UnsupportedOperationException (
 				stringFormat (
 					"Object type %s has no name field",
-					objectModel.objectName ()));
+					objectModel.objectTypeHyphen ()));
 
 		}
 
@@ -380,7 +382,7 @@ class ObjectHelperModelImplementation <
 			throw new UnsupportedOperationException (
 				stringFormat (
 					"Object type %s has no description field",
-					objectModel.objectName ()));
+					objectModel.objectTypeHyphen ()));
 
 		}
 
@@ -397,7 +399,7 @@ class ObjectHelperModelImplementation <
 			throw new UnsupportedOperationException (
 				stringFormat (
 					"Object type %s has no deleted field",
-					objectModel.objectName ()));
+					objectModel.objectTypeHyphen ()));
 
 		}
 
@@ -414,7 +416,7 @@ class ObjectHelperModelImplementation <
 			throw new UnsupportedOperationException (
 				stringFormat (
 					"Object type %s has no deleted field",
-					objectModel.objectName ()));
+					objectModel.objectTypeHyphen ()));
 
 		}
 
@@ -431,7 +433,7 @@ class ObjectHelperModelImplementation <
 			throw new UnsupportedOperationException (
 				stringFormat (
 					"Object type %s has no description field",
-					objectModel.objectName ()));
+					objectModel.objectTypeHyphen ()));
 
 		}
 
@@ -489,28 +491,26 @@ class ObjectHelperModelImplementation <
 
 	@Override
 	public
-	String friendlyName () {
-
-		return camelToSpaces (
-			objectName ());
-
+	String friendlyNameSingular () {
+		return objectModel.friendlyNameSingular ();
 	}
 
 	@Override
 	public
 	String friendlyNamePlural () {
-
-		return naivePluralise (
-			friendlyName ());
-
+		return objectModel.friendlyNamePlural ();
 	}
 
 	@Override
 	public
-	String shortName () {
+	String shortNameSingular () {
+		return objectModel.shortNameSingular ();
+	}
 
-		return friendlyName ();
-
+	@Override
+	public
+	String shortNamePlural () {
+		return objectModel.shortNamePlural ();
 	}
 
 	@Override
@@ -520,14 +520,6 @@ class ObjectHelperModelImplementation <
 
 		return objectModel.field (
 			name);
-
-	}
-
-	@Override
-	public
-	String shortNamePlural () {
-
-		return friendlyNamePlural ();
 
 	}
 

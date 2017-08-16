@@ -63,8 +63,14 @@ class ObjectModelImplementation <RecordType extends Record <RecordType>>
 
 	@Override
 	public
-	String objectName () {
-		return model.objectName ();
+	String objectTypeCamel () {
+		return model.objectTypeCamel ();
+	}
+
+	@Override
+	public
+	String objectTypeHyphen () {
+		return model.objectTypeHyphen ();
 	}
 
 	@Override
@@ -77,6 +83,36 @@ class ObjectModelImplementation <RecordType extends Record <RecordType>>
 	public
 	Class <RecordType> objectClass () {
 		return model.objectClass ();
+	}
+
+	@Override
+	public
+	String objectClassName () {
+		return model.objectClassName ();
+	}
+
+	@Override
+	public
+	String friendlyNameSingular () {
+		return model.friendlyNameSingular ();
+	}
+
+	@Override
+	public
+	String friendlyNamePlural () {
+		return model.friendlyNamePlural ();
+	}
+
+	@Override
+	public
+	String shortNameSingular () {
+		return model.shortNameSingular ();
+	}
+
+	@Override
+	public
+	String shortNamePlural () {
+		return model.shortNamePlural ();
 	}
 
 	@Override
@@ -222,66 +258,6 @@ class ObjectModelImplementation <RecordType extends Record <RecordType>>
 
 		return model.getParentOrNull (
 			object);
-
-	}
-
-	@Override
-	public
-	Record<?> getParentType (
-			@NonNull RecordType object) {
-
-		return model.getParentType (
-			object);
-
-	}
-
-	@Override
-	public
-	Long getParentId (
-			@NonNull RecordType object) {
-
-		return model.getParentId (
-			object);
-
-	}
-
-	@Override
-	public
-	String getTypeCode (
-			@NonNull RecordType record) {
-
-		return model.getTypeCode (
-			record);
-
-	}
-
-	@Override
-	public
-	String getCode (
-			@NonNull RecordType record) {
-
-		return model.getCode (
-			record);
-
-	}
-
-	@Override
-	public
-	String getName (
-			@NonNull RecordType record) {
-
-		return model.getName (
-			record);
-
-	}
-
-	@Override
-	public
-	String getDescription (
-			@NonNull RecordType record) {
-
-		return model.getDescription (
-			record);
 
 	}
 

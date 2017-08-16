@@ -14,6 +14,7 @@ import wbs.framework.component.annotations.PrototypeComponent;
 import wbs.framework.logging.TaskLogger;
 
 import wbs.utils.string.FormatWriter;
+import wbs.utils.string.StringFormat;
 
 @PrototypeComponent ("javaPropertyWriter")
 public
@@ -23,12 +24,12 @@ class JavaPropertyWriter
 	// properties
 
 	String thisClassName;
-	Function <JavaImportRegistry, String> typeName;
-	Function <JavaImportRegistry, String> setterTypeName;
+	Function <JavaImportRegistry, CharSequence> typeName;
+	Function <JavaImportRegistry, CharSequence> setterTypeName;
 	String setterConversion;
 	String propertyName;
 	String setUpdatedFieldName;
-	Function <JavaImportRegistry, String> defaultValue;
+	Function <JavaImportRegistry, CharSequence> defaultValue;
 
 	// this class name
 
@@ -73,7 +74,7 @@ class JavaPropertyWriter
 
 	public
 	JavaPropertyWriter typeName (
-			@NonNull Function <JavaImportRegistry, String> typeName) {
+			@NonNull Function <JavaImportRegistry, CharSequence> typeName) {
 
 		if (
 			isNotNull (
@@ -91,7 +92,7 @@ class JavaPropertyWriter
 
 	public
 	JavaPropertyWriter typeName (
-			@NonNull String typeName) {
+			@NonNull CharSequence typeName) {
 
 		return typeName (
 			imports ->
@@ -123,7 +124,7 @@ class JavaPropertyWriter
 
 	public
 	JavaPropertyWriter setterTypeName (
-			@NonNull Function <JavaImportRegistry, String> setterTypeName) {
+			@NonNull Function <JavaImportRegistry, CharSequence> setterTypeName) {
 
 		if (
 			isNotNull (
@@ -211,6 +212,9 @@ class JavaPropertyWriter
 			throw new IllegalStateException ();
 		}
 
+		StringFormat.camelCase.verifyAndThrow (
+			propertyName);
+
 		this.propertyName =
 			propertyName;
 
@@ -252,7 +256,7 @@ class JavaPropertyWriter
 
 	public
 	JavaPropertyWriter defaultValue (
-			@NonNull Function <JavaImportRegistry, String> defaultValue) {
+			@NonNull Function <JavaImportRegistry, CharSequence> defaultValue) {
 
 		if (
 			isNotNull (

@@ -3,9 +3,11 @@ package wbs.framework.entity.build;
 import static wbs.utils.collection.MapUtils.mapItemForKeyRequired;
 import static wbs.utils.etc.NullUtils.ifNull;
 import static wbs.utils.etc.TypeUtils.classForNameRequired;
-import static wbs.utils.string.StringUtils.camelToSpaces;
-import static wbs.utils.string.StringUtils.camelToUnderscore;
-import static wbs.utils.string.StringUtils.capitalise;
+import static wbs.utils.etc.TypeUtils.classNameFormat;
+import static wbs.utils.string.StringUtils.hyphenToCamel;
+import static wbs.utils.string.StringUtils.hyphenToCamelCapitalise;
+import static wbs.utils.string.StringUtils.hyphenToSpaces;
+import static wbs.utils.string.StringUtils.hyphenToUnderscore;
 import static wbs.utils.string.StringUtils.stringFormat;
 
 import com.google.common.collect.ImmutableList;
@@ -32,6 +34,8 @@ import wbs.framework.logging.LogContext;
 import wbs.framework.logging.OwnedTaskLogger;
 import wbs.framework.logging.TaskLogger;
 import wbs.framework.schema.helper.SchemaTypesHelper;
+
+import wbs.utils.etc.ClassName;
 
 @PrototypeComponent ("enumModelFieldBuilder")
 @ModelBuilder
@@ -119,11 +123,11 @@ class EnumModelFieldBuilder
 					spec.name (),
 					spec.typeName ());
 
-			String fullFieldTypeName =
-				stringFormat (
+			ClassName fullFieldTypeName =
+				classNameFormat (
 					"%s.model.%s",
 					fieldTypePackageName,
-					capitalise (
+					hyphenToCamelCapitalise (
 						spec.typeName ()));
 
 			Class <?> valueType =
@@ -142,10 +146,11 @@ class EnumModelFieldBuilder
 					context.parentModelField ())
 
 				.name (
-					fieldName)
+					hyphenToCamel (
+						fieldName))
 
 				.label (
-					camelToSpaces (
+					hyphenToSpaces (
 						fieldName))
 
 				.type (
@@ -169,7 +174,7 @@ class EnumModelFieldBuilder
 					ImmutableList.of (
 						ifNull (
 							spec.columnName (),
-							camelToUnderscore (
+							hyphenToUnderscore (
 								fieldName))))
 
 				.columnSqlTypes (

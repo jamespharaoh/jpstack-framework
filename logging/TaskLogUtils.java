@@ -1,6 +1,7 @@
 package wbs.framework.logging;
 
 import static wbs.utils.etc.EnumUtils.enumName;
+import static wbs.utils.string.FormatWriterUtils.formatWriterConsumerToString;
 
 import java.io.OutputStreamWriter;
 
@@ -59,6 +60,20 @@ class TaskLogUtils {
 					childEvent));
 
 		formatWriter.decreaseIndent ();
+
+	}
+
+	public static
+	String taskLogToString (
+			@NonNull String indent,
+			@NonNull TaskLogEvent taskLogEvent) {
+
+		return formatWriterConsumerToString (
+			indent,
+			formatWriter ->
+				writeTaskLog (
+					formatWriter,
+					taskLogEvent));
 
 	}
 

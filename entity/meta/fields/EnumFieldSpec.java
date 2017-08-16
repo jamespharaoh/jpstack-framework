@@ -8,6 +8,8 @@ import wbs.framework.data.annotations.DataAttribute;
 import wbs.framework.data.annotations.DataClass;
 import wbs.framework.entity.meta.model.ModelFieldSpec;
 
+import wbs.utils.string.StringFormat;
+
 @Accessors (fluent = true)
 @Data
 @DataClass ("enum-field")
@@ -16,7 +18,8 @@ public
 class EnumFieldSpec
 	implements ModelFieldSpec {
 
-	@DataAttribute
+	@DataAttribute (
+		format = StringFormat.hyphenated)
 	String name;
 
 	@DataAttribute
@@ -24,15 +27,18 @@ class EnumFieldSpec
 
 	@DataAttribute (
 		name = "type",
-		required = true)
+		required = true,
+		format = StringFormat.hyphenated)
 	String typeName;
 
 	@DataAttribute (
-		name = "default")
+		name = "default",
+		format = StringFormat.hyphenated)
 	String defaultValue;
 
 	@DataAttribute (
-		name = "column")
+		name = "column",
+		format = StringFormat.snakeCase)
 	String columnName;
 
 }

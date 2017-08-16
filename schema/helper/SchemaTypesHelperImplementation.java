@@ -5,7 +5,8 @@ import static wbs.utils.etc.OptionalUtils.optionalIsNotPresent;
 import static wbs.utils.etc.TypeUtils.classForName;
 import static wbs.utils.etc.TypeUtils.classNameSimple;
 import static wbs.utils.string.StringUtils.camelToUnderscore;
-import static wbs.utils.string.StringUtils.capitalise;
+import static wbs.utils.string.StringUtils.camelToUnderscoreUncapitalise;
+import static wbs.utils.string.StringUtils.hyphenToCamelCapitalise;
 import static wbs.utils.string.StringUtils.stringFormat;
 
 import java.sql.Types;
@@ -187,7 +188,8 @@ class SchemaTypesHelperImplementation
 				stringFormat (
 					"%s.model.%s",
 					enumType.plugin ().packageName (),
-					capitalise (enumType.name ()));
+					hyphenToCamelCapitalise (
+						enumType.name ()));
 
 			Class enumClass;
 
@@ -220,8 +222,9 @@ class SchemaTypesHelperImplementation
 					String.class);
 
 			String typeName =
-				camelToUnderscore (
-					enumClass.getSimpleName ());
+				camelToUnderscoreUncapitalise (
+					classNameSimple (
+						enumClass));
 
 			fieldTypeNamesBuilder.put (
 				enumClass,
@@ -273,7 +276,7 @@ class SchemaTypesHelperImplementation
 				stringFormat (
 					"%s.model.%s",
 					customType.plugin ().packageName (),
-					capitalise (
+					hyphenToCamelCapitalise (
 						customType.name ()));
 
 			Optional <Class <?>> objectClassOptional =
@@ -295,7 +298,7 @@ class SchemaTypesHelperImplementation
 				stringFormat (
 					"%s.hibernate.%sType",
 					customType.plugin ().packageName (),
-					capitalise (
+					hyphenToCamelCapitalise (
 						customType.name ()));
 
 			Optional<Class<?>> helperClassOptional =

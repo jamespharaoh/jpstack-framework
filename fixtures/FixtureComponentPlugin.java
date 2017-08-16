@@ -1,6 +1,6 @@
 package wbs.framework.fixtures;
 
-import static wbs.utils.string.StringUtils.capitalise;
+import static wbs.utils.string.StringUtils.hyphenToCamelCapitalise;
 import static wbs.utils.string.StringUtils.stringFormat;
 
 import lombok.NonNull;
@@ -10,6 +10,7 @@ import wbs.framework.component.annotations.SingletonComponent;
 import wbs.framework.component.registry.ComponentDefinition;
 import wbs.framework.component.registry.ComponentRegistryBuilder;
 import wbs.framework.component.scaffold.PluginFixtureSpec;
+import wbs.framework.component.scaffold.PluginMetaFixtureSpec;
 import wbs.framework.component.scaffold.PluginSpec;
 import wbs.framework.component.tools.ComponentPlugin;
 import wbs.framework.logging.LogContext;
@@ -44,6 +45,109 @@ class FixtureComponentPlugin
 
 		) {
 
+			registerMetaFixtureComponents (
+				taskLogger,
+				componentRegistry,
+				plugin);
+
+			registerFixtureComponents (
+				taskLogger,
+				componentRegistry,
+				plugin);
+
+		}
+	}
+
+	// private implementation
+
+	private
+	void registerMetaFixtureComponents (
+			@NonNull TaskLogger parentTaskLogger,
+			@NonNull ComponentRegistryBuilder componentRegistry,
+			@NonNull PluginSpec plugin) {
+
+		try (
+
+			OwnedTaskLogger taskLogger =
+				logContext.nestTaskLogger (
+					parentTaskLogger,
+					"registerMetaFixtureComponents");
+
+		) {
+
+			for (
+				PluginMetaFixtureSpec metaFixture
+					: plugin.metaFixtures ()
+			) {
+
+				String metaFixturesComponentName =
+					stringFormat (
+						"%sMetaFixtures",
+						metaFixture.name ());
+
+				String metaFixturesClassName =
+					stringFormat (
+						"%s.fixture.%sMetaFixtures",
+						plugin.packageName (),
+						hyphenToCamelCapitalise (
+							metaFixture.name ()));
+
+				Class <?> metaFixtureProviderClass;
+
+				try {
+
+					metaFixtureProviderClass =
+						Class.forName (
+							metaFixturesClassName);
+
+				} catch (ClassNotFoundException exception) {
+
+					taskLogger.errorFormat (
+						"Can't find class %s ",
+						metaFixturesClassName,
+						"for meta fixture %s ",
+						metaFixture.name (),
+						"from %s",
+						plugin.name ());
+
+					continue;
+
+				}
+
+				componentRegistry.registerDefinition (
+					taskLogger,
+					new ComponentDefinition ()
+
+					.name (
+						metaFixturesComponentName)
+
+					.componentClass (
+						metaFixtureProviderClass)
+
+					.scope (
+						"prototype"));
+
+			}
+
+		}
+
+	}
+
+	private
+	void registerFixtureComponents (
+			@NonNull TaskLogger parentTaskLogger,
+			@NonNull ComponentRegistryBuilder componentRegistry,
+			@NonNull PluginSpec plugin) {
+
+		try (
+
+			OwnedTaskLogger taskLogger =
+				logContext.nestTaskLogger (
+					parentTaskLogger,
+					"registerFixtureComponents");
+
+		) {
+
 			for (
 				PluginFixtureSpec fixture
 					: plugin.fixtures ()
@@ -58,7 +162,7 @@ class FixtureComponentPlugin
 					stringFormat (
 						"%s.fixture.%sFixtureProvider",
 						plugin.packageName (),
-						capitalise (
+						hyphenToCamelCapitalise (
 							fixture.name ()));
 
 				Class<?> fixtureProviderClass;

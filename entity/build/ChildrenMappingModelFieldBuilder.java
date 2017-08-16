@@ -1,10 +1,13 @@
 package wbs.framework.entity.build;
 
+import static wbs.utils.collection.MapUtils.mapItemForKeyRequired;
 import static wbs.utils.etc.Misc.doesNotContain;
 import static wbs.utils.etc.NullUtils.ifNull;
 import static wbs.utils.etc.TypeUtils.classForNameRequired;
-import static wbs.utils.string.StringUtils.camelToSpaces;
-import static wbs.utils.string.StringUtils.capitalise;
+import static wbs.utils.etc.TypeUtils.classNameFormat;
+import static wbs.utils.string.StringUtils.hyphenToCamel;
+import static wbs.utils.string.StringUtils.hyphenToCamelCapitalise;
+import static wbs.utils.string.StringUtils.hyphenToSpaces;
 import static wbs.utils.string.StringUtils.naivePluralise;
 import static wbs.utils.string.StringUtils.stringFormat;
 
@@ -34,6 +37,8 @@ import wbs.framework.entity.model.ModelFieldType;
 import wbs.framework.logging.LogContext;
 import wbs.framework.logging.OwnedTaskLogger;
 import wbs.framework.logging.TaskLogger;
+
+import wbs.utils.etc.ClassName;
 
 @PrototypeComponent ("childrenMappingModelFieldBuilder")
 @ModelBuilder
@@ -85,17 +90,18 @@ class ChildrenMappingModelFieldBuilder
 						spec.typeName ()));
 
 			PluginRecordModelSpec fieldTypePluginModel =
-				pluginManager.pluginRecordModelsByName ().get (
+				mapItemForKeyRequired (
+					pluginManager.pluginRecordModelsByName (),
 					spec.typeName ());
 
 			PluginSpec fieldTypePlugin =
 				fieldTypePluginModel.plugin ();
 
-			String fullFieldTypeName =
-				stringFormat (
+			ClassName fullFieldTypeName =
+				classNameFormat (
 					"%s.model.%sRec",
 					fieldTypePlugin.packageName (),
-					capitalise (
+					hyphenToCamelCapitalise (
 						spec.typeName ()));
 
 			Class <?> fieldTypeClass =
@@ -134,10 +140,11 @@ class ChildrenMappingModelFieldBuilder
 					context.parentModelField ())
 
 				.name (
-					fieldName)
+					hyphenToCamel (
+						fieldName))
 
 				.label (
-					camelToSpaces (
+					hyphenToSpaces (
 						fieldName))
 
 				.type (

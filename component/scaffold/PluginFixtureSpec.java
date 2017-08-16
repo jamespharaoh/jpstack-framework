@@ -8,6 +8,8 @@ import wbs.framework.data.annotations.DataAttribute;
 import wbs.framework.data.annotations.DataClass;
 import wbs.framework.data.annotations.DataParent;
 
+import wbs.utils.string.StringFormat;
+
 @Accessors (fluent = true)
 @DataClass ("fixture")
 public
@@ -18,7 +20,8 @@ class PluginFixtureSpec {
 	PluginSpec plugin;
 
 	@DataAttribute (
-		required = true)
+		required = true,
+		format = StringFormat.hyphenated)
 	@Getter @Setter
 	String name;
 

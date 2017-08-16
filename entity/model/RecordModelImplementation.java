@@ -20,7 +20,6 @@ import wbs.framework.data.annotations.DataChild;
 import wbs.framework.data.annotations.DataChildren;
 import wbs.framework.data.annotations.DataChildrenIndex;
 import wbs.framework.data.annotations.DataClass;
-import wbs.framework.data.annotations.DataName;
 import wbs.framework.data.annotations.DataReference;
 import wbs.framework.entity.meta.cachedview.CachedViewSpec;
 import wbs.framework.entity.record.Record;
@@ -46,11 +45,29 @@ class RecordModelImplementation <RecordType extends Record <RecordType>>
 	@DataAttribute
 	Class <RecordType> objectClass;
 
-	@DataName
-	String objectName;
+	@DataAttribute
+	String objectClassName;
 
 	@DataAttribute
 	String objectTypeCode;
+
+	@DataAttribute
+	String objectTypeHyphen;
+
+	@DataAttribute
+	String objectTypeCamel;
+
+	@DataAttribute
+	String friendlyNameSingular;
+
+	@DataAttribute
+	String friendlyNamePlural;
+
+	@DataAttribute
+	String shortNameSingular;
+
+	@DataAttribute
+	String shortNamePlural;
 
 	// database stuff
 
@@ -138,50 +155,6 @@ class RecordModelImplementation <RecordType extends Record <RecordType>>
 
 	@Override
 	public
-	String getTypeCode (
-			@NonNull RecordType object) {
-
-		return (String)
-			PropertyUtils.propertyGetAuto (
-				object,
-				typeCodeField.name ());
-
-	}
-
-	@Override
-	public
-	String getCode (
-			@NonNull RecordType object) {
-
-		if (codeField != null) {
-
-			return (String)
-				PropertyUtils.propertyGetAuto (
-					object,
-					codeField.name ());
-
-		}
-
-		return Long.toString (
-			getId (
-				object));
-
-	}
-
-	@Override
-	public
-	String getName (
-			@NonNull RecordType object) {
-
-		return (String)
-			PropertyUtils.propertyGetAuto (
-				object,
-				nameField.name ());
-
-	}
-
-	@Override
-	public
 	String getDescription (
 			@NonNull RecordType object) {
 
@@ -229,69 +202,6 @@ class RecordModelImplementation <RecordType extends Record <RecordType>>
 
 	@Override
 	public
-	Record <?> getParentOrNull (
-			@NonNull RecordType object) {
-
-		if (! canGetParent ()) {
-
-			throw new UnsupportedOperationException (
-				stringFormat (
-					"Can't get parent for %s",
-					objectName ()));
-
-		}
-
-		return (Record<?>)
-			PropertyUtils.propertyGetAuto (
-				object,
-				parentField.name ());
-
-	}
-
-	@Override
-	public
-	Long getParentId (
-			@NonNull RecordType object) {
-
-		if (parentTypeIsFixed ()) {
-
-			throw new UnsupportedOperationException (
-				stringFormat (
-					"Can't get parent id for %s",
-					objectName ()));
-
-		}
-
-		return (Long)
-			PropertyUtils.propertyGetAuto (
-				object,
-				parentIdField.name ());
-
-	}
-
-	@Override
-	public
-	Record <?> getParentType (
-			@NonNull RecordType object) {
-
-		if (parentTypeIsFixed ()) {
-
-			throw new UnsupportedOperationException (
-				stringFormat (
-					"Can't get parent type for %s",
-					objectName ()));
-
-		}
-
-		return (Record <?>)
-			PropertyUtils.propertyGetAuto (
-				object,
-				parentTypeField.name ());
-
-	}
-
-	@Override
-	public
 	Class <? extends Record <?>> parentClassRequired () {
 
 		if (parentTypeField != null) {
@@ -299,7 +209,7 @@ class RecordModelImplementation <RecordType extends Record <RecordType>>
 			throw new UnsupportedOperationException (
 				stringFormat (
 					"Can't get parent class for %s",
-					objectName ()));
+					objectTypeHyphen ()));
 
 		} else if (parentField != null) {
 
@@ -315,7 +225,7 @@ class RecordModelImplementation <RecordType extends Record <RecordType>>
 			throw new UnsupportedOperationException (
 				stringFormat (
 					"Can't get parent class for %s",
-					objectName ()));
+					objectTypeHyphen ()));
 
 		} else if (isRooted ()) {
 

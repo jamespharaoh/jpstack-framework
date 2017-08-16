@@ -7,8 +7,10 @@ import static wbs.utils.etc.NullUtils.isNotNull;
 import static wbs.utils.etc.NumberUtils.integerToDecimalString;
 import static wbs.utils.etc.OptionalUtils.optionalIsNotPresent;
 import static wbs.utils.etc.TypeUtils.classForName;
-import static wbs.utils.string.StringUtils.capitalise;
+import static wbs.utils.etc.TypeUtils.classNameFormat;
+import static wbs.utils.string.StringUtils.hyphenToCamelCapitalise;
 import static wbs.utils.string.StringUtils.joinWithSpace;
+import static wbs.utils.string.StringUtils.objectToString;
 import static wbs.utils.string.StringUtils.stringFormat;
 
 import java.io.File;
@@ -67,6 +69,8 @@ import wbs.framework.logging.TaskLogger;
 import wbs.framework.schema.helper.SchemaNamesHelperImplementation;
 import wbs.framework.sql.SqlLogicImplementation;
 
+import wbs.utils.etc.ClassName;
+
 @Accessors (fluent = true)
 @PrototypeComponent ("hibernateSessionFactoryBuilder")
 public
@@ -102,8 +106,8 @@ class HibernateSessionFactoryBuilder {
 
 	// state
 
-	Map <Class <?>, String> customTypes =
-		new HashMap <Class <?>, String> ();
+	Map <Class <?>, ClassName> customTypes =
+		new HashMap <Class <?>, ClassName> ();
 
 	Set <Class <?>> enumTypes =
 		new HashSet <Class <?>> ();
@@ -196,11 +200,11 @@ class HibernateSessionFactoryBuilder {
 
 		) {
 
-			String objectClassName =
-				stringFormat (
+			ClassName objectClassName =
+				classNameFormat (
 					"%s.model.%s",
 					type.plugin ().packageName (),
-					capitalise (
+					hyphenToCamelCapitalise (
 						type.name ()));
 
 			Optional <Class <?>> objectClassOptional =
@@ -218,11 +222,11 @@ class HibernateSessionFactoryBuilder {
 
 			}
 
-			String helperClassName =
-				stringFormat (
+			ClassName helperClassName =
+				classNameFormat (
 					"%s.hibernate.%sType",
 					type.plugin ().packageName (),
-					capitalise (
+					hyphenToCamelCapitalise (
 						type.name ()));
 
 			Optional <Class <?>> helperClassOptional =
@@ -277,14 +281,14 @@ class HibernateSessionFactoryBuilder {
 
 		) {
 
-			String enumClassName =
-				stringFormat (
+			ClassName enumClassName =
+				classNameFormat (
 					"%s.model.%s",
 					enumType.plugin ().packageName (),
-					capitalise (
+					hyphenToCamelCapitalise (
 						enumType.name ()));
 
-			Optional<Class<?>> enumClassOptional =
+			Optional <Class<?>> enumClassOptional =
 				classForName (
 					enumClassName);
 
@@ -303,7 +307,7 @@ class HibernateSessionFactoryBuilder {
 
 			}
 
-			Class<?> enumClass =
+			Class <?> enumClass =
 				enumClassOptional.get ();
 
 			if (
@@ -531,7 +535,7 @@ class HibernateSessionFactoryBuilder {
 
 			taskLogger.debugFormat (
 				"Loading %s",
-				model.objectName ());
+				model.objectTypeHyphen ());
 
 			String tableNameSql =
 				sqlLogic.quoteIdentifier (
@@ -728,7 +732,7 @@ class HibernateSessionFactoryBuilder {
 
 				taskLogger.errorFormat (
 					"Skipping %s due to %s errors",
-					model.objectName (),
+					model.objectTypeHyphen (),
 					integerToDecimalString (
 						classErrors));
 
@@ -935,8 +939,9 @@ class HibernateSessionFactoryBuilder {
 
 				.addAttribute (
 					"type",
-					customTypes.get (
-						modelField.valueType ()));
+					objectToString (
+						customTypes.get (
+							modelField.valueType ())));
 
 
 		} else if (
@@ -1857,7 +1862,7 @@ class HibernateSessionFactoryBuilder {
 						"column",
 						columnSql);
 
-				String customType =
+				ClassName customType =
 					customTypes.get (
 						compositeIdModelField.valueType ());
 
@@ -1867,7 +1872,10 @@ class HibernateSessionFactoryBuilder {
 
 						.addAttribute (
 							"type",
-							customType);
+							objectToString (
+								customType))
+
+					;
 
 				}
 
