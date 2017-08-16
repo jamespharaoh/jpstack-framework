@@ -1,8 +1,9 @@
 package wbs.framework.entity.build;
 
 import static wbs.utils.etc.NullUtils.ifNull;
-import static wbs.utils.string.StringUtils.camelToSpaces;
-import static wbs.utils.string.StringUtils.camelToUnderscore;
+import static wbs.utils.string.StringUtils.hyphenToCamel;
+import static wbs.utils.string.StringUtils.hyphenToSpaces;
+import static wbs.utils.string.StringUtils.hyphenToUnderscore;
 
 import com.google.common.collect.ImmutableList;
 
@@ -78,10 +79,11 @@ class StringModelFieldBuilder
 					context.parentModelField ())
 
 				.name (
-					fieldName)
+					hyphenToCamel (
+						fieldName))
 
 				.label (
-					camelToSpaces (
+					hyphenToSpaces (
 						fieldName))
 
 				.type (
@@ -105,7 +107,7 @@ class StringModelFieldBuilder
 					ImmutableList.of (
 						ifNull (
 							spec.columnName (),
-							camelToUnderscore (
+							hyphenToUnderscore (
 								fieldName))))
 
 				.columnSqlTypes (

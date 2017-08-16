@@ -10,26 +10,26 @@ interface GenericExceptionLogger <Resolution> {
 
 	Record <?> logSimple (
 			TaskLogger parentTaskLogger,
-			String typeCode,
-			String source,
-			String summary,
-			String dump,
+			CharSequence typeCode,
+			CharSequence source,
+			CharSequence summary,
+			CharSequence dump,
 			Optional <Long> userId,
 			Resolution resolution);
 
 	Record <?> logThrowable (
 			TaskLogger parentTaskLogger,
-			String typeCode,
-			String source,
+			CharSequence typeCode,
+			CharSequence source,
 			Throwable throwable,
 			Optional <Long> userId,
 			Resolution resolution);
 
 	Record <?> logThrowableWithSummary (
 			TaskLogger parentTaskLogger,
-			String typeCode,
-			String source,
-			String summary,
+			CharSequence typeCode,
+			CharSequence source,
+			CharSequence summary,
 			Throwable throwable,
 			Optional <Long> userId,
 			Resolution resolution);

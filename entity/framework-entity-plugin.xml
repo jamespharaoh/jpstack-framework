@@ -53,9 +53,9 @@
 		<component class="meta.model.ModelFieldsSpec"/>
 		<component class="meta.model.ModelInterfaceSpec"/>
 		<component class="meta.model.ModelMetaLoader"/>
-		<component class="meta.model.RecordSpec"/>
 		<component class="meta.model.ModelPartitioningSpec"/>
 		<component class="meta.model.ModelPartitioningUniqueIndexSpec"/>
+		<component class="meta.model.RecordSpec"/>
 
 	</layer>
 
@@ -81,6 +81,7 @@
 		<component class="generate.fields.ActiveFieldWriter"/>
 		<component class="generate.fields.AssignedIdFieldWriter"/>
 		<component class="generate.fields.BinaryFieldWriter"/>
+		<component class="generate.fields.CodeFieldWriter"/>
 		<component class="generate.fields.ComponentFieldWriter"/>
 		<component class="generate.fields.DateFieldWriter"/>
 		<component class="generate.fields.DeletedFieldWriter"/>
@@ -98,7 +99,6 @@
 		<component class="generate.fields.IndexFieldWriter"/>
 		<component class="generate.fields.IntegerFieldWriter"/>
 		<component class="generate.fields.MasterFieldWriter"/>
-		<component class="generate.fields.CodeFieldWriter"/>
 		<component class="generate.fields.NameFieldWriter"/>
 		<component class="generate.fields.ParentFieldWriter"/>
 		<component class="generate.fields.ParentIdFieldWriter"/>
@@ -149,8 +149,8 @@
 		<component class="build.MasterModelFieldBuilder"/>
 		<component class="build.ModelBuilderManager"/>
 		<component class="build.NameModelFieldBuilder"/>
-		<component class="build.ParentModelFieldBuilder"/>
 		<component class="build.ParentIdModelFieldBuilder"/>
+		<component class="build.ParentModelFieldBuilder"/>
 		<component class="build.ParentTypeModelFieldBuilder"/>
 		<component class="build.ReferenceModelFieldBuilder"/>
 		<component class="build.SlaveModelFieldBuilder"/>

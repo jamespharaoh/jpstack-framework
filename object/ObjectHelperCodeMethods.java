@@ -27,28 +27,28 @@ interface ObjectHelperCodeMethods <
 	Optional <RecordType> findByCode (
 			Transaction parentTransaction,
 			Record <?> parent,
-			List <String> codes);
+			List <? extends CharSequence> codes);
 
 	Optional <RecordType> findByCode (
 			Transaction parentTransaction,
 			GlobalId parentGlobalId,
-			List <String> codes);
+			List <? extends CharSequence> codes);
 
 	RecordType findByCodeRequired (
 			Transaction parentTransaction,
 			Record <?> parent,
-			List <String> codes);
+			List <? extends CharSequence> codes);
 
 	RecordType findByCodeRequired (
 			Transaction parentTransaction,
 			GlobalId parentGlobalId,
-			List <String> codes);
+			List <? extends CharSequence> codes);
 
 	default
 	Optional <RecordType> findByCode (
 			Transaction parentTransaction,
 			Record <?> parent,
-			String ... codes) {
+			CharSequence ... codes) {
 
 		return findByCode (
 			parentTransaction,
@@ -62,7 +62,7 @@ interface ObjectHelperCodeMethods <
 	RecordType findByCodeRequired (
 			Transaction parentTransaction,
 			Record <?> parent,
-			String ... codes) {
+			CharSequence ... codes) {
 
 		return findByCodeRequired (
 			parentTransaction,
@@ -77,7 +77,7 @@ interface ObjectHelperCodeMethods <
 	RecordType findByCodeOrNull (
 			Transaction parentTransaction,
 			Record <?> parent,
-			String ... codes) {
+			CharSequence ... codes) {
 
 		return optionalOrNull (
 			findByCode (
@@ -92,7 +92,7 @@ interface ObjectHelperCodeMethods <
 	Optional <RecordType> findByCode (
 			Transaction parentTransaction,
 			GlobalId parentGlobalId,
-			String ... codes) {
+			CharSequence ... codes) {
 
 		return findByCode (
 			parentTransaction,
@@ -106,7 +106,7 @@ interface ObjectHelperCodeMethods <
 	RecordType findByCodeRequired (
 			Transaction parentTransaction,
 			GlobalId parentGlobalId,
-			String ... codes) {
+			CharSequence ... codes) {
 
 		return findByCodeRequired (
 			parentTransaction,
@@ -120,7 +120,7 @@ interface ObjectHelperCodeMethods <
 	RecordType findByCodeOrThrow (
 			@NonNull Transaction parentTransaction,
 			@NonNull GlobalId parentGlobalId,
-			@NonNull List <String> codes,
+			@NonNull List <? extends CharSequence> codes,
 			@NonNull Supplier <? extends RuntimeException> orThrow) {
 
 		Optional <RecordType> recordOptional =
@@ -149,7 +149,7 @@ interface ObjectHelperCodeMethods <
 	RecordType findByCodeOrThrow (
 			Transaction parentTransaction,
 			Record <?> parent,
-			List <String> codes,
+			List <? extends CharSequence> codes,
 			Supplier <? extends RuntimeException> orThrow) {
 
 		Optional <RecordType> recordOptional =
@@ -178,7 +178,7 @@ interface ObjectHelperCodeMethods <
 	RecordType findByCodeOrThrow (
 			Transaction parentTransaction,
 			GlobalId parentGlobalId,
-			String code0,
+			CharSequence code0,
 			Supplier <? extends RuntimeException> orThrow) {
 
 		return findByCodeOrThrow (
@@ -194,8 +194,8 @@ interface ObjectHelperCodeMethods <
 	RecordType findByCodeOrThrow (
 			Transaction parentTransaction,
 			GlobalId parentGlobalId,
-			String code0,
-			String code1,
+			CharSequence code0,
+			CharSequence code1,
 			Supplier <? extends RuntimeException> orThrow) {
 
 		return findByCodeOrThrow (
@@ -212,7 +212,7 @@ interface ObjectHelperCodeMethods <
 	RecordType findByCodeOrThrow (
 			Transaction parentTransaction,
 			Record <?> parent,
-			String code0,
+			CharSequence code0,
 			Supplier <? extends RuntimeException> orThrow) {
 
 		return findByCodeOrThrow (
@@ -228,8 +228,8 @@ interface ObjectHelperCodeMethods <
 	RecordType findByCodeOrThrow (
 			Transaction parentTransaction,
 			Record <?> parent,
-			String code0,
-			String code1,
+			CharSequence code0,
+			CharSequence code1,
 			Supplier <? extends RuntimeException> orThrow) {
 
 		return findByCodeOrThrow (

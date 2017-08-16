@@ -1,8 +1,9 @@
 package wbs.framework.entity.generate;
 
+import static wbs.utils.etc.TypeUtils.classNameFormat;
 import static wbs.utils.io.FileUtils.directoryCreateWithParents;
 import static wbs.utils.io.FileUtils.fileExistsFormat;
-import static wbs.utils.string.StringUtils.capitalise;
+import static wbs.utils.string.StringUtils.hyphenToCamelCapitalise;
 import static wbs.utils.string.StringUtils.stringFormat;
 
 import com.google.common.collect.ImmutableList;
@@ -26,6 +27,7 @@ import wbs.framework.logging.LogContext;
 import wbs.framework.logging.OwnedTaskLogger;
 import wbs.framework.logging.TaskLogger;
 
+import wbs.utils.etc.ClassName;
 import wbs.utils.string.AtomicFileWriter;
 
 @Accessors (fluent = true)
@@ -59,12 +61,12 @@ class ModelInterfacesGenerator {
 
 	// state
 
-	String recordName;
-	String daoName;
-	String daoMethodsName;
-	String objectHelperName;
-	String objectHelperMethodsName;
-	String consoleHelperName;
+	ClassName recordName;
+	ClassName daoName;
+	ClassName daoMethodsName;
+	ClassName objectHelperName;
+	ClassName objectHelperMethodsName;
+	ClassName consoleHelperName;
 
 	boolean gotObjectHelperMethods;
 	boolean gotDaoMethods;
@@ -107,39 +109,39 @@ class ModelInterfacesGenerator {
 		// class and interface names
 
 		recordName =
-			stringFormat (
+			classNameFormat (
 				"%sRec",
-				capitalise (
+				hyphenToCamelCapitalise (
 					modelMeta.name ()));
 
 		daoName =
-			stringFormat (
+			classNameFormat (
 				"%sDao",
-				capitalise (
+				hyphenToCamelCapitalise (
 					modelMeta.name ()));
 
 		daoMethodsName =
-			stringFormat (
+			classNameFormat (
 				"%sDaoMethods",
-				capitalise (
+				hyphenToCamelCapitalise (
 					modelMeta.name ()));
 
 		objectHelperName =
-			stringFormat (
+			classNameFormat (
 				"%sObjectHelper",
-				capitalise (
+				hyphenToCamelCapitalise (
 					modelMeta.name ()));
 
 		objectHelperMethodsName =
-			stringFormat (
+			classNameFormat (
 				"%sObjectHelperMethods",
-				capitalise (
+				hyphenToCamelCapitalise (
 					modelMeta.name ()));
 
 		consoleHelperName =
-			stringFormat (
+			classNameFormat (
 				"%sConsoleHelper",
-				capitalise (
+				hyphenToCamelCapitalise (
 					modelMeta.name ()));
 
 	}

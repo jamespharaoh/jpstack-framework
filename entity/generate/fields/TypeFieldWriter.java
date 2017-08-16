@@ -1,7 +1,9 @@
 package wbs.framework.entity.generate.fields;
 
+import static wbs.utils.collection.MapUtils.mapItemForKeyRequired;
 import static wbs.utils.etc.NullUtils.ifNull;
-import static wbs.utils.string.StringUtils.capitalise;
+import static wbs.utils.string.StringUtils.hyphenToCamel;
+import static wbs.utils.string.StringUtils.hyphenToCamelCapitalise;
 import static wbs.utils.string.StringUtils.stringFormat;
 
 import lombok.NonNull;
@@ -73,16 +75,18 @@ class TypeFieldWriter
 				ifNull (
 					spec.typeName (),
 					stringFormat (
-						"%sType",
+						"%s-type",
 						context.modelMeta ().name ()));
 
 			String fieldName =
 				ifNull (
 					spec.name (),
-					fieldTypeName);
+					hyphenToCamel (
+						fieldTypeName));
 
 			PluginRecordModelSpec fieldTypePluginModel =
-				pluginManager.pluginRecordModelsByName ().get (
+				mapItemForKeyRequired (
+					pluginManager.pluginRecordModelsByName (),
 					fieldTypeName);
 
 			PluginSpec fieldTypePlugin =
@@ -92,7 +96,7 @@ class TypeFieldWriter
 				stringFormat (
 					"%s.model.%sRec",
 					fieldTypePlugin.packageName (),
-					capitalise (
+					hyphenToCamelCapitalise (
 						fieldTypeName));
 
 			// write field

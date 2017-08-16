@@ -1,7 +1,11 @@
 package wbs.framework.entity.generate.collections;
 
+import static wbs.utils.collection.MapUtils.mapItemForKeyRequired;
 import static wbs.utils.etc.NullUtils.ifNull;
-import static wbs.utils.string.StringUtils.capitalise;
+import static wbs.utils.etc.TypeUtils.className;
+import static wbs.utils.etc.TypeUtils.classNameFormat;
+import static wbs.utils.string.StringUtils.hyphenToCamel;
+import static wbs.utils.string.StringUtils.hyphenToCamelCapitalise;
 import static wbs.utils.string.StringUtils.naivePluralise;
 import static wbs.utils.string.StringUtils.stringEqualSafe;
 import static wbs.utils.string.StringUtils.stringFormat;
@@ -31,6 +35,8 @@ import wbs.framework.entity.meta.collections.AssociativeCollectionSpec;
 import wbs.framework.logging.LogContext;
 import wbs.framework.logging.OwnedTaskLogger;
 import wbs.framework.logging.TaskLogger;
+
+import wbs.utils.etc.ClassName;
 
 @PrototypeComponent ("associativeCollectionWriter")
 @ModelWriter
@@ -75,7 +81,7 @@ class AssociativeCollectionWriter
 
 		) {
 
-			String fullFieldTypeName;
+			ClassName fullFieldTypeName;
 
 			if (
 				stringEqualSafe (
@@ -84,22 +90,24 @@ class AssociativeCollectionWriter
 			) {
 
 				fullFieldTypeName =
-					"java.lang.String";
+					className (
+						"java.lang.String");
 
 			} else {
 
 				PluginRecordModelSpec fieldTypePluginModel =
-					pluginManager.pluginRecordModelsByName ().get (
+					mapItemForKeyRequired (
+						pluginManager.pluginRecordModelsByName (),
 						spec.typeName ());
 
 				PluginSpec fieldTypePlugin =
 					fieldTypePluginModel.plugin ();
 
 				fullFieldTypeName =
-					stringFormat (
+					classNameFormat (
 						"%s.model.%sRec",
 						fieldTypePlugin.packageName (),
-						capitalise (
+						hyphenToCamelCapitalise (
 							spec.typeName ()));
 
 			}
@@ -129,7 +137,8 @@ class AssociativeCollectionWriter
 								fullFieldTypeName)))
 
 				.propertyName (
-					fieldName)
+					hyphenToCamel (
+						fieldName))
 
 				.defaultValue (
 					imports ->

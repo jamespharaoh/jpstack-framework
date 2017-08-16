@@ -2,7 +2,7 @@ package wbs.framework.entity.generate;
 
 import static wbs.utils.etc.NullUtils.ifNull;
 import static wbs.utils.io.FileUtils.directoryCreateWithParents;
-import static wbs.utils.string.StringUtils.capitalise;
+import static wbs.utils.string.StringUtils.hyphenToCamelCapitalise;
 import static wbs.utils.string.StringUtils.stringEqualSafe;
 import static wbs.utils.string.StringUtils.stringFormat;
 
@@ -121,13 +121,13 @@ class ModelRecordGenerator {
 				recordClassName =
 					stringFormat (
 						"%sRec",
-						capitalise (
+						hyphenToCamelCapitalise (
 							modelMeta.name ()));
 
 			} else if (modelMeta.type ().composite ()) {
 
 				recordClassName =
-					capitalise (
+					hyphenToCamelCapitalise (
 						modelMeta.name ());
 
 			} else {
@@ -643,12 +643,12 @@ class ModelRecordGenerator {
 
 				formatWriter.writeLineFormat (
 					"\t\tget%s () == null",
-					capitalise (
+					hyphenToCamelCapitalise (
 						fieldName));
 
 				formatWriter.writeLineFormat (
 					"\t\t&& other.get%s () == null",
-					capitalise (
+					hyphenToCamelCapitalise (
 						fieldName));
 
 				formatWriter.writeLineFormat (
@@ -656,22 +656,22 @@ class ModelRecordGenerator {
 
 				formatWriter.writeLineFormat (
 					"\t\tget%s () == null",
-					capitalise (
+					hyphenToCamelCapitalise (
 						fieldName));
 
 				formatWriter.writeLineFormat (
 					"\t\t|| other.get%s () == null",
-					capitalise (
+					hyphenToCamelCapitalise (
 						fieldName));
 
 				formatWriter.writeLineFormat (
 					"\t\t|| ! get%s ().equals (",
-					capitalise (
+					hyphenToCamelCapitalise (
 						fieldName));
 
 				formatWriter.writeLineFormat (
 					"\t\t\tother.get%s ())",
-					capitalise (
+					hyphenToCamelCapitalise (
 						fieldName));
 
 				formatWriter.writeLineFormat (
@@ -921,12 +921,12 @@ class ModelRecordGenerator {
 
 			formatWriter.writeLineFormat (
 				"\t\tother.get%s (),",
-				capitalise (
+				hyphenToCamelCapitalise (
 					timestampField.name ()));
 
 			formatWriter.writeLineFormat (
 				"\t\tget%s ())",
-				capitalise (
+				hyphenToCamelCapitalise (
 					timestampField.name ()));
 
 			formatWriter.writeNewline ();
@@ -951,14 +951,14 @@ class ModelRecordGenerator {
 
 				formatWriter.writeLineFormat (
 					"\t\tget%s (),",
-					capitalise (
+					hyphenToCamelCapitalise (
 						ifNull (
 							parentField.name (),
 							parentField.typeName ())));
 
 				formatWriter.writeLineFormat (
 					"\t\tother.get%s ())",
-					capitalise (
+					hyphenToCamelCapitalise (
 						ifNull (
 							parentField.name (),
 							parentField.typeName ())));
@@ -974,17 +974,17 @@ class ModelRecordGenerator {
 
 				formatWriter.writeLineFormat (
 					"\t\tget%s (),",
-					capitalise (
+					hyphenToCamelCapitalise (
 						ifNull (
 							parentTypeField.name (),
-							"parentType")));
+							"parent-type")));
 
 				formatWriter.writeLineFormat (
 					"\t\tother.get%s ())",
-					capitalise (
+					hyphenToCamelCapitalise (
 						ifNull (
 							parentTypeField.name (),
-							"parentType")));
+							"parent-type")));
 
 				formatWriter.writeNewline ();
 
@@ -1012,14 +1012,14 @@ class ModelRecordGenerator {
 
 				formatWriter.writeLineFormat (
 					"\t\tget%s (),",
-					capitalise (
+					hyphenToCamelCapitalise (
 						ifNull (
 							masterField.name (),
 							masterField.typeName ())));
 
 				formatWriter.writeLineFormat (
 					"\t\tother.get%s ())",
-					capitalise (
+					hyphenToCamelCapitalise (
 						ifNull (
 							masterField.name (),
 							masterField.typeName ())));
@@ -1035,14 +1035,14 @@ class ModelRecordGenerator {
 
 				formatWriter.writeLineFormat (
 					"\t\tget%s (),",
-					capitalise (
+					hyphenToCamelCapitalise (
 						ifNull (
 							typeCodeField.name (),
 							"type")));
 
 				formatWriter.writeLineFormat (
 					"\t\tother.get%s ())",
-					capitalise (
+					hyphenToCamelCapitalise (
 						ifNull (
 							typeCodeField.name (),
 							"type")));
@@ -1058,14 +1058,14 @@ class ModelRecordGenerator {
 
 				formatWriter.writeLineFormat (
 					"\t\tget%s (),",
-					capitalise (
+					hyphenToCamelCapitalise (
 						ifNull (
 							codeField.name (),
 							"code")));
 
 				formatWriter.writeLineFormat (
 					"\t\tother.get%s ())",
-					capitalise (
+					hyphenToCamelCapitalise (
 						ifNull (
 							codeField.name (),
 							"code")));
@@ -1081,14 +1081,14 @@ class ModelRecordGenerator {
 
 				formatWriter.writeLineFormat (
 					"\t\tget%s (),",
-					capitalise (
+					hyphenToCamelCapitalise (
 						ifNull (
 							indexField.name (),
 							"index")));
 
 				formatWriter.writeLineFormat (
 					"\t\tother.get%s ())",
-					capitalise (
+					hyphenToCamelCapitalise (
 						ifNull (
 							indexField.name (),
 							"index")));
@@ -1107,14 +1107,14 @@ class ModelRecordGenerator {
 
 				formatWriter.writeLineFormat (
 					"\t\tget%s (),",
-					capitalise (
+					hyphenToCamelCapitalise (
 						ifNull (
 							identityReferenceField.name (),
 							identityReferenceField.typeName ())));
 
 				formatWriter.writeLineFormat (
 					"\t\tother.get%s ())",
-					capitalise (
+					hyphenToCamelCapitalise (
 						ifNull (
 							identityReferenceField.name (),
 							identityReferenceField.typeName ())));
@@ -1133,12 +1133,12 @@ class ModelRecordGenerator {
 
 				formatWriter.writeLineFormat (
 					"\t\tget%s (),",
-					capitalise (
+					hyphenToCamelCapitalise (
 						identityIntegerField.name ()));
 
 				formatWriter.writeLineFormat (
 					"\t\tother.get%s ())",
-					capitalise (
+					hyphenToCamelCapitalise (
 						identityIntegerField.name ()));
 
 				formatWriter.writeNewline ();
@@ -1155,12 +1155,12 @@ class ModelRecordGenerator {
 
 				formatWriter.writeLineFormat (
 					"\t\tget%s (),",
-					capitalise (
+					hyphenToCamelCapitalise (
 						identityStringField.name ()));
 
 				formatWriter.writeLineFormat (
 					"\t\tother.get%s ())",
-					capitalise (
+					hyphenToCamelCapitalise (
 						identityStringField.name ()));
 
 				formatWriter.writeNewline ();

@@ -1,7 +1,9 @@
 package wbs.framework.entity.build;
 
+import static wbs.utils.collection.CollectionUtils.singletonList;
 import static wbs.utils.etc.NullUtils.ifNull;
-import static wbs.utils.string.StringUtils.camelToSpaces;
+import static wbs.utils.string.StringUtils.hyphenToCamel;
+import static wbs.utils.string.StringUtils.hyphenToSpaces;
 
 import com.google.common.collect.ImmutableList;
 
@@ -82,10 +84,11 @@ class BinaryModelFieldBuilder
 					context.parentModelField ())
 
 				.name (
-					fieldName)
+					hyphenToCamel (
+						fieldName))
 
 				.label (
-					camelToSpaces (
+					hyphenToSpaces (
 						fieldName))
 
 				.type (
@@ -106,11 +109,12 @@ class BinaryModelFieldBuilder
 						false))
 
 				.columnNames (
-					ImmutableList.of (
+					singletonList (
 						ifNull (
 							spec.columnName (),
 							schemaNamesHelper.columnName (
-								fieldName))))
+								hyphenToCamel (
+									fieldName)))))
 
 				.columnSqlTypes (
 					ImmutableList.of (

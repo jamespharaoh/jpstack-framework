@@ -54,6 +54,11 @@ class PluginSpec
 
 	@DataChildren
 	@Getter @Setter
+	List <PluginMetaFixtureSpec> metaFixtures =
+		new ArrayList<> ();
+
+	@DataChildren
+	@Getter @Setter
 	List <PluginFixtureSpec> fixtures =
 		new ArrayList<> ();
 

@@ -7,6 +7,7 @@ import static wbs.utils.etc.OptionalUtils.optionalGetRequired;
 import static wbs.utils.etc.OptionalUtils.optionalIsPresent;
 import static wbs.utils.etc.TypeUtils.classForName;
 import static wbs.utils.etc.TypeUtils.classForNameRequired;
+import static wbs.utils.etc.TypeUtils.classNameFormat;
 import static wbs.utils.etc.TypeUtils.classPackageName;
 import static wbs.utils.io.FileUtils.directoryCreateWithParents;
 import static wbs.utils.string.StringUtils.capitalise;
@@ -53,6 +54,7 @@ import wbs.framework.object.ObjectModelImplementation;
 import wbs.framework.object.ObjectModelMethods;
 import wbs.framework.object.ObjectTypeRegistry;
 
+import wbs.utils.etc.ClassName;
 import wbs.utils.etc.OptionalUtils;
 import wbs.utils.string.AtomicFileWriter;
 import wbs.utils.string.FormatWriter;
@@ -93,13 +95,12 @@ class ObjectHelperGenerator {
 	String filename;
 
 	String packageName;
-	String recordClassName;
-	String objectHelperInterfaceName;
-	String objectHelperImplementationName;
+	ClassName objectHelperInterfaceName;
+	ClassName objectHelperImplementationName;
 
 	boolean hasDao;
-	String daoMethodsInterfaceName;
-	String daoImplementationClassName;
+	ClassName daoMethodsInterfaceName;
+	ClassName daoImplementationClassName;
 	String daoComponentName;
 	Class <?> daoMethodsInterface;
 
@@ -173,23 +174,17 @@ class ObjectHelperGenerator {
 						classPackageName (
 							model.objectClass ()))));
 
-		recordClassName =
-			stringFormat (
-				"%sRec",
-				capitalise (
-					model.objectName ()));
-
 		objectHelperInterfaceName =
-			stringFormat (
+			classNameFormat (
 				"%sObjectHelper",
 				capitalise (
-					model.objectName ()));
+					model.objectTypeCamel ()));
 
 		objectHelperImplementationName =
-			stringFormat (
+			classNameFormat (
 				"%sObjectHelperImplementation",
 				capitalise (
-					model.objectName ()));
+					model.objectTypeCamel ()));
 
 		objectHelperInterface =
 			classForNameRequired (
@@ -199,10 +194,10 @@ class ObjectHelperGenerator {
 		// dao
 
 		daoMethodsInterfaceName =
-			stringFormat (
+			classNameFormat (
 				"%sDaoMethods",
 				capitalise (
-					model.objectName ()));
+					model.objectTypeCamel ()));
 
 		Optional <Class <?>> daoMethodsInterfaceOptional =
 			classForName (
@@ -225,14 +220,14 @@ class ObjectHelperGenerator {
 				stringFormat (
 					"%sDao",
 					uncapitalise (
-						model.objectName ()));
+						model.objectTypeCamel ()));
 
 			daoImplementationClassName =
-				stringFormat (
+				classNameFormat (
 					"%s.hibernate.%sDaoHibernate",
 					packageName,
 					capitalise (
-						model.objectName ()));
+						model.objectTypeCamel ()));
 
 		} else {
 
@@ -247,7 +242,7 @@ class ObjectHelperGenerator {
 			stringFormat (
 				"%sObjectHelperMethods",
 				capitalise (
-					model.objectName ()));
+					model.objectTypeCamel ()));
 
 		Optional <Class <?>> extraMethodsInterfaceOptional =
 			classForName (
@@ -270,14 +265,14 @@ class ObjectHelperGenerator {
 				stringFormat (
 					"%sObjectHelperMethodsImplementation",
 					uncapitalise (
-						model.objectName ()));
+						model.objectTypeCamel ()));
 
 			extraImplementationClassName =
 				stringFormat (
 					"%s.logic.%sObjectHelperMethodsImplementation",
 					packageName,
 					capitalise (
-						model.objectName ()));
+						model.objectTypeCamel ()));
 
 		} else {
 
@@ -291,7 +286,7 @@ class ObjectHelperGenerator {
 		hooksComponentName =
 			stringFormat (
 				"%sHooks",
-				model.objectName ());
+				model.objectTypeCamel ());
 
 		// create directory
 
@@ -570,7 +565,7 @@ class ObjectHelperGenerator {
 
 		formatWriter.writeLineFormat (
 			"\t\t\"%s\");",
-			model.objectName ());
+			model.objectTypeHyphen ());
 
 		formatWriter.writeNewline ();
 
@@ -589,7 +584,7 @@ class ObjectHelperGenerator {
 
 			formatWriter.writeLineFormat (
 				"\t\t\"%s\");",
-				parentModel.objectName ());
+				parentModel.objectTypeHyphen ());
 
 			formatWriter.writeNewline ();
 

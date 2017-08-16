@@ -3,7 +3,7 @@ package wbs.framework.fixtures;
 import wbs.framework.logging.TaskLogger;
 
 public
-interface FixtureProvider {
+interface FixturesMethods {
 
 	void createFixtures (
 			TaskLogger parentTaskLogger);

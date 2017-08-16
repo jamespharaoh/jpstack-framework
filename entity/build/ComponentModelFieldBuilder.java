@@ -4,9 +4,11 @@ import static wbs.utils.collection.MapUtils.mapItemForKeyRequired;
 import static wbs.utils.etc.NullUtils.ifNull;
 import static wbs.utils.etc.NullUtils.isNull;
 import static wbs.utils.etc.TypeUtils.classForNameRequired;
-import static wbs.utils.string.StringUtils.camelToSpaces;
-import static wbs.utils.string.StringUtils.capitalise;
-import static wbs.utils.string.StringUtils.stringFormat;
+import static wbs.utils.etc.TypeUtils.className;
+import static wbs.utils.etc.TypeUtils.classNameFormat;
+import static wbs.utils.string.StringUtils.hyphenToCamel;
+import static wbs.utils.string.StringUtils.hyphenToCamelCapitalise;
+import static wbs.utils.string.StringUtils.hyphenToSpaces;
 
 import lombok.NonNull;
 
@@ -27,6 +29,8 @@ import wbs.framework.entity.model.ModelFieldType;
 import wbs.framework.logging.LogContext;
 import wbs.framework.logging.OwnedTaskLogger;
 import wbs.framework.logging.TaskLogger;
+
+import wbs.utils.etc.ClassName;
 
 @PrototypeComponent ("componentModelFieldBuilder")
 @ModelBuilder
@@ -79,17 +83,18 @@ class ComponentModelFieldBuilder
 					spec.name (),
 					spec.typeName ());
 
-			String fieldTypeName =
-				capitalise (
-					spec.typeName ());
+			ClassName fieldTypeName =
+				className (
+					hyphenToCamelCapitalise (
+						spec.typeName ()));
 
 			RecordSpec compositeModel =
 				mapItemForKeyRequired (
 					modelMetaLoader.compositeSpecs (),
 					spec.typeName ());
 
-			String fullFieldTypeName =
-				stringFormat (
+			ClassName fullFieldTypeName =
+				classNameFormat (
 					"%s.model.%s",
 					compositeModel.plugin ().packageName (),
 					fieldTypeName);
@@ -110,10 +115,11 @@ class ComponentModelFieldBuilder
 					context.parentModelField ())
 
 				.name (
-					fieldName)
+					hyphenToCamel (
+						fieldName))
 
 				.label (
-					camelToSpaces (
+					hyphenToSpaces (
 						fieldName))
 
 				.type (

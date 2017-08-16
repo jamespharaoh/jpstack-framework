@@ -289,7 +289,7 @@ class FixturesLogicImplementation
 				throw new IllegalArgumentException (
 					stringFormat (
 						"Can't create record type %s ",
-						objectHelper.objectName (),
+						objectHelper.objectTypeHyphen (),
 						"without fixed parent type"));
 
 			}

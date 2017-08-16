@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-import wbs.framework.data.annotations.DataAncestor;
 import wbs.framework.data.annotations.DataAttribute;
 import wbs.framework.data.annotations.DataClass;
 import wbs.framework.data.annotations.DataParent;
@@ -12,25 +11,16 @@ import wbs.framework.data.annotations.DataParent;
 import wbs.utils.string.StringFormat;
 
 @Accessors (fluent = true)
-@DataClass ("enum-type")
+@DataClass ("meta-fixture")
 public
-class PluginEnumTypeSpec {
-
-	/*
-	@DataAncestor
-	@Getter @Setter
-	ProjectSpec project;
-	*/
-
-	@DataAncestor
-	@Getter @Setter
-	PluginSpec plugin;
+class PluginMetaFixtureSpec {
 
 	@DataParent
 	@Getter @Setter
-	PluginModelsSpec models;
+	PluginSpec plugin;
 
 	@DataAttribute (
+		required = true,
 		format = StringFormat.hyphenated)
 	@Getter @Setter
 	String name;

@@ -8,6 +8,8 @@ import wbs.framework.data.annotations.DataAttribute;
 import wbs.framework.data.annotations.DataClass;
 import wbs.framework.entity.meta.model.ModelFieldSpec;
 
+import wbs.utils.string.StringFormat;
+
 @Accessors (fluent = true)
 @Data
 @DataClass ("integer-field")
@@ -17,7 +19,8 @@ class IntegerFieldSpec
 	implements ModelFieldSpec {
 
 	@DataAttribute (
-		required = true)
+		required = true,
+		format = StringFormat.hyphenated)
 	String name;
 
 	@DataAttribute
@@ -28,15 +31,18 @@ class IntegerFieldSpec
 	Long defaultValue;
 
 	@DataAttribute (
-		name = "minimum")
+		name = "minimum",
+		format = StringFormat.integer)
 	Long minimumValue;
 
 	@DataAttribute (
-		name = "maximum")
+		name = "maximum",
+		format = StringFormat.integer)
 	Long maximumValue;
 
 	@DataAttribute (
-		name = "column")
+		name = "column",
+		format = StringFormat.snakeCase)
 	String columnName;
 
 }

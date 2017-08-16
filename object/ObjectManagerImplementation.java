@@ -130,7 +130,7 @@ class ObjectManagerImplementation
 			objectHelpersByName =
 				mapWithDerivedKey (
 					objectHelpers,
-					ObjectHelper::objectName);
+					ObjectHelper::objectTypeHyphen);
 
 			objectHelpersByTypeId =
 				mapWithDerivedKey (
@@ -225,7 +225,8 @@ class ObjectManagerImplementation
 
 			ObjectHelper <?> objectHelper =
 				objectHelperForObjectRequired (
-					object);
+					genericCastUnchecked (
+						object));
 
 			return objectHelper.getChildrenGeneric (
 				transaction,
@@ -293,12 +294,13 @@ class ObjectManagerImplementation
 	}
 
 	@Override
-	public
-	ObjectHelper <?> objectHelperForObjectRequired (
-			@NonNull Record <?> object) {
+	public <Type extends Record <Type>>
+	ObjectHelper <Type> objectHelperForObjectRequired (
+			@NonNull Type object) {
 
-		return objectHelperForClassRequired (
-			object.getClass ());
+		return genericCastUnchecked (
+			objectHelperForClassRequired (
+				object.getClass ()));
 
 	}
 
@@ -369,7 +371,8 @@ class ObjectManagerImplementation
 
 			ObjectHelper <?> objectHelper =
 				objectHelperForObjectRequired (
-					currentObject);
+					genericCastUnchecked (
+						currentObject));
 
 			if (objectHelper.isRoot ())
 				return "root";
@@ -394,7 +397,8 @@ class ObjectManagerImplementation
 
 				ObjectHelper <?> parentHelper =
 					objectHelperForObjectRequired (
-						parent);
+						genericCastUnchecked (
+							parent));
 
 				// work out this part
 
@@ -518,10 +522,12 @@ class ObjectManagerImplementation
 	@Override
 	public
 	String objectIdString (
-			Record<?> object) {
+			@NonNull Record <?> object) {
 
-		ObjectHelper<?> objectHelper =
-			objectHelperForObjectRequired (object);
+		ObjectHelper <?> objectHelper =
+			objectHelperForObjectRequired (
+				genericCastUnchecked (
+					object));
 
 		return stringFormat (
 			"%s#%s",
@@ -548,7 +554,8 @@ class ObjectManagerImplementation
 
 			ObjectHelper <?> objectHelper =
 				objectHelperForObjectRequired (
-					object);
+					genericCastUnchecked (
+						object));
 
 			return objectHelper.getGlobalId (
 				genericCastUnchecked (
@@ -575,7 +582,8 @@ class ObjectManagerImplementation
 
 			ObjectHelper <?> objectHelper =
 				objectHelperForObjectRequired (
-					object);
+					genericCastUnchecked (
+						object));
 
 			return objectHelper.getParentGlobalId (
 				transaction,
@@ -717,7 +725,8 @@ class ObjectManagerImplementation
 
 			ObjectHelper <?> objectHelper =
 				objectHelperForObjectRequired (
-					parent);
+					genericCastUnchecked (
+						parent));
 
 			return objectHelper.getMinorChildrenGeneric (
 				transaction,
@@ -735,7 +744,8 @@ class ObjectManagerImplementation
 
 		ObjectHelper <?> objectHelper =
 			objectHelperForObjectRequired (
-				object);
+				genericCastUnchecked (
+					object));
 
 		return objectHelper.remove (
 			parentTransaction,
@@ -760,7 +770,8 @@ class ObjectManagerImplementation
 
 			ObjectHelper <?> objectHelper =
 				objectHelperForObjectRequired (
-					object);
+					genericCastUnchecked (
+						object));
 
 			return objectHelper.objectTypeCode ();
 
@@ -785,7 +796,8 @@ class ObjectManagerImplementation
 
 			ObjectHelper <?> objectHelper =
 				objectHelperForObjectRequired (
-					object);
+					genericCastUnchecked (
+						object));
 
 			return objectHelper.objectTypeId ();
 
@@ -901,7 +913,8 @@ class ObjectManagerImplementation
 
 			ObjectHelper <?> currentHelper =
 				objectHelperForObjectRequired (
-					current);
+					genericCastUnchecked (
+						current));
 
 			for (;;) {
 
@@ -928,7 +941,8 @@ class ObjectManagerImplementation
 
 				currentHelper =
 					objectHelperForObjectRequired (
-						current);
+						genericCastUnchecked (
+							current));
 
 			}
 
@@ -1376,7 +1390,8 @@ class ObjectManagerImplementation
 	List <Pair <Record <?>, String>> verifyData (
 			@NonNull Transaction parentTransaction,
 			@NonNull Record <?> object,
-			@NonNull Boolean recurse) {
+			@NonNull Boolean recurse,
+			@NonNull Boolean forUpdate) {
 
 		try (
 
@@ -1389,13 +1404,15 @@ class ObjectManagerImplementation
 
 			ObjectHelper <?> objectHelper =
 				objectHelperForObjectRequired (
-					object);
+					genericCastUnchecked (
+						object));
 
 			return objectHelper.hooks ().verifyData (
 				transaction,
 				genericCastUnchecked (
 					object),
-				recurse);
+				recurse,
+				forUpdate);
 
 		}
 

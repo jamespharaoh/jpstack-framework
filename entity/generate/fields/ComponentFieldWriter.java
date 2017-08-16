@@ -2,7 +2,8 @@ package wbs.framework.entity.generate.fields;
 
 import static wbs.utils.collection.MapUtils.mapItemForKeyRequired;
 import static wbs.utils.etc.NullUtils.ifNull;
-import static wbs.utils.string.StringUtils.capitalise;
+import static wbs.utils.string.StringUtils.hyphenToCamel;
+import static wbs.utils.string.StringUtils.hyphenToCamelCapitalise;
 import static wbs.utils.string.StringUtils.stringFormat;
 
 import lombok.NonNull;
@@ -86,13 +87,14 @@ class ComponentFieldWriter
 				.typeNameFormat (
 					"%s.model.%s",
 					targetModel.plugin ().packageName (),
-					capitalise (
+					hyphenToCamelCapitalise (
 						spec.typeName ()))
 
 				.propertyName (
-					ifNull (
-						spec.name (),
-						spec.typeName ()))
+					hyphenToCamel (
+						ifNull (
+							spec.name (),
+							spec.typeName ())))
 
 				.defaultValue (
 					imports ->
@@ -101,7 +103,7 @@ class ComponentFieldWriter
 							imports.registerFormat (
 								"%s.model.%s",
 								targetModel.plugin ().packageName (),
-								capitalise (
+								hyphenToCamelCapitalise (
 									spec.typeName ()))))
 
 				.setUpdatedFieldName (

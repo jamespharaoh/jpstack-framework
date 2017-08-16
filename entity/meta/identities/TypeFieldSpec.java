@@ -8,6 +8,8 @@ import wbs.framework.data.annotations.DataAttribute;
 import wbs.framework.data.annotations.DataClass;
 import wbs.framework.entity.meta.model.ModelFieldSpec;
 
+import wbs.utils.string.StringFormat;
+
 @Accessors (fluent = true)
 @Data
 @DataClass ("type-field")
@@ -16,15 +18,18 @@ public
 class TypeFieldSpec
 	implements ModelFieldSpec {
 
-	@DataAttribute
+	@DataAttribute (
+		format = StringFormat.camelCase)
 	String name;
 
 	@DataAttribute (
-		name = "type")
+		name = "type",
+		format = StringFormat.hyphenated)
 	String typeName;
 
 	@DataAttribute (
-		name = "column")
+		name = "column",
+		format = StringFormat.snakeCase)
 	String columnName;
 
 }

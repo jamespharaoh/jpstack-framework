@@ -31,10 +31,10 @@ class SimpleExceptionLogger
 	public
 	Record <?> logSimple (
 			@NonNull TaskLogger parentTaskLogger,
-			@NonNull String typeCode,
-			@NonNull String source,
-			@NonNull String summary,
-			@NonNull String dump,
+			@NonNull CharSequence typeCode,
+			@NonNull CharSequence source,
+			@NonNull CharSequence summary,
+			@NonNull CharSequence dump,
 			@NonNull Optional<Long> userId,
 			@NonNull GenericExceptionResolution resolution) {
 
@@ -51,8 +51,8 @@ class SimpleExceptionLogger
 	public
 	Record <?> logThrowable (
 			@NonNull TaskLogger parentTaskLogger,
-			@NonNull String typeCode,
-			@NonNull String source,
+			@NonNull CharSequence typeCode,
+			@NonNull CharSequence source,
 			@NonNull Throwable throwable,
 			@NonNull Optional<Long> userId,
 			@NonNull GenericExceptionResolution resolution) {
@@ -84,9 +84,9 @@ class SimpleExceptionLogger
 	public
 	Record <?> logThrowableWithSummary (
 			@NonNull TaskLogger parentTaskLogger,
-			@NonNull String typeCode,
-			@NonNull String source,
-			@NonNull String summary,
+			@NonNull CharSequence typeCode,
+			@NonNull CharSequence source,
+			@NonNull CharSequence summary,
 			@NonNull Throwable throwable,
 			@NonNull Optional<Long> userId,
 			@NonNull GenericExceptionResolution resolution) {

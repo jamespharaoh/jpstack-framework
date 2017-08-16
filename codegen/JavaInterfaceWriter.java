@@ -29,6 +29,7 @@ import wbs.framework.logging.OwnedTaskLogger;
 import wbs.framework.logging.TaskLogger;
 
 import wbs.utils.string.FormatWriter;
+import wbs.utils.string.StringFormat;
 
 @Accessors (fluent = true)
 @PrototypeComponent ("javaInterfaceWriter")
@@ -43,7 +44,7 @@ class JavaInterfaceWriter
 
 	// properties
 
-	@Getter @Setter
+	@Getter
 	String interfaceName;
 
 	@Getter @Setter
@@ -63,6 +64,23 @@ class JavaInterfaceWriter
 		new ArrayList<> ();
 
 	// setters and getters
+
+	public
+	JavaInterfaceWriter interfaceName (
+			@NonNull CharSequence interfaceNameCharSequence) {
+
+		String interfaceName =
+			interfaceNameCharSequence.toString ();
+
+		StringFormat.className.verifyAndThrow (
+			interfaceName);
+
+		this.interfaceName =
+			interfaceName;
+
+		return this;
+
+	}
 
 	public
 	JavaInterfaceWriter interfaceNameFormat (
@@ -165,7 +183,7 @@ class JavaInterfaceWriter
 
 	public
 	JavaInterfaceWriter addInterfaceFormat (
-			@NonNull String ... arguments) {
+			@NonNull CharSequence ... arguments) {
 
 		interfaces.add (
 			imports ->

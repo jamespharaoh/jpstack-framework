@@ -201,7 +201,7 @@ class HibernateObjectDatabaseHelper <RecordType extends Record <RecordType>>
 				throw new UnsupportedOperationException (
 					stringFormat (
 						"Object type %s must be looked up by type code",
-						objectModel.objectName ()));
+						objectModel.objectTypeHyphen ()));
 
 			}
 
@@ -213,7 +213,7 @@ class HibernateObjectDatabaseHelper <RecordType extends Record <RecordType>>
 				throw new UnsupportedOperationException (
 					stringFormat (
 						"Object type %s has no code field",
-						objectModel.objectName ()));
+						objectModel.objectTypeHyphen ()));
 
 			}
 
@@ -242,10 +242,10 @@ class HibernateObjectDatabaseHelper <RecordType extends Record <RecordType>>
 
 						"FROM %s _%s ",
 						objectModel.objectClass ().getSimpleName (),
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 
 						"WHERE _%s.%s = :code",
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 						objectModel.codeField ().name ()))
 
 					.setString (
@@ -290,7 +290,7 @@ class HibernateObjectDatabaseHelper <RecordType extends Record <RecordType>>
 					throw new UnsupportedOperationException (
 						stringFormat (
 							"%sObjectHelper.findByParentAndCode (...)",
-							objectModel.objectName ()));
+							objectModel.objectTypeCamel ()));
 
 				}
 
@@ -301,14 +301,14 @@ class HibernateObjectDatabaseHelper <RecordType extends Record <RecordType>>
 
 						"FROM %s _%s ",
 						objectModel.objectClass ().getSimpleName (),
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 
 						"WHERE _%s.%s.id = :parentId ",
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 						objectModel.parentField ().name (),
 
 						"AND _%s.%s = :code",
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 						objectModel.codeField ().name ()))
 
 					.setLong (
@@ -343,18 +343,18 @@ class HibernateObjectDatabaseHelper <RecordType extends Record <RecordType>>
 
 						"FROM %s _%s ",
 						objectModel.objectClass ().getSimpleName (),
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 
 						"WHERE _%s.%s.id = :parentTypeId ",
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 						objectModel.parentTypeField ().name (),
 
 						"AND _%s.%s = :parentId ",
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 						objectModel.parentIdField ().name (),
 
 						"AND _%s.%s = :code",
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 						objectModel.codeField ().name ()))
 
 					.setLong (
@@ -447,10 +447,10 @@ class HibernateObjectDatabaseHelper <RecordType extends Record <RecordType>>
 
 						"FROM %s _%s ",
 						objectModel.objectClass ().getSimpleName (),
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 
 						"WHERE _%s.%s IN :codes",
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 						objectModel.codeField ().name ()))
 
 					.setParameterList (
@@ -488,7 +488,7 @@ class HibernateObjectDatabaseHelper <RecordType extends Record <RecordType>>
 					throw new UnsupportedOperationException (
 						stringFormat (
 							"%sObjectHelper.findByParentAndCode (...)",
-							objectModel.objectName ()));
+							objectModel.objectTypeCamel ()));
 
 				}
 
@@ -499,14 +499,14 @@ class HibernateObjectDatabaseHelper <RecordType extends Record <RecordType>>
 
 						"FROM %s _%s ",
 						objectModel.objectClass ().getSimpleName (),
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 
 						"WHERE _%s.%s.id = :parentId ",
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 						objectModel.parentField ().name (),
 
 						"AND _%s.%s IN :codes",
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 						objectModel.codeField ().name ()))
 
 					.setLong (
@@ -534,18 +534,18 @@ class HibernateObjectDatabaseHelper <RecordType extends Record <RecordType>>
 
 						"FROM %s _%s ",
 						objectModel.objectClass ().getSimpleName (),
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 
 						"WHERE _%s.%s.id = :parentTypeId ",
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 						objectModel.parentTypeField ().name (),
 
 						"AND _%s.%s = :parentId ",
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 						objectModel.parentIdField ().name (),
 
 						"AND _%s.%s IN :codes",
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 						objectModel.codeField ().name ()))
 
 					.setLong (
@@ -631,10 +631,10 @@ class HibernateObjectDatabaseHelper <RecordType extends Record <RecordType>>
 
 						"FROM %s _%s ",
 						objectModel.objectClass ().getSimpleName (),
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 
 						"WHERE _%s.%s = :index",
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 						objectModel.indexField ().name ()))
 
 					.setLong (
@@ -678,14 +678,14 @@ class HibernateObjectDatabaseHelper <RecordType extends Record <RecordType>>
 
 						"FROM %s _%s ",
 						objectModel.objectClass ().getSimpleName (),
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 
 						"WHERE _%s.%s.id = :parentId ",
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 						objectModel.parentField ().name (),
 
 						"AND _%s.%s = :index",
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 						objectModel.indexField ().name ()))
 
 					.setLong (
@@ -720,18 +720,18 @@ class HibernateObjectDatabaseHelper <RecordType extends Record <RecordType>>
 
 						"FROM %s _%s ",
 						objectModel.objectClass ().getSimpleName (),
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 
 						"WHERE _%s.%s.id = :parentTypeId ",
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 						objectModel.parentTypeField ().name (),
 
 						"AND _%s.%s = :parentId ",
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 						objectModel.parentIdField ().name (),
 
 						"AND _%s.%s = :index",
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 						objectModel.indexField ().name ()))
 
 					.setLong (
@@ -792,8 +792,8 @@ class HibernateObjectDatabaseHelper <RecordType extends Record <RecordType>>
 
 				throw new UnsupportedOperationException (
 					stringFormat (
-						"Cannot call findAllByParentAndType for '%s', ",
-						objectModel.objectName (),
+						"Cannot call findAllByParentAndType for %s, ",
+						objectModel.objectTypeHyphen (),
 						"because it has no type code field"));
 
 			}
@@ -826,15 +826,15 @@ class HibernateObjectDatabaseHelper <RecordType extends Record <RecordType>>
 
 						"FROM %s _%s ",
 						objectModel.objectClass ().getSimpleName (),
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 
 						"WHERE _%s.%s = :%s ",
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 						objectModel.typeCodeField ().name (),
 						objectModel.typeCodeField ().name (),
 
 						"AND _%s.%s = :%s",
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 						objectModel.codeField ().name (),
 						objectModel.codeField ().name ()))
 
@@ -883,19 +883,19 @@ class HibernateObjectDatabaseHelper <RecordType extends Record <RecordType>>
 
 						"FROM %s _%s ",
 						objectModel.objectClass ().getSimpleName (),
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 
 						"WHERE _%s.%s.id = :parentId ",
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 						objectModel.parentField ().name (),
 
 						"AND _%s.%s = :%s ",
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 						objectModel.typeCodeField ().name (),
 						objectModel.typeCodeField ().name (),
 
 						"AND _%s.%s = :%s",
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 						objectModel.codeField ().name (),
 						objectModel.codeField ().name ()))
 
@@ -935,23 +935,23 @@ class HibernateObjectDatabaseHelper <RecordType extends Record <RecordType>>
 
 						"FROM %s _%s ",
 						objectModel.objectClass ().getSimpleName (),
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 
 						"WHERE _%s.%s.id = :parentTypeId ",
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 						objectModel.parentTypeField ().name (),
 
 						"AND _%s.%s = :parentId ",
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 						objectModel.parentIdField ().name (),
 
 						"AND _%s.%s = :%s ",
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 						objectModel.typeCodeField ().name (),
 						objectModel.typeCodeField ().name (),
 
 						"AND _%s.%s = :code",
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 						objectModel.codeField ().name ()))
 
 					.setLong (
@@ -1157,10 +1157,10 @@ class HibernateObjectDatabaseHelper <RecordType extends Record <RecordType>>
 
 						"FROM %s _%s ",
 						objectModel.objectClass ().getSimpleName (),
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 
 						"WHERE _%s.%s.id = :parentId",
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 						objectModel.parentField ().name ()))
 
 					.setLong (
@@ -1188,14 +1188,14 @@ class HibernateObjectDatabaseHelper <RecordType extends Record <RecordType>>
 
 						"FROM %s _%s ",
 						objectModel.objectClass ().getSimpleName (),
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 
 						"WHERE _%s.%s.id = :parentTypeId ",
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 						objectModel.parentTypeField ().name (),
 
 						"AND _%s.%s = :parentId",
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 						objectModel.parentIdField ().name ()))
 
 					.setLong (
@@ -1270,7 +1270,7 @@ class HibernateObjectDatabaseHelper <RecordType extends Record <RecordType>>
 				Restrictions.eq (
 					stringFormat (
 						"_%s.%s.id",
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 						objectModel.parentField ().name ()),
 					parentGlobalId.objectId ()));
 
@@ -1280,7 +1280,7 @@ class HibernateObjectDatabaseHelper <RecordType extends Record <RecordType>>
 				Restrictions.eq (
 					stringFormat (
 						"_%s.%s.id",
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 						objectModel.parentTypeField ().name ()),
 					parentGlobalId.typeId ()));
 
@@ -1288,7 +1288,7 @@ class HibernateObjectDatabaseHelper <RecordType extends Record <RecordType>>
 				Restrictions.eq (
 					stringFormat (
 						"_%s.%s",
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 						objectModel.parentIdField ().name ()),
 					parentGlobalId.objectId ()));
 
@@ -1320,7 +1320,7 @@ class HibernateObjectDatabaseHelper <RecordType extends Record <RecordType>>
 			Criteria criteria =
 				session.createCriteria (
 					objectModel.objectClass (),
-					"_" + objectModel.objectName ());
+					"_" + objectModel.objectTypeCamel ());
 
 			// apply parent restriction
 
@@ -1334,7 +1334,7 @@ class HibernateObjectDatabaseHelper <RecordType extends Record <RecordType>>
 				Restrictions.ge (
 					stringFormat (
 						"_%s.%s",
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 						objectModel.indexField ().name ()),
 					indexStart));
 
@@ -1342,7 +1342,7 @@ class HibernateObjectDatabaseHelper <RecordType extends Record <RecordType>>
 				Restrictions.lt (
 					stringFormat (
 						"_%s.%s",
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 						objectModel.indexField ().name ()),
 					indexEnd));
 
@@ -1352,7 +1352,7 @@ class HibernateObjectDatabaseHelper <RecordType extends Record <RecordType>>
 				Order.asc (
 					stringFormat (
 						"_%s.%s",
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 						objectModel.indexField ().name ())));
 
 			// manual flush mode
@@ -1528,8 +1528,8 @@ class HibernateObjectDatabaseHelper <RecordType extends Record <RecordType>>
 
 				throw new UnsupportedOperationException (
 					stringFormat (
-						"Cannot call findAllByParentAndType for '%s', ",
-						objectModel.objectName (),
+						"Cannot call findAllByParentAndType for %s, ",
+						objectModel.objectTypeHyphen (),
 						"because it has no type code field"));
 
 			}
@@ -1555,17 +1555,17 @@ class HibernateObjectDatabaseHelper <RecordType extends Record <RecordType>>
 
 				}
 
-				List<?> objectsUncast =
+				return genericCastUnchecked (
 					session.createQuery (
 
 					stringFormat (
 
 						"FROM %s _%s ",
 						objectModel.objectClass ().getSimpleName (),
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 
 						"WHERE _%s.%s = :%s",
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 						objectModel.typeCodeField ().name (),
 						objectModel.typeCodeField ().name ()))
 
@@ -1576,14 +1576,9 @@ class HibernateObjectDatabaseHelper <RecordType extends Record <RecordType>>
 					.setFlushMode (
 						FlushMode.MANUAL)
 
-					.list ();
+					.list ()
 
-				@SuppressWarnings ("unchecked")
-				List<RecordType> objects =
-					(List<RecordType>)
-					objectsUncast;
-
-				return objects;
+				);
 
 			}
 
@@ -1600,7 +1595,7 @@ class HibernateObjectDatabaseHelper <RecordType extends Record <RecordType>>
 							"Invalid parent type id %s for %s (should be %s)",
 							integerToDecimalString (
 								parentGlobalId.typeId ()),
-							objectModel.objectName (),
+							objectModel.objectTypeHyphen (),
 							integerToDecimalString (
 								objectModel.parentTypeId ())));
 
@@ -1613,14 +1608,14 @@ class HibernateObjectDatabaseHelper <RecordType extends Record <RecordType>>
 
 						"FROM %s _%s ",
 						objectModel.objectClass ().getSimpleName (),
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 
 						"WHERE _%s.%s.id = :parentId ",
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 						objectModel.parentField ().name (),
 
 						"AND _%s.%s = :%s",
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 						objectModel.typeCodeField ().name (),
 						objectModel.typeCodeField ().name ()))
 
@@ -1653,18 +1648,18 @@ class HibernateObjectDatabaseHelper <RecordType extends Record <RecordType>>
 
 						"FROM %s _%s ",
 						objectModel.objectClass ().getSimpleName (),
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 
 						"WHERE _%s.%s.id = :parentTypeId ",
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 						objectModel.parentTypeField ().name (),
 
 						"AND _%s.%s = :parentId",
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 						objectModel.parentIdField ().name (),
 
 						"AND _%s.%s = :%s",
-						objectModel.objectName (),
+						objectModel.objectTypeCamel (),
 						objectModel.typeCodeField ().name (),
 						objectModel.typeCodeField ().name ()))
 

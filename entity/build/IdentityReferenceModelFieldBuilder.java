@@ -3,9 +3,11 @@ package wbs.framework.entity.build;
 import static wbs.utils.collection.CollectionUtils.singletonList;
 import static wbs.utils.etc.NullUtils.ifNull;
 import static wbs.utils.etc.TypeUtils.classForNameRequired;
-import static wbs.utils.string.StringUtils.camelToSpaces;
-import static wbs.utils.string.StringUtils.camelToUnderscore;
-import static wbs.utils.string.StringUtils.capitalise;
+import static wbs.utils.etc.TypeUtils.classNameFormat;
+import static wbs.utils.string.StringUtils.hyphenToCamel;
+import static wbs.utils.string.StringUtils.hyphenToCamelCapitalise;
+import static wbs.utils.string.StringUtils.hyphenToSpaces;
+import static wbs.utils.string.StringUtils.hyphenToUnderscore;
 import static wbs.utils.string.StringUtils.stringFormat;
 
 import lombok.NonNull;
@@ -28,6 +30,8 @@ import wbs.framework.entity.model.ModelFieldType;
 import wbs.framework.logging.LogContext;
 import wbs.framework.logging.OwnedTaskLogger;
 import wbs.framework.logging.TaskLogger;
+
+import wbs.utils.etc.ClassName;
 
 @PrototypeComponent ("identityReferenceModelFieldBuilder")
 @ModelBuilder
@@ -84,11 +88,11 @@ class IdentityReferenceModelFieldBuilder
 			PluginSpec fieldTypePlugin =
 				fieldTypePluginModel.plugin ();
 
-			String fullFieldTypeName =
-				stringFormat (
+			ClassName fullFieldTypeName =
+				classNameFormat (
 					"%s.model.%sRec",
 					fieldTypePlugin.packageName (),
-					capitalise (
+					hyphenToCamelCapitalise (
 						spec.typeName ()));
 
 			// create model field
@@ -103,10 +107,11 @@ class IdentityReferenceModelFieldBuilder
 					context.parentModelField ())
 
 				.name (
-					fieldName)
+					hyphenToCamel (
+						fieldName))
 
 				.label (
-					camelToSpaces (
+					hyphenToSpaces (
 						fieldName))
 
 				.type (
@@ -131,7 +136,7 @@ class IdentityReferenceModelFieldBuilder
 							spec.columnName (),
 							stringFormat (
 								"%s_id",
-								camelToUnderscore (
+								hyphenToUnderscore (
 									fieldName)))))
 				.columnSqlTypes (
 					singletonList (

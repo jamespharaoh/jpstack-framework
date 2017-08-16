@@ -70,6 +70,7 @@ import wbs.framework.logging.OwnedTaskLogger;
 import wbs.framework.logging.TaskLogger;
 
 import wbs.utils.string.FormatWriter;
+import wbs.utils.string.StringFormat;
 
 @Accessors (fluent = true)
 @PrototypeComponent ("javaClassWriter")
@@ -84,7 +85,7 @@ class JavaClassWriter
 
 	// properties
 
-	@Getter @Setter
+	@Getter
 	String className;
 
 	@Getter @Setter
@@ -127,6 +128,23 @@ class JavaClassWriter
 		new ArrayList<> ();
 
 	// setters and getters
+
+	public
+	JavaClassWriter className (
+			@NonNull CharSequence classNameCharSequence) {
+
+		String className =
+			classNameCharSequence.toString ();
+
+		StringFormat.className.verifyAndThrow (
+			className);
+
+		this.className =
+			className;
+
+		return this;
+
+	}
 
 	public
 	JavaClassWriter classNameFormat (
@@ -220,7 +238,7 @@ class JavaClassWriter
 
 	public
 	JavaClassWriter addImplementsFormat (
-			@NonNull String ... arguments) {
+			@NonNull CharSequence ... arguments) {
 
 		return addImplementsName (
 			stringFormatArray (
@@ -254,8 +272,8 @@ class JavaClassWriter
 
 	public
 	JavaClassWriter addSingletonDependency (
-			@NonNull String typeName,
-			@NonNull String variableName,
+			@NonNull CharSequence typeName,
+			@NonNull CharSequence variableName,
 			@NonNull Class <?> annotationClass,
 			@NonNull Boolean named) {
 
@@ -271,7 +289,7 @@ class JavaClassWriter
 						typeName))
 
 			.memberName (
-				variableName)
+				variableName.toString ())
 
 			.provider (
 				false)
@@ -340,7 +358,7 @@ class JavaClassWriter
 	public
 	JavaClassWriter addNamedSingletonDependency (
 			@NonNull Class <?> typeClass,
-			@NonNull String variableName) {
+			@NonNull CharSequence variableName) {
 
 		return addSingletonDependency (
 			classNameFull (
@@ -353,8 +371,8 @@ class JavaClassWriter
 
 	public
 	JavaClassWriter addNamedSingletonDependency (
-			@NonNull String typeName,
-			@NonNull String variableName) {
+			@NonNull CharSequence typeName,
+			@NonNull CharSequence variableName) {
 
 		return addSingletonDependency (
 			typeName,

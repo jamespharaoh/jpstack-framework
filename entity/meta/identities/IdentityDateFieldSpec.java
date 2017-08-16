@@ -8,6 +8,8 @@ import wbs.framework.data.annotations.DataAttribute;
 import wbs.framework.data.annotations.DataClass;
 import wbs.framework.entity.meta.model.ModelFieldSpec;
 
+import wbs.utils.string.StringFormat;
+
 @Accessors (fluent = true)
 @Data
 @DataClass ("identity-date-field")
@@ -16,10 +18,12 @@ public
 class IdentityDateFieldSpec
 	implements ModelFieldSpec {
 
-	@DataAttribute
+	@DataAttribute (
+		format = StringFormat.hyphenated)
 	String name;
 
-	@DataAttribute
+	@DataAttribute (
+		format = StringFormat.snakeCase)
 	String columnName;
 
 }

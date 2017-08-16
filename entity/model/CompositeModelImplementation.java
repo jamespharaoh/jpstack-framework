@@ -37,11 +37,29 @@ class CompositeModelImplementation <DataType>
 	@DataAttribute
 	Class <DataType> objectClass;
 
+	@DataAttribute
+	String objectClassName;
+
 	@DataName
-	String objectName;
+	String objectTypeHyphen;
 
 	@DataAttribute
 	String objectTypeCode;
+
+	@DataAttribute
+	String objectTypeCamel;
+
+	@DataAttribute
+	String friendlyNameSingular;
+
+	@DataAttribute
+	String friendlyNamePlural;
+
+	@DataAttribute
+	String shortNameSingular;
+
+	@DataAttribute
+	String shortNamePlural;
 
 	// fields
 
@@ -198,69 +216,6 @@ class CompositeModelImplementation <DataType>
 	public
 	Class <? extends ObjectHelper <?>> helperClass () {
 		throw new UnsupportedOperationException ();
-	}
-
-	@Override
-	public
-	Record <?> getParentOrNull (
-			@NonNull DataType object) {
-
-		throw new UnsupportedOperationException ();
-
-	}
-
-	@Override
-	public
-	Record <?> getParentType (
-			@NonNull DataType object) {
-
-		throw new UnsupportedOperationException ();
-
-	}
-
-	@Override
-	public
-	Long getParentId (
-			@NonNull DataType object) {
-
-		throw new UnsupportedOperationException ();
-
-	}
-
-	@Override
-	public
-	String getTypeCode (
-			@NonNull DataType object) {
-
-		throw new UnsupportedOperationException ();
-
-	}
-
-	@Override
-	public
-	String getCode (
-			@NonNull DataType record) {
-
-		throw new UnsupportedOperationException ();
-
-	}
-
-	@Override
-	public
-	String getName (
-			@NonNull DataType record) {
-
-		throw new UnsupportedOperationException ();
-
-	}
-
-	@Override
-	public
-	String getDescription (
-			@NonNull DataType record) {
-
-		throw new UnsupportedOperationException ();
-
 	}
 
 	@Override

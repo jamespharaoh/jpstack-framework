@@ -35,6 +35,7 @@ import wbs.framework.logging.TaskLogger;
 
 import wbs.utils.string.FormatWriter;
 import wbs.utils.string.NullFormatWriter;
+import wbs.utils.string.StringFormat;
 
 @Accessors (fluent = true)
 @PrototypeComponent ("javaClassUnitWriter")
@@ -147,7 +148,10 @@ class JavaClassUnitWriter {
 		@Override
 		public
 		String register (
-				@NonNull String fullClassName) {
+				@NonNull CharSequence fullClassNameCharSequence) {
+
+			String fullClassName =
+				fullClassNameCharSequence.toString ();
 
 			if (
 
@@ -242,7 +246,14 @@ class JavaClassUnitWriter {
 		@Override
 		public
 		String register (
-				@NonNull String fullClassName) {
+				@NonNull CharSequence fullClassNameCharSequence) {
+
+			String fullClassName =
+				fullClassNameCharSequence.toString ();
+
+			StringFormat.className.verifyParameterAndThrow (
+				"fullClassName",
+				fullClassName);
 
 			if (
 

@@ -6,9 +6,10 @@ import static wbs.utils.etc.LogicUtils.booleanToYesNo;
 import static wbs.utils.etc.LogicUtils.ifThenElse;
 import static wbs.utils.etc.NullUtils.ifNull;
 import static wbs.utils.etc.NullUtils.isNotNull;
-import static wbs.utils.etc.TypeUtils.classNameSimple;
 import static wbs.utils.etc.NullUtils.isNull;
+import static wbs.utils.etc.TypeUtils.classNameSimple;
 import static wbs.utils.string.StringUtils.camelToHyphen;
+import static wbs.utils.string.StringUtils.camelToHyphenUncapitalise;
 import static wbs.utils.string.StringUtils.nullIfEmptyString;
 import static wbs.utils.string.StringUtils.stringFormat;
 
@@ -250,8 +251,9 @@ class DataToXml {
 			ifNull (
 				nullIfEmptyString (
 					dataClassAnnotation.value ()),
-				camelToHyphen (
-					object.getClass ().getSimpleName ()));
+				camelToHyphenUncapitalise (
+					classNameSimple (
+						object.getClass ())));
 
 		Element element =
 			parent.addElement (

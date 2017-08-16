@@ -1,10 +1,11 @@
 package wbs.framework.exception;
 
 import static wbs.utils.etc.NullUtils.isNotNull;
-import static wbs.utils.etc.TypeUtils.genericCastUnchecked;
 import static wbs.utils.etc.NullUtils.isNull;
+import static wbs.utils.etc.TypeUtils.genericCastUnchecked;
 import static wbs.utils.string.StringUtils.emptyStringIfNull;
 import static wbs.utils.string.StringUtils.stringFormat;
+import static wbs.utils.string.StringUtils.stringReplaceAllSimple;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -272,18 +273,19 @@ class ExceptionUtilsImplementation
 
 	public static
 	String substituteNuls (
-			@NonNull String source,
-			@NonNull String replacement) {
+			@NonNull CharSequence source,
+			@NonNull CharSequence replacement) {
 
-		return source.replaceAll (
+		return stringReplaceAllSimple (
 			"\u0000",
-			replacement);
+			replacement,
+			source);
 
 	}
 
 	public static
 	String substituteNuls (
-			@NonNull String source) {
+			@NonNull CharSequence source) {
 
 		return substituteNuls (
 			source,

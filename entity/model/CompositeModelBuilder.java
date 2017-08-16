@@ -1,9 +1,14 @@
 package wbs.framework.entity.model;
 
 import static wbs.utils.etc.TypeUtils.classForNameRequired;
+import static wbs.utils.etc.TypeUtils.classNameFormat;
+import static wbs.utils.etc.TypeUtils.classNameSimple;
 import static wbs.utils.etc.TypeUtils.genericCastUnchecked;
-import static wbs.utils.string.StringUtils.capitalise;
+import static wbs.utils.string.StringUtils.hyphenToCamel;
+import static wbs.utils.string.StringUtils.hyphenToCamelCapitalise;
+import static wbs.utils.string.StringUtils.hyphenToUnderscore;
 import static wbs.utils.string.StringUtils.stringFormat;
+import static wbs.utils.string.StringUtils.stringIntern;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -27,6 +32,8 @@ import wbs.framework.logging.OwnedTaskLogger;
 import wbs.framework.logging.TaskLogger;
 import wbs.framework.schema.helper.SchemaNamesHelper;
 import wbs.framework.schema.helper.SchemaTypesHelper;
+
+import wbs.utils.etc.ClassName;
 
 @Accessors (fluent = true)
 @PrototypeComponent ("compositeModelBuilder")
@@ -59,8 +66,8 @@ class CompositeModelBuilder <DataType> {
 
 	CompositeModelImplementation <?> model;
 
-	String modelClassName;
-	String recordClassNameFull;
+	ClassName recordClassName;
+	ClassName recordClassNameFull;
 	Class <ModelType> modelClass;
 
 	// implementation
@@ -83,17 +90,17 @@ class CompositeModelBuilder <DataType> {
 
 			// model class
 
-			modelClassName =
-				stringFormat (
+			recordClassName =
+				classNameFormat (
 					"%s",
-					capitalise (
+					hyphenToCamelCapitalise (
 						modelMeta.name ()));
 
 			recordClassNameFull =
-				stringFormat (
+				classNameFormat (
 					"%s.model.%s",
 					plugin.packageName (),
-					modelClassName);
+					recordClassName);
 
 			modelClass =
 				genericCastUnchecked (
@@ -108,8 +115,40 @@ class CompositeModelBuilder <DataType> {
 				.objectClass (
 					modelClass)
 
-				.objectName (
-					modelMeta.name ())
+				.objectClassName (
+					stringFormat (
+						classNameSimple (
+							modelClass)))
+
+				.objectTypeCamel (
+					stringIntern (
+						hyphenToCamel (
+							modelMeta.name ())))
+
+				.objectTypeHyphen (
+					stringIntern (
+						modelMeta.name ()))
+
+				.objectTypeCode (
+					stringIntern (
+						hyphenToUnderscore (
+							modelMeta.name ())))
+
+				.friendlyNameSingular (
+					stringIntern (
+						modelMeta.friendlyNameSingular ()))
+
+				.friendlyNamePlural (
+					stringIntern (
+						modelMeta.friendlyNamePlural ()))
+
+				.shortNameSingular (
+					stringIntern (
+						modelMeta.shortNameSingular ()))
+
+				.shortNamePlural (
+					stringIntern (
+						modelMeta.shortNamePlural ()))
 
 			;
 
