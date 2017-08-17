@@ -8,6 +8,7 @@ import static wbs.utils.etc.NumberUtils.integerToDecimalString;
 import static wbs.utils.etc.OptionalUtils.optionalIsNotPresent;
 import static wbs.utils.etc.TypeUtils.classForName;
 import static wbs.utils.etc.TypeUtils.classNameFormat;
+import static wbs.utils.string.StringUtils.hyphenToCamel;
 import static wbs.utils.string.StringUtils.hyphenToCamelCapitalise;
 import static wbs.utils.string.StringUtils.joinWithSpace;
 import static wbs.utils.string.StringUtils.objectToString;
@@ -806,7 +807,9 @@ class HibernateSessionFactoryBuilder {
 
 			.addAttribute (
 				"column",
-				columnSql);
+				columnSql)
+
+		;
 
 		Element generatorElement =
 			idElement
@@ -816,7 +819,9 @@ class HibernateSessionFactoryBuilder {
 
 			.addAttribute (
 				"class",
-				"foreign");
+				"foreign")
+
+		;
 
 		generatorElement
 
@@ -828,7 +833,10 @@ class HibernateSessionFactoryBuilder {
 				"property")
 
 			.addText (
-				modelField.foreignFieldName ());
+				hyphenToCamel (
+					modelField.foreignFieldName ()))
+
+		;
 
 	}
 

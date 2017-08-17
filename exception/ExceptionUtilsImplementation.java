@@ -6,6 +6,7 @@ import static wbs.utils.etc.TypeUtils.genericCastUnchecked;
 import static wbs.utils.string.StringUtils.emptyStringIfNull;
 import static wbs.utils.string.StringUtils.stringFormat;
 import static wbs.utils.string.StringUtils.stringReplaceAllSimple;
+import static wbs.web.utils.JsonUtils.objectToJson;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -14,12 +15,12 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.gson.JsonObject;
 
 import lombok.NonNull;
 
 import org.hibernate.JDBCException;
 import org.hibernate.exception.ConstraintViolationException;
-import org.json.simple.JSONObject;
 
 import wbs.framework.component.annotations.ClassSingletonDependency;
 import wbs.framework.component.annotations.SingletonComponent;
@@ -295,7 +296,7 @@ class ExceptionUtilsImplementation
 
 	@Override
 	public
-	JSONObject throwableDumpJson (
+	JsonObject throwableDumpJson (
 			@NonNull TaskLogger parentTaskLogger,
 			@NonNull Throwable throwable) {
 
@@ -308,8 +309,8 @@ class ExceptionUtilsImplementation
 
 		) {
 
-			ImmutableMap.Builder<String,Object> dumpBuilder =
-				ImmutableMap.<String,Object>builder ();
+			ImmutableMap.Builder <String, Object> dumpBuilder =
+				ImmutableMap.builder ();
 
 			// class
 
@@ -365,7 +366,7 @@ class ExceptionUtilsImplementation
 
 			// return
 
-			return new JSONObject (
+			return objectToJson (
 				dumpBuilder.build ());
 
 		}

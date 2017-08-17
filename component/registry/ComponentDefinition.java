@@ -3,6 +3,9 @@ package wbs.framework.component.registry;
 import static wbs.utils.etc.OptionalUtils.optionalGetRequired;
 import static wbs.utils.etc.OptionalUtils.optionalIsPresent;
 import static wbs.utils.etc.TypeUtils.genericCastUnchecked;
+import static wbs.utils.string.StringUtils.joinWithPipe;
+import static wbs.utils.string.StringUtils.patternCompile;
+import static wbs.utils.string.StringUtils.stringDoesNotMatch;
 import static wbs.utils.string.StringUtils.stringFormat;
 import static wbs.utils.string.StringUtils.stringFormatArray;
 
@@ -13,6 +16,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import com.google.common.base.Optional;
 
@@ -28,6 +32,7 @@ import wbs.framework.data.annotations.DataClass;
 import wbs.framework.data.annotations.DataName;
 
 import wbs.utils.data.Pair;
+import wbs.utils.string.StringFormat;
 
 @Accessors (fluent = true)
 @DataClass
@@ -35,7 +40,7 @@ public
 class ComponentDefinition {
 
 	@DataName
-	@Getter @Setter
+	@Getter
 	String name;
 
 	@DataAttribute
@@ -117,6 +122,33 @@ class ComponentDefinition {
 		new HashSet<> ();
 
 	// property setters
+
+	public
+	ComponentDefinition name (
+			@NonNull CharSequence name) {
+
+		String nameString =
+			name.toString ();
+
+		if (
+			stringDoesNotMatch (
+				componentNamePattern,
+				nameString)
+		) {
+
+			throw new IllegalArgumentException (
+				stringFormat (
+					"Invalid component name: %s",
+					nameString));
+
+		}
+
+		this.name =
+			name.toString ();
+
+		return this;
+
+	}
 
 	public
 	ComponentDefinition nameFormat (
@@ -252,5 +284,17 @@ class ComponentDefinition {
 		return this;
 
 	}
+
+	// data
+
+	private final static
+	Pattern componentNamePattern =
+		patternCompile (
+			joinWithPipe (
+				stringFormat (
+				"(%s):(%s)",
+					StringFormat.classNamePattern.toString (),
+					StringFormat.classNamePattern.toString ()),
+				StringFormat.camelCasePattern.toString ()));
 
 }

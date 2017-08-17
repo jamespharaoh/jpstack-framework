@@ -26,7 +26,7 @@ import wbs.framework.logging.OwnedTaskLogger;
 import wbs.framework.logging.TaskLogger;
 import wbs.framework.schema.helper.SchemaNamesHelper;
 
-@PrototypeComponent ("BinaryModelFieldBuilder")
+@PrototypeComponent ("binaryModelFieldBuilder")
 @ModelBuilder
 public
 class BinaryModelFieldBuilder

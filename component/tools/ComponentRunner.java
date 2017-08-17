@@ -123,6 +123,10 @@ class ComponentRunner {
 				bootstrapComponentManager,
 				taskLogger);
 
+		} catch (LoggedErrorsException exception) {
+
+			System.exit (1);
+
 		}
 
 	}

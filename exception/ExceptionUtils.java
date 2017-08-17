@@ -2,7 +2,7 @@ package wbs.framework.exception;
 
 import java.io.PrintWriter;
 
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 
 import wbs.framework.logging.TaskLogger;
 
@@ -17,7 +17,7 @@ interface ExceptionUtils {
 			TaskLogger parentTaskLogger,
 			Throwable throwable);
 
-	JSONObject throwableDumpJson (
+	JsonObject throwableDumpJson (
 			TaskLogger parentTaskLogger,
 			Throwable throwable);
 

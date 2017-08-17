@@ -5,6 +5,7 @@ import static wbs.utils.etc.Misc.doNothing;
 import static wbs.utils.etc.NumberUtils.integerNotEqualSafe;
 import static wbs.utils.etc.NumberUtils.integerToDecimalString;
 import static wbs.utils.etc.TypeUtils.classNameSimple;
+import static wbs.utils.string.StringUtils.hyphenToCamel;
 import static wbs.utils.string.StringUtils.stringFormat;
 
 import java.util.ArrayList;
@@ -367,7 +368,8 @@ class SchemaTableFromModel {
 
 			ModelField foreignModelField =
 				model.fieldsByName ().get (
-					modelField.foreignFieldName ());
+					hyphenToCamel (
+						modelField.foreignFieldName ()));
 
 			if (foreignModelField == null) {
 
