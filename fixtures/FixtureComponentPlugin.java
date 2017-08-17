@@ -1,5 +1,8 @@
 package wbs.framework.fixtures;
 
+import static wbs.utils.etc.TypeUtils.classForNameRequired;
+import static wbs.utils.etc.TypeUtils.classNameFormat;
+import static wbs.utils.string.StringUtils.hyphenToCamel;
 import static wbs.utils.string.StringUtils.hyphenToCamelCapitalise;
 import static wbs.utils.string.StringUtils.stringFormat;
 
@@ -16,6 +19,9 @@ import wbs.framework.component.tools.ComponentPlugin;
 import wbs.framework.logging.LogContext;
 import wbs.framework.logging.OwnedTaskLogger;
 import wbs.framework.logging.TaskLogger;
+
+import wbs.utils.etc.ClassName;
+import wbs.utils.exception.RuntimeClassNotFoundException;
 
 @SingletonComponent ("fixtureComponentPlugin")
 public
@@ -83,10 +89,11 @@ class FixtureComponentPlugin
 				String metaFixturesComponentName =
 					stringFormat (
 						"%sMetaFixtures",
-						metaFixture.name ());
+						hyphenToCamel (
+							metaFixture.name ()));
 
-				String metaFixturesClassName =
-					stringFormat (
+				ClassName metaFixturesClassName =
+					classNameFormat (
 						"%s.fixture.%sMetaFixtures",
 						plugin.packageName (),
 						hyphenToCamelCapitalise (
@@ -97,10 +104,10 @@ class FixtureComponentPlugin
 				try {
 
 					metaFixtureProviderClass =
-						Class.forName (
+						classForNameRequired (
 							metaFixturesClassName);
 
-				} catch (ClassNotFoundException exception) {
+				} catch (RuntimeClassNotFoundException exception) {
 
 					taskLogger.errorFormat (
 						"Can't find class %s ",
@@ -156,7 +163,8 @@ class FixtureComponentPlugin
 				String fixtureProviderComponentName =
 					stringFormat (
 						"%sFixtureProvider",
-						fixture.name ());
+						hyphenToCamel (
+							fixture.name ()));
 
 				String fixtureProviderClassName =
 					stringFormat (
